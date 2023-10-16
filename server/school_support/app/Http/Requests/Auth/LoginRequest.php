@@ -37,7 +37,6 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    // public function authenticate(): void
     public function authenticate()
     {
         $this->ensureIsNotRateLimited();
