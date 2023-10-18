@@ -43,6 +43,22 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
+                <InputLabel for="kana" value="Kana" />
+
+                <TextInput
+                    id="kana"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.kana"
+                    required
+                    autofocus
+                    autocomplete="kana"
+                />
+
+                <InputError class="mt-2" :message="form.errors.kana" />
+            </div>
+
+            <div class="mt-4">
                 <InputLabel for="email" value="Email" />
 
                 <TextInput
@@ -55,6 +71,68 @@ const submit = () => {
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="tel" value="Tel" />
+
+                <TextInput
+                    id="tel"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.tel"
+                    required
+                    autocomplete="tel"
+                />
+
+                <InputError class="mt-2" :message="form.errors.tel" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="role" value="Role" />
+
+                <div class="mt-2">
+										<label class="inline-flex items-center">
+												<input type="radio" id="role_admin" value="1" v-model="form.role" />
+												<span class="ml-2">編集者</span>
+										</label>
+										<label class="ml-4 inline-flex items-center">
+												<input type="radio" id="role_admin_viewer" value="2" v-model="form.role" />
+												<span class="ml-2">閲覧者</span>
+										</label>
+								</div>
+
+                <InputError class="mt-2" :message="form.errors.role" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="retirement_date" value="Retirement date" />
+
+                <TextInput
+                    id="retirement_date"
+                    type="date"
+                    class="mt-1 block w-full"
+                    v-model="form.retirement_date"
+                    required
+                    autocomplete="retirement_date"
+                />
+
+                <InputError class="mt-2" :message="form.errors.retirement_date" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="session_id" value="Session id" />
+
+                <TextInput
+                    id="session_id"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.session_id"
+                    required
+                    autocomplete="session_id"
+                />
+
+                <InputError class="mt-2" :message="form.errors.session_id" />
             </div>
 
             <div class="mt-4">
