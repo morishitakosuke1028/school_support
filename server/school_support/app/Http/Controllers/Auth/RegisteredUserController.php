@@ -33,13 +33,23 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+						'kana' => 'nullable|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
             'email' => 'required|string|email|max:255|unique:'.User::class,
+            'tel' => 'nullable|string|email|max:13',
+            'role' => 'required|in:1,2',
+            'retirement_date' => 'nullable|date_format:Y/m/d',
+            'session_id' => 'required|string|max:255',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+						'name' => $request->name,
+            'kana' => $request->kana,
             'email' => $request->email,
+            'tel' => $request->tel,
+            'role' => $request->role,
+            'retirement_date' => $request->retirement_date,
+            'session_id' => $request->session_id,
             'password' => Hash::make($request->password),
         ]);
 

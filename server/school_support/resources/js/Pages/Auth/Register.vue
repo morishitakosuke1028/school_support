@@ -8,7 +8,12 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
     name: '',
+    kana: '',
     email: '',
+    tel: '',
+    role: '',
+    retirement_date: '',
+    session_id: '',
     password: '',
     password_confirmation: '',
     terms: false,
@@ -50,7 +55,6 @@ const submit = () => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.kana"
-                    required
                     autofocus
                     autocomplete="kana"
                 />
@@ -81,7 +85,6 @@ const submit = () => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.tel"
-                    required
                     autocomplete="tel"
                 />
 
@@ -93,11 +96,11 @@ const submit = () => {
 
                 <div class="mt-2">
 										<label class="inline-flex items-center">
-												<input type="radio" id="role_admin" value="1" v-model="form.role" />
+												<input type="radio" id="role_admin" value="1" v-model="form.role" required />
 												<span class="ml-2">編集者</span>
 										</label>
 										<label class="ml-4 inline-flex items-center">
-												<input type="radio" id="role_admin_viewer" value="2" v-model="form.role" />
+												<input type="radio" id="role_admin_viewer" value="2" v-model="form.role" required />
 												<span class="ml-2">閲覧者</span>
 										</label>
 								</div>
@@ -113,7 +116,6 @@ const submit = () => {
                     type="date"
                     class="mt-1 block w-full"
                     v-model="form.retirement_date"
-                    required
                     autocomplete="retirement_date"
                 />
 
