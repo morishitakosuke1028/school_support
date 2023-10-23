@@ -35,10 +35,11 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
 						'kana' => 'nullable|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
             'email' => 'required|string|email|max:255|unique:'.User::class,
-            'tel' => 'nullable|string|email|max:13',
+            'tel' => 'nullable|string|max:13',
             'role' => 'required|in:1,2',
             'retirement_date' => 'nullable|date_format:Y/m/d',
             'session_id' => 'required|string|max:255',
+            'school_id' => 'required|string',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -50,6 +51,7 @@ class RegisteredUserController extends Controller
             'role' => $request->role,
             'retirement_date' => $request->retirement_date,
             'session_id' => $request->session_id,
+            'school_id' => $request->school_id,
             'password' => Hash::make($request->password),
         ]);
 

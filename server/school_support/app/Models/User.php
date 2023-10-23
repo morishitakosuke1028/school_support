@@ -25,6 +25,7 @@ class User extends Authenticatable
         'role',
         'retirement_date',
         'session_id',
+        'school_id',
         'password',
     ];
 

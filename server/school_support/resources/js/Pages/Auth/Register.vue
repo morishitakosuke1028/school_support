@@ -14,6 +14,7 @@ const form = useForm({
     role: '',
     retirement_date: '',
     session_id: '',
+    school_id: '1',
     password: '',
     password_confirmation: '',
     terms: false,
@@ -31,6 +32,14 @@ const submit = () => {
         <Head title="Register" />
 
         <form @submit.prevent="submit">
+						<TextInput
+								id="school_id"
+								type="hidden"
+								v-model="form.school_id"
+								required
+								autofocus
+								autocomplete="school_id"
+						/>
             <div>
                 <InputLabel for="name" value="Name" />
 
