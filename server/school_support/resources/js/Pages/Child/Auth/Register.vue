@@ -15,7 +15,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('register'), {
+    form.post(route('child.register'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
@@ -24,6 +24,8 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Register" />
+
+				<h1>生徒用アカウント作成</h1>
 
         <form @submit.prevent="submit">
             <div>

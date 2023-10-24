@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController as ProfileOfChildController;
 use Illuminate\Foundation\Application;
@@ -34,6 +35,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Admin用ダッシュボードから生徒用アカウント作成画面に遷移
+    // Route::get('/child/register/create', [RegisteredUserController::class, 'create'])
+    //     ->name('child.register');
+    // Route::post('/child/register', [RegisteredUserController::class, 'store'])
+    //     ->name('child.register.store');
 });
 
 Route::prefix('child')->name('child.')->group(function(){
