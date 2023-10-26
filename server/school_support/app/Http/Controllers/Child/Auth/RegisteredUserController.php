@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Child\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Child;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -32,14 +32,32 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+						'name' => 'required|string|max:255',
+						'kana' => 'nullable|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
+						'email' => 'required|string|email|max:255|unique:'.child::class,
+						'zip' => 'nullable|digits:7',
+						'address' => 'nullable|string|max:255',
+						'tel' => 'nullable|string|max:13',
+						'gender' => 'required|in:1,2',
+						'birthday' => 'nullable|date_format:Y-m-d',
+						'pin_code' => 'required|string|max:255',
+						'session_id' => 'required|string|max:255',
+						'school_id' => 'required|string',
+						'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
+        $user = Child::create([
             'name' => $request->name,
+            'kana' => $request->kana,
+            'zip' => $request->zip,
+            'address' => $request->address,
+            'tel' => $request->tel,
             'email' => $request->email,
+            'gender' => $request->gender,
+            'birthday' => $request->birthday,
+            'pin_code' => $request->pin_code,
+            'session_id' => $request->session_id,
+            'school_id' => $request->school_id,
             'password' => Hash::make($request->password),
         ]);
 

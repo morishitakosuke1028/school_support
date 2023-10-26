@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
             'email' => 'required|string|email|max:255|unique:'.User::class,
             'tel' => 'nullable|string|max:13',
             'role' => 'required|in:1,2',
-            'retirement_date' => 'nullable|date_format:Y/m/d',
+            'retirement_date' => 'nullable|date_format:Y-m-d',
             'session_id' => 'required|string|max:255',
             'school_id' => 'required|string',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
