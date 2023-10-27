@@ -14,7 +14,7 @@ const form = useForm({
     address: '',
     tel: '',
     birthday: '',
-    admission_date: '', //@TODO登録時はいらない
+    admission_date: '',
     movein_date: '', //@TODO登録時はいらない
     graduation_date: '', //@TODO登録時はいらない
     pin_code: '',
@@ -73,6 +73,7 @@ const submit = () => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.kana"
+										required
                     autofocus
                     autocomplete="kana"
                 />
@@ -142,6 +143,21 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.birthday" />
             </div>
 
+						<div class="mt-4">
+                <InputLabel for="admission_date" value="Admission_date" />
+
+                <TextInput
+                    id="admission_date"
+                    type="date"
+                    class="mt-1 block w-full"
+                    v-model="form.admission_date"
+                    autofocus
+                    autocomplete="admission_date"
+                />
+
+                <InputError class="mt-2" :message="form.errors.admission_date" />
+            </div>
+
             <div class="mt-4">
                 <InputLabel for="email" value="Email" />
 
@@ -165,6 +181,7 @@ const submit = () => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.tel"
+										required
                     autocomplete="tel"
                 />
 

@@ -18,9 +18,21 @@ class Child extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+			'name',
+			'kana',
+			'email',
+			'zip',
+			'address',
+			'tel',
+			'gender',
+			'admission_date',
+			'movein_date',
+			'graduation_date',
+			'birthday',
+			'pin_code',
+			'session_id',
+			'school_id',
+			'password',
     ];
 
     /**
