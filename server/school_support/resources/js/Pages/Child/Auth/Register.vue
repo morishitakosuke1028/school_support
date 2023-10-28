@@ -36,9 +36,9 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <Head title="生徒登録" />
 
-				<h1>生徒用アカウント作成</h1>
+				<h1 class="mt-2 mb-3">生徒用アカウント作成</h1>
 
         <form @submit.prevent="submit">
 					<TextInput
@@ -50,7 +50,7 @@ const submit = () => {
 								autocomplete="school_id"
 						/>
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="名前" />
 
                 <TextInput
                     id="name"
@@ -66,7 +66,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="kana" value="Kana" />
+                <InputLabel for="kana" value="かな" />
 
                 <TextInput
                     id="kana"
@@ -82,15 +82,16 @@ const submit = () => {
             </div>
 
 						<div class="mt-4">
-                <InputLabel for="gender" value="Gender" />
+                <!-- <InputLabel for="gender" value="性別" /> -->
+                <InputLabel value="性別" />
 
                 <div class="mt-2">
-										<label class="inline-flex items-center">
-												<input type="radio" id="gender" value="1" v-model="form.gender" required />
+										<label for="gender_men" class="inline-flex items-center">
+												<input type="radio" id="gender_men" value="1" v-model="form.gender" required />
 												<span class="ml-2">男</span>
 										</label>
-										<label class="ml-4 inline-flex items-center">
-												<input type="radio" id="gender" value="2" v-model="form.gender" required />
+										<label for="gender_women" class="ml-4 inline-flex items-center">
+												<input type="radio" id="gender_women" value="2" v-model="form.gender" required />
 												<span class="ml-2">女</span>
 										</label>
 								</div>
@@ -99,7 +100,7 @@ const submit = () => {
             </div>
 
 						<div class="mt-4">
-                <InputLabel for="zip" value="Zip" />
+                <InputLabel for="zip" value="郵便番号" />
 
                 <TextInput
                     id="zip"
@@ -114,7 +115,7 @@ const submit = () => {
             </div>
 
 						<div class="mt-4">
-                <InputLabel for="address" value="Address" />
+                <InputLabel for="address" value="住所" />
 
                 <TextInput
                     id="address"
@@ -129,7 +130,7 @@ const submit = () => {
             </div>
 
 						<div class="mt-4">
-                <InputLabel for="birthday" value="Birthday" />
+                <InputLabel for="birthday" value="生年月日" />
 
                 <TextInput
                     id="birthday"
@@ -144,7 +145,7 @@ const submit = () => {
             </div>
 
 						<div class="mt-4">
-                <InputLabel for="admission_date" value="Admission_date" />
+                <InputLabel for="admission_date" value="入学日" />
 
                 <TextInput
                     id="admission_date"
@@ -159,7 +160,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="保護者メールアドレス" />
 
                 <TextInput
                     id="email"
@@ -174,7 +175,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="tel" value="Tel" />
+                <InputLabel for="tel" value="電話番号" />
 
                 <TextInput
                     id="tel"
@@ -189,7 +190,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="pin_code" value="Pin code" />
+                <InputLabel for="pin_code" value="簡易認証コード" />
 
                 <TextInput
                     id="pin_code"
@@ -204,7 +205,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="session_id" value="Session id" />
+                <InputLabel for="session_id" value="認証 ID" />
 
                 <TextInput
                     id="session_id"
@@ -219,7 +220,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="パスワード" />
 
                 <TextInput
                     id="password"
@@ -234,7 +235,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
+                <InputLabel for="password_confirmation" value="パスワード確認" />
 
                 <TextInput
                     id="password_confirmation"
@@ -248,9 +249,12 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex items-center justify-around mt-4">
+								<Link as="button" class="inline-flex items-center px-4 py-2 bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-500 focus:bg-gray-500 active:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" :href="route('dashboard')">
+										トップへ
+								</Link>
                 <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
+                    生徒登録
                 </PrimaryButton>
             </div>
         </form>
