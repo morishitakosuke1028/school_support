@@ -12,7 +12,7 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Profile" />
+    <Head title="職員情報編集" />
 
     <AuthenticatedLayout>
         <template #header>
