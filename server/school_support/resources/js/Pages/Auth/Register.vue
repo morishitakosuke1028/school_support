@@ -109,7 +109,7 @@ const submit = () => {
 								</div>
 
 								<div class="mt-4">
-										<InputLabel for="role" value="権限" />
+										<InputLabel for="role_admin" value="権限" />
 										<span class="font-medium text-sm text-red-700">　(必須)</span>
 
 										<div class="mt-2">
