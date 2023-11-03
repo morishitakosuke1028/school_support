@@ -179,6 +179,20 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+			'name' => '名前',
+			'kana' => 'かな',
+			'gender' => '性別',
+			'zip' => '郵便番号',
+			'address' => '住所',
+			'tel' => '電話番号',
+			'birthday' => '誕生日',
+			'admission_date' => '入学日',
+			'movein_date' => '転入日',
+			'graduation_date' => '卒業日',
+			'pin_code' => '簡易認証コード',
+			'session_id' => '認証 ID',
+			'role' => '権限',
+		],
 
 ];

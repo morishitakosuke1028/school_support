@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileController as ProfileOfChildController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -33,6 +35,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::prefix('child')->name('child.')->group(function(){
+
+	Route::get('/dashboard', function () {
+			return Inertia::render('Child/Dashboard');
+	})->middleware(['auth:child', 'verified'])->name('dashboard');
+
+	Route::middleware('auth:child')->group(function () {
+			Route::get('/profile', [ProfileOfChildController::class, 'edit'])->name('profile.edit');
+			Route::patch('/profile', [ProfileOfChildController::class, 'update'])->name('profile.update');
+			Route::delete('/profile', [ProfileOfChildController::class, 'destroy'])->name('profile.destroy');
+	});
+
+	require __DIR__.'/child.php';
 });
 
 require __DIR__.'/auth.php';
