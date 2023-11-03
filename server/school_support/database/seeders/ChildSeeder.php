@@ -20,7 +20,7 @@ class ChildSeeder extends Seeder
 				'name' => '園児　太郎',
 				'kana' => '園児　たろう',
 				'school_id' => '1',
-				'gender' => '男',
+				'gender' => '1',
 				'zip' => '郵便番号',
 				'address' => '京都府京都市右京区',
 				'tel' => '08012345678',
