@@ -17,6 +17,11 @@ Route::middleware('guest:child')->group(function () {
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
+		Route::get('register', [RegisteredUserController::class, 'create'])
+								->name('register');
+
+		Route::post('register', [RegisteredUserController::class, 'store']);
+
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
                 ->name('password.request');
 
@@ -30,12 +35,6 @@ Route::middleware('guest:child')->group(function () {
                 ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
-	Route::get('register', [RegisteredUserController::class, 'create'])
-	->name('register');
-
-	Route::post('register', [RegisteredUserController::class, 'store']);
-});
 Route::middleware('auth:child')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
