@@ -43,6 +43,11 @@ const showingNavigationDropdown = ref(false);
                                   生徒登録
                                 </NavLink>
                             </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('users.index')" :active="route().current('child.register')">
+                                  職員一覧
+                                </NavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">

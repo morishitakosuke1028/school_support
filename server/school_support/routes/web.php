@@ -27,6 +27,11 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/admin/index', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('users.index');
+Route::get('/admin/{user}', [UserController::class, 'show'])->middleware(['auth', 'verified'])->name('users.show');
+Route::get('/admin/{user}/edit', [UserController::class, 'edit'])->middleware(['auth', 'verified'])->name('users.edit');
+Route::put('/admin/{user}', [UserController::class, 'update'])->middleware(['auth', 'verified'])->name('users.update');
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
