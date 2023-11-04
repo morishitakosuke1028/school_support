@@ -13,7 +13,7 @@ class UserController extends Controller
 	{
 			$authUserId = Auth::id();
 			return Inertia::render('Admin/Index', [
-					'users' => User::select('id', 'name', 'tel', 'email', 'role')->paginate(20),
+					'users' => User::select('id', 'name', 'tel', 'email', 'role')->paginate(1),
 					'authUserId' => $authUserId
 			]);
 	}
