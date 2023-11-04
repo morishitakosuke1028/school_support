@@ -53,6 +53,7 @@ const submit = () => {
 								/>
 								<div>
 										<InputLabel for="name" value="名前" />
+										<span class="font-medium text-sm text-red-700">　(必須)</span>
 
 										<TextInput
 												id="name"
@@ -69,6 +70,7 @@ const submit = () => {
 
 								<div class="mt-4">
 										<InputLabel for="kana" value="かな" />
+										<span class="font-medium text-sm text-red-700">　(必須)</span>
 
 										<TextInput
 												id="kana"
@@ -84,7 +86,6 @@ const submit = () => {
 								</div>
 
 								<div class="mt-4">
-										<!-- <InputLabel for="gender" value="性別" /> -->
 										<InputLabel value="性別" />
 
 										<div class="mt-2">
@@ -148,6 +149,7 @@ const submit = () => {
 
 								<div class="mt-4">
 										<InputLabel for="admission_date" value="入学日" />
+										<span class="font-medium text-sm text-red-700">　(必須)</span>
 
 										<TextInput
 												id="admission_date"
@@ -155,6 +157,7 @@ const submit = () => {
 												class="mt-1 block w-full"
 												v-model="form.admission_date"
 												autofocus
+												required
 												autocomplete="admission_date"
 										/>
 
@@ -178,6 +181,7 @@ const submit = () => {
 
 								<div class="mt-4">
 										<InputLabel for="tel" value="電話番号" />
+										<span class="font-medium text-sm text-red-700">　(必須)</span>
 
 										<TextInput
 												id="tel"
@@ -193,6 +197,7 @@ const submit = () => {
 
 								<div class="mt-4">
 										<InputLabel for="pin_code" value="簡易認証コード" />
+										<span class="font-medium text-sm text-red-700">　(必須)</span>
 
 										<TextInput
 												id="pin_code"
@@ -208,6 +213,7 @@ const submit = () => {
 
 								<div class="mt-4">
 										<InputLabel for="session_id" value="認証 ID" />
+										<span class="font-medium text-sm text-red-700">　(必須)</span>
 
 										<TextInput
 												id="session_id"
@@ -223,6 +229,7 @@ const submit = () => {
 
 								<div class="mt-4">
 										<InputLabel for="password" value="パスワード" />
+										<span class="font-medium text-sm text-red-700">　(必須)</span>
 
 										<TextInput
 												id="password"
