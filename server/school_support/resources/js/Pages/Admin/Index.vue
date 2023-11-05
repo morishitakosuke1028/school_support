@@ -12,7 +12,6 @@ const props = defineProps({
 const currentUserRole = ref(null);
 
 onMounted(() => {
-    console.log(props.users);
     const currentUser = props.users.data.find(user => user.id === props.authUserId);
     if (currentUser) {
         currentUserRole.value = currentUser.role;
