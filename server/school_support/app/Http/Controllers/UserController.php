@@ -24,4 +24,12 @@ class UserController extends Controller
 					'authUserId' => $authUserId
 			]);
 	}
+
+    public function edit(User $user)
+    {
+        return Inertia::render('Admin/Edit', [
+            'user' => $user
+        ]);
+    }
+
 }
