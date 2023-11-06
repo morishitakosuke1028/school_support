@@ -32,4 +32,22 @@ class UserController extends Controller
         ]);
     }
 
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->name = $request->name;
+        $user->kana = $request->kana;
+        $user->email = $request->email;
+        $user->tel = $request->tel;
+        $user->role = $request->role;
+        $user->retirement_date = $request->retirement_date;
+        $user->session_id = $request->session_id;
+        $user->save();
+        return to_route('users.index');
+        // ->with([
+        //     'message' => '更新しました。',
+        //     'status' => '成功しました。',
+        // ]);
+    }
+
 }
