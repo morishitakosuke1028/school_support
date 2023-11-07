@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
-import { reactive } from 'vue'
+import { Head, Link, router } from '@inertiajs/vue3';
+import { reactive } from 'vue';
 
 const props = defineProps({
     user: Object
@@ -17,7 +17,7 @@ const form = reactive({
     session_id: props.user.session_id,
 })
 const updateUser = id => {
-    Inertia.put(route('users.update', { user: id }), form)
+    router.put(route('users.update', { user: id }), form)
 }
 </script>
 
