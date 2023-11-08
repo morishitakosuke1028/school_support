@@ -45,11 +45,11 @@ class UserController extends Controller
         $user->retirement_date = $request->retirement_date;
         $user->session_id = $request->session_id;
         $user->save();
-        return to_route('users.index');
-        // ->with([
-        //     'message' => '更新しました。',
-        //     'status' => '成功しました。',
-        // ]);
+        return to_route('users.index')
+        ->with([
+            'message' => '更新しました。',
+            'status' => 'success',
+        ]);
     }
 
 }
