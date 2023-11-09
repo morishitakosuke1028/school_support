@@ -31,9 +31,6 @@ Route::get('/', function () {
 Route::get('/admin/index', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('users.index');
 Route::get('/admin/{user}/edit', [UserController::class, 'edit'])->middleware(['auth', 'verified'])->name('users.edit');
 Route::put('/admin/{user}', [UserController::class, 'update'])->middleware(['auth', 'verified'])->name('users.update');
-// Route::get('/child/index', [ChildController::class, 'index'])->middleware(['auth', 'verified'])->name('children.index');
-// Route::get('/child/{child}/edit', [ChildController::class, 'edit'])->middleware(['auth', 'verified'])->name('children.edit');
-// Route::put('/child/{child}', [ChildController::class, 'update'])->middleware(['auth', 'verified'])->name('children.update');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
