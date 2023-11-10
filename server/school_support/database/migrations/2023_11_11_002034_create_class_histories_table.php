@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('class_histories', function (Blueprint $table) {
             $table->id();
+            $table->string('child_id');
+            $table->string('grade_class_id');
             $table->timestamps();
         });
     }
