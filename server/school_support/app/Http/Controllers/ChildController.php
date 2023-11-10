@@ -20,7 +20,6 @@ class ChildController extends Controller
             $authUserId = Auth::id();
             $children = Child::select('id', 'name', 'tel', 'email', 'admission_date')->paginate(50);
 
-            // dd($users);
 			return Inertia::render('Child/Index', [
                 'children' => $children,
                 'authUserId' => $authUserId

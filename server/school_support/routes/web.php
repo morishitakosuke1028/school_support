@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChildController;
+use App\Http\Controllers\GradeClassController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController as ProfileOfChildController;
 use Illuminate\Foundation\Application;
@@ -31,6 +32,8 @@ Route::get('/', function () {
 Route::get('/admin/index', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('users.index');
 Route::get('/admin/{user}/edit', [UserController::class, 'edit'])->middleware(['auth', 'verified'])->name('users.edit');
 Route::put('/admin/{user}', [UserController::class, 'update'])->middleware(['auth', 'verified'])->name('users.update');
+
+Route::get('/gradeClass/index', [GradeClassController::class, 'index'])->middleware(['auth', 'verified'])->name('gradeClasses.index');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

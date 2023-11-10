@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\class_history;
+use App\Models\gradeClass;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ClassHistoryPolicy
+class GradeClassPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class ClassHistoryPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\class_history  $classHistory
+     * @param  \App\Models\gradeClass  $gradeClass
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, class_history $classHistory)
+    public function view(User $user, gradeClass $gradeClass)
     {
         //
     }
@@ -48,10 +48,10 @@ class ClassHistoryPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\class_history  $classHistory
+     * @param  \App\Models\gradeClass  $gradeClass
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, class_history $classHistory)
+    public function update(User $user, gradeClass $gradeClass)
     {
         //
     }
@@ -60,10 +60,10 @@ class ClassHistoryPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\class_history  $classHistory
+     * @param  \App\Models\gradeClass  $gradeClass
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, class_history $classHistory)
+    public function delete(User $user, gradeClass $gradeClass)
     {
         //
     }
@@ -72,10 +72,10 @@ class ClassHistoryPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\class_history  $classHistory
+     * @param  \App\Models\gradeClass  $gradeClass
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, class_history $classHistory)
+    public function restore(User $user, gradeClass $gradeClass)
     {
         //
     }
@@ -84,10 +84,10 @@ class ClassHistoryPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\class_history  $classHistory
+     * @param  \App\Models\gradeClass  $gradeClass
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, class_history $classHistory)
+    public function forceDelete(User $user, gradeClass $gradeClass)
     {
         //
     }

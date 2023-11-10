@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('class_histories', function (Blueprint $table) {
+        Schema::create('grade_classes', function (Blueprint $table) {
             $table->id();
-            $table->string('child_id');
-            $table->string('grade_class_id');
+            $table->integer('school_id');
+            $table->string('grade_name');
+            $table->string('class_name');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('class_histories');
+        Schema::dropIfExists('grade_classes');
     }
 };
