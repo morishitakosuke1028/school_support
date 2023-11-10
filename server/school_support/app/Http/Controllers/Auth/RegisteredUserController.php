@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-						'kana' => 'nullable|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
+            'kana' => 'nullable|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
             'email' => 'required|string|email|max:255|unique:'.User::class,
             'tel' => 'nullable|string|max:13',
             'role' => 'required|in:1,2',
@@ -44,7 +44,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $user = User::create([
-						'name' => $request->name,
+            'name' => $request->name,
             'kana' => $request->kana,
             'email' => $request->email,
             'tel' => $request->tel,

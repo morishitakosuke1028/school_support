@@ -9,6 +9,7 @@ use App\Http\Controllers\Child\Auth\PasswordController;
 use App\Http\Controllers\Child\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\Child\Auth\VerifyEmailController;
+use App\Http\Controllers\ChildController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest:child')->group(function () {
@@ -16,6 +17,20 @@ Route::middleware('guest:child')->group(function () {
                 ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+    Route::get('index', [ChildController::class, 'index'])
+                ->name('index');
+
+    Route::get('{child}/edit', [ChildController::class, 'edit'])
+                ->name('edit');
+
+    Route::put('{child}', [ChildController::class, 'update'])
+                ->name('update');
+
+    Route::get('register', [RegisteredUserController::class, 'create'])
+                ->name('register');
+
+    Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
                 ->name('password.request');
@@ -30,12 +45,6 @@ Route::middleware('guest:child')->group(function () {
                 ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
-	Route::get('register', [RegisteredUserController::class, 'create'])
-	->name('register');
-
-	Route::post('register', [RegisteredUserController::class, 'store']);
-});
 Route::middleware('auth:child')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
