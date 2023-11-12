@@ -13,7 +13,7 @@ class StoregradeClassRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class StoregradeClassRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'school_id' => ['required'],
+            'grade_name' => ['required', 'max:50'],
+            'class_name' => ['required', 'max:50'],
         ];
     }
 }

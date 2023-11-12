@@ -27,6 +27,12 @@ const props = defineProps({
                     <div class="p-6 bg-white border-b border-gray-200">
                         <section class="text-gray-600 body-font">
                             <div class="container px-5 py-24 mx-auto">
+                                <div class="flex pl-4 my-4 lg:w-2/3 w-full mx-auto">
+                                    <Link as="button" class="inline-flex items-center px-4 py-2 bg-blue-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" :href="route('gradeClasses.create')">
+                                        新規作成
+                                    </Link>
+                                </div>
+
                                 <div class="lg:w-2/3 w-full mx-auto overflow-auto">
                                     <table class="table-auto w-full text-left whitespace-no-wrap" id="sort_table">
                                         <thead>
@@ -42,9 +48,9 @@ const props = defineProps({
                                             <tr>
                                                 <span v-if="currentUserRole">
                                                     <td class="px-4 py-3">
-                                                        <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('users.edit', { user: user.id })">
+                                                        <!-- <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('gradeClasses.edit', { gradeClass: gradeClass.id })">
                                                             編集する
-                                                        </Link>
+                                                        </Link> -->
                                                     </td>
                                                 </span>
                                                 <span v-else>

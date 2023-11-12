@@ -39,7 +39,7 @@ class GradeClassController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('GradeClass/Create');
     }
 
     /**
@@ -50,7 +50,17 @@ class GradeClassController extends Controller
      */
     public function store(StoregradeClassRequest $request)
     {
-        //
+        GradeClass::create([
+            'grade_name' => $request->grade_name,
+            'class_name' => $request->class_name,
+            'school_id' => $request->school_id,
+        ]);
+
+        return to_route('gradeClasses.index')
+        ->with([
+            'message' => '登録しました。',
+            'status' => 'success'
+        ]);
     }
 
     /**

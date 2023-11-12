@@ -42,7 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/gradeClass/index', [GradeClassController::class, 'index'])->name('gradeClasses.index');
+    Route::get('/gradeClasses/index', [GradeClassController::class, 'index'])->name('gradeClasses.index');
+    Route::get('/gradeClasses/create', [GradeClassController::class, 'create'])->name('gradeClasses.create');
+    Route::post('/gradeClasses', [GradeClassController::class, 'store'])->name('gradeClasses.store');
 
     Route::prefix('child')->name('child.')->group(function(){
         Route::middleware('auth:child')->group(function () {
