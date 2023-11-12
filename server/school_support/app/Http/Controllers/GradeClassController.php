@@ -26,8 +26,6 @@ class GradeClassController extends Controller
 
         $gradeClasses = gradeClass::select('id', 'grade_name', 'class_name', 'created_at', 'updated_at')->paginate(50);
 
-        // var_dump($authUserId);
-
         return Inertia::render('GradeClass/Index', [
             'gradeClasses' => $gradeClasses,
             'currentUserRole' => Auth::user()->role === 1,
@@ -51,17 +49,6 @@ class GradeClassController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StoregradeClassRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\gradeClass  $gradeClass
-     * @return \Illuminate\Http\Response
-     */
-    public function show(gradeClass $gradeClass)
     {
         //
     }
