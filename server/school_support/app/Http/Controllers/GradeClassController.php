@@ -24,14 +24,12 @@ class GradeClassController extends Controller
         // $pageNumber = $request->input('page', 1); // デフォルトのページ番号を1に設定
         // \Log::info('Requested page number: ' . $pageNumber);
 
-        $authUserId = Auth::id();
         $gradeClasses = gradeClass::select('id', 'grade_name', 'class_name', 'created_at', 'updated_at')->paginate(50);
-        $users = User::all();
+
+        // var_dump($authUserId);
 
         return Inertia::render('GradeClass/Index', [
             'gradeClasses' => $gradeClasses,
-            'authUserId' => $authUserId,
-            'users' => $users,
             'currentUserRole' => Auth::user()->role === 1,
         ]);
     }

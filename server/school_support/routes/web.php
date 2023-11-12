@@ -33,8 +33,6 @@ Route::get('/admin/index', [UserController::class, 'index'])->middleware(['auth'
 Route::get('/admin/{user}/edit', [UserController::class, 'edit'])->middleware(['auth', 'verified'])->name('users.edit');
 Route::put('/admin/{user}', [UserController::class, 'update'])->middleware(['auth', 'verified'])->name('users.update');
 
-Route::get('/gradeClass/index', [GradeClassController::class, 'index'])->middleware(['auth', 'verified'])->name('gradeClasses.index');
-
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -43,6 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/gradeClass/index', [GradeClassController::class, 'index'])->name('gradeClasses.index');
 
     Route::prefix('child')->name('child.')->group(function(){
         Route::middleware('auth:child')->group(function () {

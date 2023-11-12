@@ -7,19 +7,7 @@ import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     gradeClasses: Object,
-    authUserId: Number,
-    users: Object,
-});
-
-const currentUserRole = ref(null);
-
-onMounted(() => {
-    if (props.users && props.users.data) {
-        const currentUser = props.users.data.find(user => user.id === props.authUserId);
-        if (currentUser) {
-            currentUserRole.value = currentUser.role;
-        }
-    }
+    currentUserRole: Boolean,
 });
 </script>
 <template>
@@ -52,14 +40,14 @@ onMounted(() => {
                                         </thead>
                                         <tbody v-if="gradeClasses && gradeClasses.data" v-for="gradeClass in gradeClasses.data" :key="gradeClass.id">
                                             <tr>
-                                                <span v-if="currentUserRole === 1">
+                                                <span v-if="currentUserRole">
                                                     <td class="px-4 py-3">
                                                         <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('users.edit', { user: user.id })">
                                                             編集する
                                                         </Link>
                                                     </td>
                                                 </span>
-                                                <span v-else-if="currentUserRole === 2">
+                                                <span v-else>
                                                     <td class="px-4 py-3">
                                                         <span as="button" class="flex mx-auto text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
                                                             編集する

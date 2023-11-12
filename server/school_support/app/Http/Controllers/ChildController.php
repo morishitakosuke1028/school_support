@@ -9,20 +9,36 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
 
 class ChildController extends Controller
 {
+    // @TODO auth取得
+    protected $auth;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->auth = Auth::guard('web');
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
 	{
             $pageNumber = $request->input('page', 1); // デフォルトのページ番号を1に設定
             \Log::info('Requested page number: ' . $pageNumber);
 
-            $authUserId = Auth::id();
+            // $authUserId = Auth::id();
+            // $authUserId = Auth::guard('web')->user();
+            $authUserId = $this->auth->user();
             $children = Child::select('id', 'name', 'tel', 'email', 'admission_date')->paginate(50);
 
+            // var_dump($authUserId);
 			return Inertia::render('Child/Index', [
                 'children' => $children,
-                'authUserId' => $authUserId
+                'authUserId' => $authUserId,
+                // 'currentUserRole' => Auth::user()->role === 1,
 			]);
 	}
 
