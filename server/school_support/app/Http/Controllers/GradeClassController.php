@@ -71,7 +71,9 @@ class GradeClassController extends Controller
      */
     public function edit(gradeClass $gradeClass)
     {
-        //
+        return Inertia::render('GradeClass/Edit', [
+            'gradeClass' => $gradeClass
+        ]);
     }
 
     /**

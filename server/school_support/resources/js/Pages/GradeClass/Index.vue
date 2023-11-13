@@ -4,6 +4,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 import { ref, onMounted } from 'vue';
+import dayjs from 'dayjs';
 
 const props = defineProps({
     gradeClasses: Object,
@@ -48,28 +49,28 @@ const props = defineProps({
                                             <tr>
                                                 <span v-if="currentUserRole">
                                                     <td class="px-4 py-3">
-                                                        <!-- <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('gradeClasses.edit', { gradeClass: gradeClass.id })">
-                                                            編集する
-                                                        </Link> -->
+                                                        <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('gradeClasses.edit', { gradeClass: gradeClass.id })">
+                                                            編集
+                                                        </Link>
                                                     </td>
                                                 </span>
                                                 <span v-else>
                                                     <td class="px-4 py-3">
                                                         <span as="button" class="flex mx-auto text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
-                                                            編集する
+                                                            編集
                                                         </span>
                                                     </td>
                                                 </span>
                                                 <td class="px-4 py-3">{{ gradeClass.grade_name }}</td>
                                                 <td class="px-4 py-3">{{ gradeClass.class_name }}</td>
-                                                <td class="px-4 py-3">{{ gradeClass.created_at }}</td>
-                                                <td class="px-4 py-3">{{ gradeClass.updated_at }}</td>
+                                                <td class="px-4 py-3">{{ dayjs(gradeClass.created_at).format('YYYY-MM-DD HH:mm:ss') }}</td>
+                                                <td class="px-4 py-3">{{ dayjs(gradeClass.updated_at).format('YYYY-MM-DD HH:mm:ss') }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <!-- <Pagination :links="gradeClasses.links"></Pagination> -->
+                            <Pagination :links="gradeClasses.links"></Pagination>
                         </section>
                     </div>
                 </div>
