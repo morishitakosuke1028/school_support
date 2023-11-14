@@ -85,7 +85,15 @@ class GradeClassController extends Controller
      */
     public function update(UpdategradeClassRequest $request, gradeClass $gradeClass)
     {
-        //
+        // $gradeClass = gradeClass::findOrFail($id);
+        $gradeClass->grade_name = $request->grade_name;
+        $gradeClass->class_name = $request->class_name;
+        $gradeClass->save();
+        return to_route('gradeClasses.index')
+        ->with([
+            'message' => '更新しました。',
+            'status' => 'success',
+        ]);
     }
 
     /**

@@ -7,6 +7,7 @@ const props = defineProps({
     gradeClass: Object
 })
 const form = reactive({
+    id: props.gradeClass.id,
     school_id: props.gradeClass.school_id,
     grade_name: props.gradeClass.grade_name,
     class_name: props.gradeClass.class_name,
