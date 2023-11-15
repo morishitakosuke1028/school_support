@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/gradeClasses', [GradeClassController::class, 'store'])->name('gradeClasses.store');
     Route::get('/gradeClasses/{gradeClass}/edit', [GradeClassController::class, 'edit'])->name('gradeClasses.edit');
     Route::put('/gradeClasses/{gradeClass}', [GradeClassController::class, 'update'])->name('gradeClasses.update');
+    Route::delete('/gradeClasses/{gradeClass}', [GradeClassController::class, 'destroy'])->name('gradeClasses.destroy');
 
     Route::prefix('child')->name('child.')->group(function(){
         Route::middleware('auth:child')->group(function () {
