@@ -3,6 +3,7 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChildController;
 use App\Http\Controllers\GradeClassController;
+use App\Http\Controllers\GradeClassHistoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController as ProfileOfChildController;
 use Illuminate\Foundation\Application;
@@ -48,6 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/gradeClasses/{gradeClass}/edit', [GradeClassController::class, 'edit'])->name('gradeClasses.edit');
     Route::put('/gradeClasses/{gradeClass}', [GradeClassController::class, 'update'])->name('gradeClasses.update');
     Route::delete('/gradeClasses/{gradeClass}', [GradeClassController::class, 'destroy'])->name('gradeClasses.destroy');
+
+    Route::get('/gradeClassHistories/index', [GradeClassHistoryController::class, 'index'])->name('gradeClassHistories.index');
 
     Route::prefix('child')->name('child.')->group(function(){
         Route::middleware('auth:child')->group(function () {

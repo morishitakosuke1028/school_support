@@ -68,8 +68,7 @@ const showingNavigationDropdown = ref(false);
                                         <DropdownLink :href="route('child.register')"> 園児登録</DropdownLink>
                                         <DropdownLink :href="route('users.index')" > 職員一覧</DropdownLink>
                                         <DropdownLink :href="route('child.index')" > 園児一覧</DropdownLink>
-                                        <!-- @TODO ルート設定 -->
-                                        <DropdownLink :href="route('child.index')" > クラス替え</DropdownLink>
+                                        <DropdownLink :href="route('gradeClassHistories.index')" > クラス替え</DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>

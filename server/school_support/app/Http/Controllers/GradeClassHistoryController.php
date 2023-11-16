@@ -5,6 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoregradeClassHistoryRequest;
 use App\Http\Requests\UpdategradeClassHistoryRequest;
 use App\Models\gradeClassHistory;
+use App\Models\gradeClass;
+use App\Models\User;
+use App\Models\Child;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Support\Facades\Auth;
 
 class GradeClassHistoryController extends Controller
 {
@@ -15,7 +22,14 @@ class GradeClassHistoryController extends Controller
      */
     public function index()
     {
-        //
+        $gradeClasses = gradeClass::all();
+        $children = child::all();
+
+        return Inertia::render('GradeClassHistory/Index', [
+            'gradeClasses' => $gradeClasses,
+            'children' => $children,
+            'currentUserRole' => Auth::user()->role === 1,
+        ]);
     }
 
     /**
