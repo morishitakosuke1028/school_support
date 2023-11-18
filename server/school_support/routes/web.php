@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChildController;
 use App\Http\Controllers\GradeClassController;
 use App\Http\Controllers\GradeClassHistoryController;
+use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController as ProfileOfChildController;
 use Illuminate\Foundation\Application;
@@ -52,18 +53,14 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/gradeClassHistories/index', [GradeClassHistoryController::class, 'index'])->name('gradeClassHistories.index');
 
-    Route::prefix('child')->name('child.')->group(function(){
-        Route::middleware('auth:child')->group(function () {
-            Route::get('register', [RegisteredUserController::class, 'create'])
-            ->name('register');
+    Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
+    ->name('admin.child.register');
 
-            Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::post('/admin/child/register', [RegisteredUserController::class, 'store']);
 
-            Route::get('index', [ChildController::class, 'index'])->name('index');
-            Route::get('{child}/edit', [ChildController::class, 'edit'])->name('edit');
-            Route::put('{child}', [ChildController::class, 'update'])->name('update');
-        });
-    });
+    Route::get('/admin/child/index', [ChildController::class, 'index'])->name('admin.child.index');
+    Route::get('/admin/child/{child}/edit', [ChildController::class, 'edit'])->name('admin.child.edit');
+    Route::put('/admin/child/{child}', [ChildController::class, 'update'])->name('admin.child.update');
 });
 
 Route::prefix('child')->name('child.')->group(function(){
@@ -73,11 +70,11 @@ Route::prefix('child')->name('child.')->group(function(){
 	})->middleware(['auth:child', 'verified'])->name('dashboard');
 
 	Route::middleware('auth:child')->group(function () {
-			Route::get('/profile', [ProfileOfChildController::class, 'edit'])->name('profile.edit');
-			Route::patch('/profile', [ProfileOfChildController::class, 'update'])->name('profile.update');
-			Route::delete('/profile', [ProfileOfChildController::class, 'destroy'])->name('profile.destroy');
-	});
+        Route::get('/profile', [ProfileOfChildController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileOfChildController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileOfChildController::class, 'destroy'])->name('profile.destroy');
 
+    });
 	require __DIR__.'/child.php';
 });
 

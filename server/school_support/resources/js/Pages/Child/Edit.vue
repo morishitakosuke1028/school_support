@@ -23,7 +23,7 @@ const form = reactive({
     graduation_date: props.child.graduation_date,
 })
 const updateChild = id => {
-    router.put(route('child.update', { child: id }), form)
+    router.put(route('admin.child.update', { child: id }), form)
 }
 </script>
 

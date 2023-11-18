@@ -14,31 +14,26 @@ use Illuminate\Contracts\Auth\Factory as AuthFactory;
 class ChildController extends Controller
 {
     // @TODO auth取得
-    protected $auth;
+    // protected $auth;
 
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            $this->auth = Auth::guard('web');
-            return $next($request);
-        });
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware(function ($request, $next) {
+    //         $this->auth = Auth::guard('web');
+    //         return $next($request);
+    //     });
+    // }
 
     public function index(Request $request)
 	{
             $pageNumber = $request->input('page', 1); // デフォルトのページ番号を1に設定
             \Log::info('Requested page number: ' . $pageNumber);
 
-            // $authUserId = Auth::id();
-            // $authUserId = Auth::guard('web')->user();
-            $authUserId = $this->auth->user();
             $children = Child::select('id', 'name', 'tel', 'email', 'admission_date')->paginate(50);
 
-            // var_dump($authUserId);
 			return Inertia::render('Child/Index', [
                 'children' => $children,
-                'authUserId' => $authUserId,
-                // 'currentUserRole' => Auth::user()->role === 1,
+                'currentUserRole' => Auth::user()->role === 1,
 			]);
 	}
 
@@ -66,7 +61,7 @@ class ChildController extends Controller
         $child->movein_date = $request->movein_date;
         $child->graduation_date = $request->graduation_date;
         $child->save();
-        return to_route('child.index')
+        return to_route('admin.child.index')
         ->with([
             'message' => '更新しました。',
             'status' => 'success',
