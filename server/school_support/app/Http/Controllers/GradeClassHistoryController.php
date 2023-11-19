@@ -22,12 +22,35 @@ class GradeClassHistoryController extends Controller
      */
     public function index()
     {
-        $gradeClasses = gradeClass::all();
-        $children = child::all();
+        // $gradeClassHistories = GradeClassHistory::with('gradeClass', 'user', 'child')->get();
+        $gradeClassHistories = GradeClassHistory::with(['gradeClass' => function ($query) {
+            $query->select('id', 'class_name', 'grade_name');
+        }, 'user' => function ($query) {
+            $query->select('id', 'name');
+        }])
+        ->select('id', 'grade_class_id', 'user_id') // 必要に応じて他のカラムも指定
+        ->get();
+
+        // $gradeClassHistories = GradeClassHistory::all()->gradeClass;
+
+        // echo '<pre>';
+        // dump($gradeClassHistories->grade_name);
+        // dump($gradeClassHistories->pluck('gradeClass.grade_name'));
+        // echo '</pre>';
+
+        // dd($gradeClassHistories);
+        // $gradeClasses = gradeClass::select('id', 'grade_name', 'class_name', 'updated_at');
+        // $children = child::select('id', 'name');
+        // $users = user::select('id', 'name');
+        $gradeClasses = GradeClass::all();
+        $children = Child::all();
+        $users = User::all();
 
         return Inertia::render('GradeClassHistory/Index', [
+            'gradeClassHistories' => $gradeClassHistories,
             'gradeClasses' => $gradeClasses,
             'children' => $children,
+            'users' => $users,
             'currentUserRole' => Auth::user()->role === 1,
         ]);
     }

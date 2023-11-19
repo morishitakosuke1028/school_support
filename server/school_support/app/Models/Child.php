@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\GradeClassHistory;
 
 class Child extends Authenticatable
 {
@@ -53,4 +54,9 @@ class Child extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function gradeClassHistories()
+    {
+        return $this->hasMany(GradeClassHistory::class);
+    }
 }

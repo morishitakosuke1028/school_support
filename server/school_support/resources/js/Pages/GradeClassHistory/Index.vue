@@ -6,8 +6,10 @@ import { ref, onMounted } from 'vue';
 import dayjs from 'dayjs';
 
 defineProps({
+    gradeClassHistories: Array,
     gradeClasses: Array,
     children: Array,
+    users: Array,
     currentUserRole: Boolean,
 });
 </script>
@@ -37,45 +39,30 @@ defineProps({
                                                 <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">　</th>
                                                 <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">学年</th>
                                                 <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">クラス</th>
-                                                <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">作成日</th>
+                                                <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">担任</th>
                                                 <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">更新日</th>
                                             </tr>
                                         </thead>
-                                        <tbody v-if="gradeClasses" v-for="gradeClass in gradeClasses" :key="gradeClass.id">
+                                        <tbody v-for="history in gradeClassHistories" :key="history.id">
                                             <tr>
-                                                <span>
+                                                <span v-if="currentUserRole">
                                                     <td class="px-4 py-3">
-                                                        <!-- <button class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" @click="editGradeClass(gradeClass.id)">
+                                                        <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('gradeClassHistories.edit', { history: history.id })">
                                                             編集
-                                                        </button> -->
+                                                        </Link>
                                                     </td>
                                                 </span>
-                                                <td class="px-4 py-3">{{ gradeClass.grade_name }}</td>
-                                                <td class="px-4 py-3">{{ gradeClass.class_name }}</td>
-                                                <td class="px-4 py-3">{{ dayjs(gradeClass.created_at).format('YYYY-MM-DD HH:mm:ss') }}</td>
-                                                <td class="px-4 py-3">{{ dayjs(gradeClass.updated_at).format('YYYY-MM-DD HH:mm:ss') }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                    <h3 class="text-2xl font-semibold mt-8 mb-4">生徒一覧</h3>
-                                    <table class="table-auto w-full text-left whitespace-no-wrap" id="children_table">
-                                        <thead>
-                                            <tr>
-                                                <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">　</th>
-                                                <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">名前</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody v-if="children" v-for="child in children" :key="child.id">
-                                            <tr>
-                                                <span>
+                                                <span v-else>
                                                     <td class="px-4 py-3">
-                                                        <!-- <button class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" @click="editGradeClass(gradeClass.id)">
+                                                        <span as="button" class="flex mx-auto text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
                                                             編集
-                                                        </button> -->
+                                                        </span>
                                                     </td>
                                                 </span>
-                                                <td class="px-4 py-3">{{ child.name }}</td>
+                                                <td class="px-4 py-3">{{ history.grade_class.grade_name }}</td>
+                                                <td class="px-4 py-3">{{ history.grade_class.class_name }}</td>
+                                                <td class="px-4 py-3">{{ history.user.name}}</td>
+                                                <td class="px-4 py-3">{{ dayjs(history.updated_at).format('YYYY-MM-DD HH:mm:ss') }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
