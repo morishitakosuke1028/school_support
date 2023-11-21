@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('grade_class_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('child_id')->constrained();
+            $table->foreignId('user_id')->nullable()->constrained();
+            $table->foreignId('child_id')->nullable()->constrained();
             $table->foreignId('grade_class_id')->constrained();
             $table->timestamps();
         });
