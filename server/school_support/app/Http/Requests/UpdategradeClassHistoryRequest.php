@@ -13,7 +13,7 @@ class UpdategradeClassHistoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class UpdategradeClassHistoryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'user_id' => ['nullable'],
+            'child_id' => ['nullable', 'array'],
         ];
     }
 }

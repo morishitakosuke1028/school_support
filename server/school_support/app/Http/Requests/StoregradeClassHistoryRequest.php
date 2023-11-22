@@ -13,7 +13,7 @@ class StoregradeClassHistoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class StoregradeClassHistoryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'grade_class_id' => ['required'],
+            'user_id' => ['nullable'],
+            'child_id' => ['nullable', 'array'],
         ];
     }
 }

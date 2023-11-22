@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoregradeClassHistoryRequest;
 use App\Http\Requests\UpdategradeClassHistoryRequest;
-use App\Models\gradeClassHistory;
-use App\Models\gradeClass;
+use App\Models\GradeClassHistory;
+use App\Models\GradeClass;
 use App\Models\User;
 use App\Models\Child;
 use Illuminate\Http\Request;

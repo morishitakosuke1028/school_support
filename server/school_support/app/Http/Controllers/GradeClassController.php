@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoregradeClassRequest;
 use App\Http\Requests\UpdategradeClassRequest;
-use App\Models\gradeClass;
+use App\Models\GradeClass;
+use App\Models\GradeClassHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -50,10 +51,14 @@ class GradeClassController extends Controller
      */
     public function store(StoregradeClassRequest $request)
     {
-        GradeClass::create([
+        $gradeClass = GradeClass::create([
             'grade_name' => $request->grade_name,
             'class_name' => $request->class_name,
             'school_id' => $request->school_id,
+        ]);
+
+        GradeClassHistory::create([
+            'grade_class_id' => $gradeClass->id,
         ]);
 
         return to_route('gradeClasses.index')

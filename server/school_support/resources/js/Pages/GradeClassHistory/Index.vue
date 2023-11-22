@@ -47,7 +47,7 @@ defineProps({
                                             <tr>
                                                 <span v-if="currentUserRole">
                                                     <td class="px-4 py-3">
-                                                        <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('gradeClassHistories.edit', { history: history.id })">
+                                                        <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('gradeClassHistories.edit', { gradeClassHistory: history.id })">
                                                             編集
                                                         </Link>
                                                     </td>
@@ -61,7 +61,7 @@ defineProps({
                                                 </span>
                                                 <td class="px-4 py-3">{{ history.grade_class.grade_name }}</td>
                                                 <td class="px-4 py-3">{{ history.grade_class.class_name }}</td>
-                                                <td class="px-4 py-3">{{ history.user.name}}</td>
+                                                <td class="px-4 py-3">{{ history.user ? history.user.name : ' ' }}</td>
                                                 <td class="px-4 py-3">{{ dayjs(history.updated_at).format('YYYY-MM-DD HH:mm:ss') }}</td>
                                             </tr>
                                         </tbody>

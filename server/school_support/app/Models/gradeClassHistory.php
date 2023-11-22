@@ -10,6 +10,10 @@ use App\Models\gradeClass;
 
 class gradeClassHistory extends Model
 {
+    protected $casts = [
+        'child_id' => 'array',
+    ];
+
     use HasFactory;
 
     protected $fillable = [
