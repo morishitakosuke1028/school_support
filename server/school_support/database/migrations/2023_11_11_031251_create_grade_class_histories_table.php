@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('grade_class_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained();
-            $table->foreignId('child_id')->nullable()->constrained();
+            $table->string('child_id')->nullable();
             $table->foreignId('grade_class_id')->constrained();
             $table->timestamps();
         });
@@ -30,5 +30,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('grade_class_histories');
+        Schema::dropIfExists('users');
     }
 };

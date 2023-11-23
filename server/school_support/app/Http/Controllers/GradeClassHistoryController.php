@@ -44,38 +44,6 @@ class GradeClassHistoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoregradeClassHistoryRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoregradeClassHistoryRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\gradeClassHistory  $gradeClassHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function show(gradeClassHistory $gradeClassHistory)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\gradeClassHistory  $gradeClassHistory
@@ -83,7 +51,13 @@ class GradeClassHistoryController extends Controller
      */
     public function edit(gradeClassHistory $gradeClassHistory)
     {
-        //
+        $children = Child::all();
+        $users = User::all();
+        return Inertia::render('GradeClassHistory/Edit', [
+            'gradeClassHistory' => $gradeClassHistory,
+            'children' => $children,
+            'users' => $users,
+        ]);
     }
 
     /**
@@ -95,7 +69,14 @@ class GradeClassHistoryController extends Controller
      */
     public function update(UpdategradeClassHistoryRequest $request, gradeClassHistory $gradeClassHistory)
     {
-        //
+        $gradeClassHistory->user_id = $request->user_id;
+        $gradeClassHistory->child_id = $request->child_id;
+        $gradeClassHistory->save();
+        return to_route('gradeClassHistories.index')
+        ->with([
+            'message' => '更新しました。',
+            'status' => 'success',
+        ]);
     }
 
     /**
@@ -106,6 +87,11 @@ class GradeClassHistoryController extends Controller
      */
     public function destroy(gradeClassHistory $gradeClassHistory)
     {
-        //
+        $gradeClassHistory->delete();
+        return to_route('gradeClassHistories.index')
+        ->with([
+            'message' => '削除しました。',
+            'status' => 'danger',
+        ]);
     }
 }
