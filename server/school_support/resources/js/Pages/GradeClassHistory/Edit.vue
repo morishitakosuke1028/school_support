@@ -20,17 +20,27 @@ const selectedChildren = ref([]);
 const tempSelectedChildren = ref([]);
 
 const moveToRight = () => {
-  console.log('moveToRight ボタンが押されました');
-  console.log('移動前 selectedGradeClassChildren:', selectedGradeClassChildren.value);
-  // 以下の処理を追加
-  if (selectedChildren.value.length > 0) {
-    selectedGradeClassChildren.value = [
-      ...selectedGradeClassChildren.value,
-      ...selectedChildren.value.map(childId => ({ id: childId }))
-    ];
-    selectedChildren.value = [];
-  }
-  console.log('移動後 selectedGradeClassChildren:', selectedGradeClassChildren.value);
+    console.log('moveToRight ボタンが押されました');
+    console.log('移動前 selectedGradeClassChildren:', selectedGradeClassChildren.value);
+
+    if (selectedChildren.value.length > 0) {
+        selectedGradeClassChildren.value = [
+            ...selectedGradeClassChildren.value,
+            ...selectedChildren.value.map(childId => ({ id: childId }))
+        ];
+
+        // 選択された子供を非表示にする
+        selectedChildren.value.forEach(childId => {
+            const childIndex = props.children.findIndex(child => child.id === childId);
+            if (childIndex !== -1) {
+                props.children[childIndex].hidden = true;
+            }
+        });
+
+        selectedChildren.value = [];
+    }
+
+    console.log('移動後 selectedGradeClassChildren:', selectedGradeClassChildren.value);
 }
 
 const moveToLeft = () => {
@@ -49,6 +59,7 @@ const getChildName = (childId) => {
   const matchingChild = props.children.find(child => child.id === childId);
   return matchingChild ? matchingChild.name : 'No Name';
 };
+
 
 // watchEffect(() => {
 //   console.log('selectedGradeClassChildren が変更されました', selectedGradeClassChildren.value);
@@ -106,8 +117,10 @@ const deleteGradeClassHistory = id => {
                                                         <label class="leading-7 text-sm text-gray-600">生徒名</label>
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div>
-                                                            <select multiple v-model="selectedChildren" style="height: 20em; width: 12em;" @change="handleSelectionChange">
-                                                                <option v-for="child in props.children" :key="child.id" :value="child.id">{{ child.name }}</option>
+                                                            <select multiple v-model="selectedChildren" style="height: 20em; width: 12em;">
+                                                                <option v-for="child in props.children" :key="child.id" :value="child.id">
+                                                                    <span v-if="!child.hidden">{{ child.name }}</span>
+                                                                </option>
                                                             </select>
                                                         </div>
                                                     </div>
