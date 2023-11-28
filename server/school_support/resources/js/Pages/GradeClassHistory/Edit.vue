@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { reactive, ref, watchEffect, nextTick, watch } from 'vue'
+import { reactive, ref, onMounted, watchEffect, nextTick, watch } from 'vue'
 
 const props = defineProps({
     gradeClassHistory: Object,
@@ -67,6 +67,10 @@ const getChildName = (childId) => {
 //     console.log('DOM が更新されました');
 //   });
 // });
+
+onMounted(() => {
+    selectedGradeClassChildren.value = props.gradeClassHistory.child_id;
+});
 
 
 const updateGradeClassHistory = id => {
@@ -137,8 +141,10 @@ const deleteGradeClassHistory = id => {
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div>
                                                             <select multiple style="height: 20em; width: 12em;" v-model="selectedGradeClassChildren">
-                                                                <option v-for="child in selectedGradeClassChildren" :key="child.id" :value="child.id">
-                                                                    {{ child && child.id && childInChildren(child.id) ? getChildName(child.id) : '　' }}
+                                                                <!-- <option v-for="child in selectedGradeClassChildren" :key="child.id" :value="child.id"> -->
+                                                                <option v-for="childId in selectedGradeClassChildren" :key="childId" :value="childId">
+                                                                    <!-- {{ child && child.id && childInChildren(child.id) ? getChildName(child.id) : '　' }} -->
+                                                                    {{ childId && childInChildren(childId) ? getChildName(childId) : '　' }}
                                                                 </option>
                                                             </select>
                                                         </div>
