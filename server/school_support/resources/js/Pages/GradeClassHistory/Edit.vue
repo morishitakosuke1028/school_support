@@ -19,6 +19,10 @@ const selectedGradeClassChildren = ref([]);
 const selectedChildren = ref([]);
 const tempSelectedChildren = ref([]);
 
+onMounted(() => {
+    selectedGradeClassChildren.value = props.gradeClassHistory.child_id;
+});
+
 const moveToRight = () => {
     console.log('moveToRight ボタンが押されました');
     console.log('移動前 selectedGradeClassChildren:', selectedGradeClassChildren.value);
@@ -51,27 +55,17 @@ const moveToLeft = () => {
   }
 }
 
-const childInChildren = (childId) => {
-  return props.children.some(child => child.id === childId);
+// const childInChildren = (childId) => {
+//   return props.children.some(child => child.id === childId);
+// };
+const childIsVisible = (childId) => {
+    return !selectedGradeClassChildren.value.some(selectedChild => selectedChild.id === childId);
 };
 
 const getChildName = (childId) => {
   const matchingChild = props.children.find(child => child.id === childId);
   return matchingChild ? matchingChild.name : 'No Name';
 };
-
-
-// watchEffect(() => {
-//   console.log('selectedGradeClassChildren が変更されました', selectedGradeClassChildren.value);
-//   nextTick(() => {
-//     console.log('DOM が更新されました');
-//   });
-// });
-
-onMounted(() => {
-    selectedGradeClassChildren.value = props.gradeClassHistory.child_id;
-});
-
 
 const updateGradeClassHistory = id => {
     form.child_id = selectedChildren.value;
@@ -123,7 +117,9 @@ const deleteGradeClassHistory = id => {
                                                         <div>
                                                             <select multiple v-model="selectedChildren" style="height: 20em; width: 12em;">
                                                                 <option v-for="child in props.children" :key="child.id" :value="child.id">
-                                                                    <span v-if="!child.hidden">{{ child.name }}</span>
+                                                                    <!-- <span v-if="!child.hidden">{{ child.name }}</span> -->
+                                                                    <!-- <span v-if="childIsVisible(child.id)">{{ child.name }}</span> -->
+                                                                    <span v-if="!selectedGradeClassChildren.includes(child.id) && !child.hidden">{{ child.name }}</span>
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -142,9 +138,13 @@ const deleteGradeClassHistory = id => {
                                                         <div>
                                                             <select multiple style="height: 20em; width: 12em;" v-model="selectedGradeClassChildren">
                                                                 <!-- <option v-for="child in selectedGradeClassChildren" :key="child.id" :value="child.id"> -->
-                                                                <option v-for="childId in selectedGradeClassChildren" :key="childId" :value="childId">
+                                                                <!-- <option v-for="childId in selectedGradeClassChildren" :key="childId" :value="childId"> -->
+                                                                <option v-for="child in props.children" :key="child.id" :value="child.id">
                                                                     <!-- {{ child && child.id && childInChildren(child.id) ? getChildName(child.id) : '　' }} -->
-                                                                    {{ childId && childInChildren(childId) ? getChildName(childId) : '　' }}
+                                                                    <!-- {{ childId && childInChildren(childId) ? getChildName(childId) : '　' }} -->
+                                                                    <span v-if="selectedGradeClassChildren.includes(child.id)">
+                                                                        {{ child && child.id ? getChildName(child.id) : '　' }}
+                                                                    </span>
                                                                 </option>
                                                             </select>
                                                         </div>
