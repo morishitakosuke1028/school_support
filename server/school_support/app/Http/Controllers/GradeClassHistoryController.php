@@ -53,10 +53,13 @@ class GradeClassHistoryController extends Controller
     {
         $children = Child::all();
         $users = User::all();
+        $gradeClasses = gradeClass::all();
+        $gradeClassHistory = gradeClassHistory::all();
         return Inertia::render('GradeClassHistory/Edit', [
             'gradeClassHistory' => $gradeClassHistory,
             'children' => $children,
             'users' => $users,
+            'gradeClasses' => $gradeClasses,
         ]);
     }
 
