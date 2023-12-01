@@ -47,6 +47,13 @@ const getFilteredHistories = computed(() => {
     return props.gradeClassHistory.filter((history) => history.grade_class_id === selectedClassId.value);
   }
 });
+
+const getChildrenNotInClass = computed(() => {
+  // 所属なし生徒の取得
+  return props.children.filter((child) => {
+    return !props.gradeClassHistory.some((history) => history.child_id.includes(child.id));
+  });
+});
 </script>
 
 <template>
@@ -86,7 +93,7 @@ const getFilteredHistories = computed(() => {
                                                         <label for="classSelector">クラス</label>
                                                         <select id="classSelector" v-model="selectedClassId" @change="handleChangeClass">
                                                             <option :value="null">所属なし生徒</option>
-                                                            <option  v-for="gradeClass in gradeClasses" :key="gradeClass.id" :value="gradeClass.id">
+                                                            <option v-for="gradeClass in gradeClasses" :key="gradeClass.id" :value="gradeClass.id">
                                                                 {{ gradeClass.grade_name }}{{ gradeClass.class_name }}
                                                             </option>
                                                         </select>
@@ -96,12 +103,19 @@ const getFilteredHistories = computed(() => {
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div v-if="selectedClassId !== null">
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector">
-                                                                <template v-for="history in getFilteredHistories" :key="history.id">
-                                                                    <template v-if="history.grade_class_id === selectedClassId">
-                                                                        <template v-for="(childId, index) in history.child_id" :key="index">
-                                                                            <option :value="childId">{{ getChildName(childId) }}</option>
-                                                                        </template>
+                                                                <template v-if="selectedClassId === null">
+                                                                <!-- 所属なし生徒を選択した場合 -->
+                                                                <option v-for="child in getChildrenNotInClass" :key="child.id" :value="child.id">
+                                                                    {{ child.name }}
+                                                                </option>
+                                                                </template>
+                                                                <template v-else>
+                                                                <!-- 特定のクラスに所属する生徒の履歴を表示 -->
+                                                                <template v-for="history in getFilteredHistories">
+                                                                    <template v-for="(childId, index) in history.child_id" :key="index">
+                                                                    <option :value="childId">{{ getChildName(childId) }}</option>
                                                                     </template>
+                                                                </template>
                                                                 </template>
                                                             </select>
                                                         </div>

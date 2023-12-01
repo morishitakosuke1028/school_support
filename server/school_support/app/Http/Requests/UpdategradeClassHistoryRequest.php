@@ -25,7 +25,7 @@ class UpdategradeClassHistoryRequest extends FormRequest
     {
         return [
             'user_id' => ['nullable'],
-            'child_id' => ['nullable', 'array'],
+            'child_id' => ['nullable'],
         ];
     }
 }
