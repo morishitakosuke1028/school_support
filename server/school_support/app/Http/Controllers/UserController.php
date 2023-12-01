@@ -14,10 +14,7 @@ class UserController extends Controller
 {
 	public function index(Request $request)
 	{
-        $pageNumber = $request->input('page', 1); // デフォルトのページ番号を1に設定
-        \Log::info('Requested page number: ' . $pageNumber);
-
-        $users = User::select('id', 'name', 'tel', 'email', 'role')->paginate(50);
+        $users = User::select('id', 'name', 'tel', 'email', 'role')->paginate(20);
 
         return Inertia::render('Admin/Index', [
             'users' => $users,

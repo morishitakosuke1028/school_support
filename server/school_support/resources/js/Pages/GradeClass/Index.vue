@@ -70,7 +70,9 @@ const props = defineProps({
                                     </table>
                                 </div>
                             </div>
-                            <Pagination :links="gradeClasses.links"></Pagination>
+                            <div class="text-center">
+                                <Pagination :links="props.gradeClasses.links"></Pagination>
+                            </div>
                         </section>
                     </div>
                 </div>

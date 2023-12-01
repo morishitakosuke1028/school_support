@@ -13,23 +13,9 @@ use Illuminate\Contracts\Auth\Factory as AuthFactory;
 
 class ChildController extends Controller
 {
-    // @TODO auth取得
-    // protected $auth;
-
-    // public function __construct()
-    // {
-    //     $this->middleware(function ($request, $next) {
-    //         $this->auth = Auth::guard('web');
-    //         return $next($request);
-    //     });
-    // }
-
     public function index(Request $request)
 	{
-            $pageNumber = $request->input('page', 1); // デフォルトのページ番号を1に設定
-            \Log::info('Requested page number: ' . $pageNumber);
-
-            $children = Child::select('id', 'name', 'tel', 'email', 'admission_date')->paginate(50);
+            $children = Child::select('id', 'name', 'tel', 'email', 'admission_date')->paginate(20);
 
 			return Inertia::render('Child/Index', [
                 'children' => $children,

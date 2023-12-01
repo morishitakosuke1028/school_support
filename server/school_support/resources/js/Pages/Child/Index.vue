@@ -9,15 +9,6 @@ const props = defineProps({
     children: Object,
     currentUserRole: Boolean,
 });
-
-// const currentUserRole = ref(null);
-
-// onMounted(() => {
-//     const currentUser = props.users.data.find(user => user.id === props.authUserId);
-//     if (currentUser) {
-//         currentUserRole.value = currentUser.role;
-//     }
-// });
 </script>
 <template>
     <Head title="生徒一覧" />
@@ -52,14 +43,14 @@ const props = defineProps({
                                                 <span v-if="currentUserRole === true">
                                                     <td class="px-4 py-3">
                                                         <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('admin.child.edit', { child: child.id })">
-                                                            編集する
+                                                            編集
                                                         </Link>
                                                     </td>
                                                 </span>
                                                 <span v-else>
                                                     <td class="px-4 py-3">
                                                         <span as="button" class="flex mx-auto text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
-                                                            編集する
+                                                            編集
                                                         </span>
                                                     </td>
                                                 </span>
@@ -72,7 +63,9 @@ const props = defineProps({
                                     </table>
                                 </div>
                             </div>
-                            <Pagination :links="children.links"></Pagination>
+                            <div class="text-center">
+                                <Pagination :links="props.children.links"></Pagination>
+                            </div>
                         </section>
                     </div>
                 </div>

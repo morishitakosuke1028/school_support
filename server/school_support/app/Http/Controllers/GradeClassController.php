@@ -22,10 +22,7 @@ class GradeClassController extends Controller
      */
     public function index(Request $request)
     {
-        // $pageNumber = $request->input('page', 1); // デフォルトのページ番号を1に設定
-        // \Log::info('Requested page number: ' . $pageNumber);
-
-        $gradeClasses = gradeClass::select('id', 'grade_name', 'class_name', 'created_at', 'updated_at')->paginate(50);
+        $gradeClasses = gradeClass::select('id', 'grade_name', 'class_name', 'created_at', 'updated_at')->paginate(20);
 
         return Inertia::render('GradeClass/Index', [
             'gradeClasses' => $gradeClasses,

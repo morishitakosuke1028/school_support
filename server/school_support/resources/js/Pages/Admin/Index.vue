@@ -67,7 +67,9 @@ const props = defineProps({
                                     </table>
                                 </div>
                             </div>
-                            <Pagination :links="users.links"></Pagination>
+                            <div class="text-center">
+                                <Pagination :links="props.users.links"></Pagination>
+                            </div>
                         </section>
                     </div>
                 </div>
