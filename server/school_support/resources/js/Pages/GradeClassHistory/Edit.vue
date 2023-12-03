@@ -4,10 +4,12 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { reactive, ref, onMounted, computed, watchEffect, nextTick, watch } from 'vue'
 
 const props = defineProps({
-    gradeClassHistory: Array,
+    gradeClassHistory: Object,
     children: Array,
     users: Object,
     gradeClasses: Array,
+    childrenNotInGradeClass: Array,
+    childrenInGradeClass: Array,
 })
 
 const selectedChildren = ref([]);
@@ -101,21 +103,19 @@ const getChildrenNotInClass = computed(() => {
                                                         <br>
                                                         <label class="leading-7 text-sm text-gray-600">生徒名</label>
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
-                                                        <div v-if="selectedClassId !== null">
+                                                        <div v-if="selectedClassId === null">
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector">
-                                                                <template v-if="selectedClassId === null">
-                                                                <!-- 所属なし生徒を選択した場合 -->
-                                                                <option v-for="child in getChildrenNotInClass" :key="child.id" :value="child.id">
+                                                                <option v-for="child in childrenNotInGradeClass" :key="child.id" :value="child.id">
                                                                     {{ child.name }}
                                                                 </option>
-                                                                </template>
-                                                                <template v-else>
-                                                                <!-- 特定のクラスに所属する生徒の履歴を表示 -->
+                                                            </select>
+                                                        </div>
+                                                        <div v-else>
+                                                            <select multiple style="height: 20em; width: 12em;" id="classSelector">
                                                                 <template v-for="history in getFilteredHistories">
                                                                     <template v-for="(childId, index) in history.child_id" :key="index">
                                                                     <option :value="childId">{{ getChildName(childId) }}</option>
                                                                     </template>
-                                                                </template>
                                                                 </template>
                                                             </select>
                                                         </div>

@@ -54,12 +54,19 @@ class GradeClassHistoryController extends Controller
         $children = Child::all();
         $users = User::all();
         $gradeClasses = gradeClass::all();
-        $gradeClassHistory = gradeClassHistory::all();
+        $childrenInGradeClass = gradeClassHistory::pluck('child_id')->flatten()->unique()->toArray();
+
+        $childrenNotInGradeClass = $children->reject(function ($child) use ($childrenInGradeClass) {
+            return in_array($child->id, $childrenInGradeClass);
+        });
+
         return Inertia::render('GradeClassHistory/Edit', [
             'gradeClassHistory' => $gradeClassHistory,
             'children' => $children,
             'users' => $users,
             'gradeClasses' => $gradeClasses,
+            'childrenNotInGradeClass' => $childrenNotInGradeClass,
+            'childrenInGradeClass' => $childrenInGradeClass
         ]);
     }
 
