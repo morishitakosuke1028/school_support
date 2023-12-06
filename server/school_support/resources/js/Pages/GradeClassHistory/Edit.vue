@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, watch } from 'vue'
 
 const props = defineProps({
     gradeClassHistory: Object,
@@ -18,7 +18,8 @@ const form = reactive({
     child_id: props.gradeClassHistory.child_id,
 })
 
-const selectedChildren = ref(form.child_id); // 初期値を設定
+const selectedClassId = ref(null);
+const selectedChildren = ref(props.gradeClassHistory.child_id);
 
 const updateGradeClassHistory = () => {
     form.child_id = selectedChildren.value;
@@ -31,36 +32,36 @@ const deleteGradeClassHistory = () => {
     })
 }
 
+const getFilteredHistories = computed(() => {
+    if (selectedClassId.value === null) {
+        // 所属なし生徒を選択した場合は全ての履歴を返す
+        return [props.gradeClassHistory];
+    } else {
+        const selectedChildIds = Array.isArray(selectedChildren.value) ? selectedChildren.value : [];
+        console.log(selectedChildIds);
+
+        return selectedChildIds.map((childId) => ({
+            grade_class_id: selectedClassId.value,
+            child_id: childId,
+        }));
+    }
+});
+
 const getChildName = (childId) => {
     const matchingChild = props.children.find((child) => child.id === childId);
     return matchingChild ? matchingChild.name : 'No Name';
 };
 
-const getFilteredHistories = computed(() => {
-    if (selectedClassId.value === null) {
-        // 所属なし生徒を選択した場合は全ての履歴を返す
-        return [props.gradeClassHistory]; // オブジェクトを配列に変換
-    } else {
-        // 特定のクラスに所属する生徒の履歴を返す
-        const childHistories = props.gradeClassHistory.child_id || []; // 配列がない場合は空配列をセット
-        console.log(childHistories);
-        return childHistories.filter((history) => history.grade_class_id === selectedClassId.value);
-    }
-});
-
 const getChildrenNotInClass = computed(() => {
-    // 所属なし生徒の取得
-    return props.children.filter((child) => {
-        return !props.gradeClassHistory.some((history) => history.child_id.includes(child.id));
-    });
+    return props.childrenNotInGradeClass;
 });
 
-const selectedClassId = ref(null); // selectedClassId を追加
+// const selectedClassId = ref(null); // selectedClassId を追加
 
 
 
 const handleChangeClass = () => {
-    // クラスが変更されたときに何か処理が必要な場合はここに追加
+    selectedChildren.value = props.childrenInGradeClass[selectedClassId.value] || [];
 };
 </script>
 
@@ -118,11 +119,11 @@ const handleChangeClass = () => {
                                                         </div>
                                                         <div v-else>
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector">
-                                                                <template v-for="history in getFilteredHistories">
-                                                                    <template v-for="(childId, index) in history.child_id" :key="index">
-                                                                    <option :value="childId">{{ getChildName(childId) }}</option>
-                                                                    </template>
-                                                                </template>
+                                                                <!-- <template v-for="childId in selectedChildren.value"> -->
+                                                                    <option v-for="childId in selectedChildren.value" :value="childId">
+                                                                        {{ getChildName(childId) }}
+                                                                    </option>
+                                                                <!-- </template> -->
                                                             </select>
                                                         </div>
                                                     </div>
