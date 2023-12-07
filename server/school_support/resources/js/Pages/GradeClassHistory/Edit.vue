@@ -5,6 +5,7 @@ import { reactive, ref, computed, watch } from 'vue'
 
 const props = defineProps({
     gradeClassHistory: Object,
+    gradeClassHistories: Array,
     children: Array,
     users: Object,
     gradeClasses: Array,
@@ -15,6 +16,7 @@ const props = defineProps({
 const form = reactive({
     id: props.gradeClassHistory.id,
     user_id: props.gradeClassHistory.user_id,
+    grade_class_id: props.gradeClassHistory.grade_class_id,
     child_id: props.gradeClassHistory.child_id,
 })
 
@@ -32,21 +34,6 @@ const deleteGradeClassHistory = () => {
     })
 }
 
-const getFilteredHistories = computed(() => {
-    if (selectedClassId.value === null) {
-        // 所属なし生徒を選択した場合は全ての履歴を返す
-        return [props.gradeClassHistory];
-    } else {
-        const selectedChildIds = Array.isArray(selectedChildren.value) ? selectedChildren.value : [];
-        console.log(selectedChildIds);
-
-        return selectedChildIds.map((childId) => ({
-            grade_class_id: selectedClassId.value,
-            child_id: childId,
-        }));
-    }
-});
-
 const getChildName = (childId) => {
     const matchingChild = props.children.find((child) => child.id === childId);
     return matchingChild ? matchingChild.name : 'No Name';
@@ -56,12 +43,19 @@ const getChildrenNotInClass = computed(() => {
     return props.childrenNotInGradeClass;
 });
 
-// const selectedClassId = ref(null); // selectedClassId を追加
-
-
-
 const handleChangeClass = () => {
-    selectedChildren.value = props.childrenInGradeClass[selectedClassId.value] || [];
+    if (props.gradeClassHistories) {
+        // 選択されたクラスに所属する grade_class_history レコードを取得
+        const selectedGradeClassHistories = props.gradeClassHistories.filter(
+            (history) => history.grade_class_id === selectedClassId.value
+        );
+
+        // 選択されたクラスに所属する子供のリストを取得
+        selectedChildren.value = selectedGradeClassHistories.map((history) => history.child_id);
+    } else {
+        // もしくはエラー処理など
+        console.error('props.gradeClassHistories is undefined');
+    }
 };
 </script>
 
@@ -111,6 +105,7 @@ const handleChangeClass = () => {
                                                         <label class="leading-7 text-sm text-gray-600">生徒名</label>
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div v-if="selectedClassId === null">
+                                                            <!-- 学年クラスに所属していない生徒一覧 -->
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector">
                                                                 <option v-for="child in props.childrenNotInGradeClass" :key="child.id" :value="child.id">
                                                                     {{ child.name }}
@@ -118,6 +113,7 @@ const handleChangeClass = () => {
                                                             </select>
                                                         </div>
                                                         <div v-else>
+                                                            <!-- 選択された学年クラス毎の生徒一覧 -->
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector">
                                                                 <!-- <template v-for="childId in selectedChildren.value"> -->
                                                                     <option v-for="childId in selectedChildren.value" :value="childId">

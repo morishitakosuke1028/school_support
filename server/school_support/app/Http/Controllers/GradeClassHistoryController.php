@@ -54,6 +54,7 @@ class GradeClassHistoryController extends Controller
         $children = Child::all();
         $users = User::all();
         $gradeClasses = gradeClass::all();
+        $gradeClassHistories = gradeClassHistory::all();
         $childrenInGradeClass = gradeClassHistory::pluck('child_id')->flatten()->unique()->toArray();
 
         $childrenNotInGradeClass = $children->reject(function ($child) use ($childrenInGradeClass) {
@@ -65,6 +66,7 @@ class GradeClassHistoryController extends Controller
             'children' => $children,
             'users' => $users,
             'gradeClasses' => $gradeClasses,
+            'gradeClassHistories' => $gradeClassHistories,
             'childrenNotInGradeClass' => $childrenNotInGradeClass,
             'childrenInGradeClass' => $childrenInGradeClass
         ]);
