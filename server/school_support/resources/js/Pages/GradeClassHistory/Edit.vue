@@ -19,6 +19,12 @@ const form = reactive({
     grade_class_id: props.gradeClassHistory.grade_class_id,
     child_id: props.gradeClassHistory.child_id,
 })
+const form2 = reactive({
+    id: props.gradeClassHistory.id,
+    user_id: props.gradeClassHistory.user_id,
+    grade_class_id: props.gradeClassHistory.grade_class_id,
+    child_id: props.gradeClassHistory.child_id,
+})
 
 // 1セット目のセレクトボックス用
 const selectedClassId = ref(null);
@@ -71,9 +77,9 @@ const getChildName2 = (childId) => {
     return matchingChild ? matchingChild.name : '';
 };
 
-const getChildrenNotInClass2 = computed(() => {
-    return props.childrenNotInGradeClass;
-});
+// const getChildrenNotInClass2 = computed(() => {
+//     return props.childrenNotInGradeClass;
+// });
 
 const handleChangeClass2 = () => {
     if (props.gradeClassHistories) {
@@ -88,12 +94,6 @@ const handleChangeClass2 = () => {
         selectedChildren2.value = selectedGradeClassHistories.map((history) => history.child_id);
     }
 };
-
-// watch(selectedChildren, (newVal) => {
-//   newVal.forEach((childId, index) => {
-//     const childName = getChildName(childId);
-//   });
-// });
 </script>
 
 <template>
@@ -116,19 +116,19 @@ const handleChangeClass2 = () => {
                                 <div class="container px-5 py-8 mx-auto">
                                     <div class="lg:w-1/2 md:w-2/3 mx-auto">
                                         <div>
-                                            <div class="p-2 w-full">
-                                                <div class="relative">
-                                                    <label class="leading-7 text-sm text-gray-600">担任</label>
-                                                    <span class="font-medium text-sm text-red-700">　(必須)</span>
-                                                    <div>
-                                                        <select v-model="form.user_id">
-                                                            <option v-for="user in props.users" :key="user.id" :value="user.id">{{ user.name }}</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div class="flex justify-between mt-8">
                                                 <div class="p-2">
+                                                    <div class="p-2 w-full">
+                                                        <div class="relative">
+                                                            <label class="leading-7 text-sm text-gray-600">担任</label>
+                                                            <span class="font-medium text-sm text-red-700">　(必須)</span>
+                                                            <div>
+                                                                <select v-model="form.user_id">
+                                                                    <option v-for="user in props.users" :key="user.id" :value="user.id">{{ user.name }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="relative">
                                                         <label for="classSelector">クラス</label><br>
                                                         <select id="classSelector" v-model="selectedClassId" @change="handleChangeClass">
@@ -159,17 +159,28 @@ const handleChangeClass2 = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div style="margin-top: 8em;">
+                                                <div style="margin-top: 15em;" v-if="selectedClassId2 !== null">
                                                     <input type="button" name="right" value="≫" style="font-size: 2em;" @click="moveToRight" />
                                                     <br />
                                                     <br />
                                                     <input type="button" name="left" value="≪" style="font-size: 2em;" @click="moveToLeft" />
                                                 </div>
                                                 <div class="p-2">
+                                                    <div class="p-2 w-full">
+                                                        <div class="relative">
+                                                            <label class="leading-7 text-sm text-gray-600">担任</label>
+                                                            <span class="font-medium text-sm text-red-700">　(必須)</span>
+                                                            <div>
+                                                                <select v-model="form2.user_id">
+                                                                    <option v-for="user in props.users" :key="user.id" :value="user.id">{{ user.name }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="relative">
                                                         <label for="classSelector">クラス</label><br>
                                                         <select id="classSelector" v-model="selectedClassId2" @change="handleChangeClass2">
-                                                            <option :value="null">所属なし生徒</option>
+                                                            <option :value="null">---</option>
                                                             <option v-for="gradeClass in gradeClasses" :key="gradeClass.id" :value="gradeClass.id">
                                                                 {{ gradeClass.grade_name }}{{ gradeClass.class_name }}
                                                             </option>
@@ -178,15 +189,7 @@ const handleChangeClass2 = () => {
                                                         <br>
                                                         <label class="leading-7 text-sm text-gray-600">生徒名</label>
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
-                                                        <div v-if="selectedClassId2 === null">
-                                                            <!-- 学年クラスに所属していない生徒一覧 -->
-                                                            <select multiple style="height: 20em; width: 12em;" id="classSelector">
-                                                                <option v-for="child in props.childrenNotInGradeClass" :key="child.id" :value="child.id">
-                                                                    {{ child.name }}
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                        <div v-else>
+                                                        <div v-if="selectedClassId2 !== null">
                                                             <!-- 選択された学年クラス毎の生徒一覧 -->
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector">
                                                                 <option v-for="childId in selectedChildren2" :value="childId">
