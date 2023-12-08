@@ -36,7 +36,9 @@ const deleteGradeClassHistory = () => {
 
 const getChildName = (childId) => {
     const matchingChild = props.children.find((child) => child.id === childId);
-    return matchingChild ? matchingChild.name : 'No Name';
+    if (matchingChild) {
+        return matchingChild.name;
+    }
 };
 
 const getChildrenNotInClass = computed(() => {
@@ -45,18 +47,23 @@ const getChildrenNotInClass = computed(() => {
 
 const handleChangeClass = () => {
     if (props.gradeClassHistories) {
-        // 選択されたクラスに所属する grade_class_history レコードを取得
-        const selectedGradeClassHistories = props.gradeClassHistories.filter(
+        const gradeClassHistoriesArray = Array.isArray(props.gradeClassHistories)
+            ? props.gradeClassHistories
+            : [props.gradeClassHistories];
+
+        const selectedGradeClassHistories = gradeClassHistoriesArray.filter(
             (history) => history.grade_class_id === selectedClassId.value
         );
 
-        // 選択されたクラスに所属する子供のリストを取得
         selectedChildren.value = selectedGradeClassHistories.map((history) => history.child_id);
-    } else {
-        // もしくはエラー処理など
-        console.error('props.gradeClassHistories is undefined');
     }
 };
+
+watch(selectedChildren, (newVal) => {
+  newVal.forEach((childId, index) => {
+    const childName = getChildName(childId);
+  });
+});
 </script>
 
 <template>
@@ -115,11 +122,9 @@ const handleChangeClass = () => {
                                                         <div v-else>
                                                             <!-- 選択された学年クラス毎の生徒一覧 -->
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector">
-                                                                <!-- <template v-for="childId in selectedChildren.value"> -->
-                                                                    <option v-for="childId in selectedChildren.value" :value="childId">
-                                                                        {{ getChildName(childId) }}
-                                                                    </option>
-                                                                <!-- </template> -->
+                                                                <option v-for="childId in selectedChildren" :value="childId">
+                                                                    {{ getChildName(childId) }}
+                                                                </option>
                                                             </select>
                                                         </div>
                                                     </div>
