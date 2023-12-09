@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { reactive, ref, computed, watch } from 'vue'
+import { reactive, ref, computed, watch, onMounted } from 'vue'
 
 const props = defineProps({
     gradeClassHistory: Object,
@@ -13,12 +13,14 @@ const props = defineProps({
     childrenInGradeClass: Object,
 })
 
+// 1セット目のセレクトボックス用
 const form = reactive({
     id: props.gradeClassHistory.id,
     user_id: props.gradeClassHistory.user_id,
     grade_class_id: props.gradeClassHistory.grade_class_id,
     child_id: props.gradeClassHistory.child_id,
 })
+// 2セット目のセレクトボックス用
 const form2 = reactive({
     id: props.gradeClassHistory.id,
     user_id: props.gradeClassHistory.user_id,
@@ -28,11 +30,13 @@ const form2 = reactive({
 
 // 1セット目のセレクトボックス用
 const selectedClassId = ref(null);
-const selectedChildren = ref(props.gradeClassHistory.child_id);
+const selectedChildren = ref([]);
+// const selectedChildren = ref(props.gradeClassHistory.child_id);
 
 // 2セット目のセレクトボックス用
 const selectedClassId2 = ref(null);
-const selectedChildren2 = ref(props.gradeClassHistory.child_id);
+const selectedChildren2 = ref([]);
+// const selectedChildren2 = ref(props.gradeClassHistory.child_id);
 
 const updateGradeClassHistory = () => {
     form.child_id = selectedChildren.value;
@@ -77,10 +81,6 @@ const getChildName2 = (childId) => {
     return matchingChild ? matchingChild.name : '';
 };
 
-// const getChildrenNotInClass2 = computed(() => {
-//     return props.childrenNotInGradeClass;
-// });
-
 const handleChangeClass2 = () => {
     if (props.gradeClassHistories) {
         const gradeClassHistoriesArray = Array.isArray(props.gradeClassHistories)
@@ -93,6 +93,28 @@ const handleChangeClass2 = () => {
 
         selectedChildren2.value = selectedGradeClassHistories.map((history) => history.child_id);
     }
+};
+
+const moveToRight = () => {
+    console.log('moveToRight ボタンが押されました');
+    console.log('移動前 selectedChildren:', selectedChildren.value);
+    console.log('移動前 selectedChildren2:', selectedChildren2.value);
+
+    if (selectedChildren.value.length > 0) {
+        selectedChildren2.value = [...selectedChildren2.value, ...selectedChildren.value];
+        selectedChildren.value = [];
+    }
+
+    // console.log('移動後 selectedChildren2:', selectedChildren2.value);
+    console.log('selectedChildren の型:', typeof selectedChildren.value);
+    console.log('selectedChildren2 の型:', typeof selectedChildren2.value);
+};
+
+const moveToLeft = () => {
+    const selectedChildrenArray = Array.isArray(selectedChildren.value) ? selectedChildren.value : [selectedChildren.value];
+    const selectedChildren2Array = Array.isArray(selectedChildren2.value) ? selectedChildren2.value : [selectedChildren2.value];
+
+    selectedChildren2.value = selectedChildren2Array.filter((childId) => !selectedChildrenArray.includes(childId));
 };
 </script>
 
@@ -143,7 +165,7 @@ const handleChangeClass2 = () => {
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div v-if="selectedClassId === null">
                                                             <!-- 学年クラスに所属していない生徒一覧 -->
-                                                            <select multiple style="height: 20em; width: 12em;" id="classSelector">
+                                                            <select multiple style="height: 20em; width: 12em;" id="classSelector" v-model="selectedChildren">
                                                                 <option v-for="child in props.childrenNotInGradeClass" :key="child.id" :value="child.id">
                                                                     {{ child.name }}
                                                                 </option>
@@ -151,7 +173,7 @@ const handleChangeClass2 = () => {
                                                         </div>
                                                         <div v-else>
                                                             <!-- 選択された学年クラス毎の生徒一覧 -->
-                                                            <select multiple style="height: 20em; width: 12em;" id="classSelector">
+                                                            <select multiple style="height: 20em; width: 12em;" id="classSelector" v-model="selectedChildren">
                                                                 <option v-for="childId in selectedChildren" :value="childId">
                                                                     {{ getChildName(childId) }}
                                                                 </option>
@@ -191,7 +213,7 @@ const handleChangeClass2 = () => {
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div v-if="selectedClassId2 !== null">
                                                             <!-- 選択された学年クラス毎の生徒一覧 -->
-                                                            <select multiple style="height: 20em; width: 12em;" id="classSelector">
+                                                            <select multiple style="height: 20em; width: 12em;" id="classSelector" v-model="selectedChildren2">
                                                                 <option v-for="childId in selectedChildren2" :value="childId">
                                                                     {{ getChildName2(childId) }}
                                                                 </option>
