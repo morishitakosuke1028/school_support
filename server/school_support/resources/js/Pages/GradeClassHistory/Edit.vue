@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { reactive, ref, computed, watch, onMounted } from 'vue'
+import { reactive, ref, computed, watch, onMounted, nextTick } from 'vue'
 
 const props = defineProps({
     gradeClassHistory: Object,
@@ -100,14 +100,44 @@ const moveToRight = () => {
     console.log('移動前 selectedChildren:', selectedChildren.value);
     console.log('移動前 selectedChildren2:', selectedChildren2.value);
 
-    if (selectedChildren.value.length > 0) {
-        selectedChildren2.value = [...selectedChildren2.value, ...selectedChildren.value];
-        selectedChildren.value = [];
-    }
+    // if (selectedChildren.value.length > 0) {
+    //     selectedChildren2.value = [...selectedChildren2.value, ...selectedChildren.value];
+    //     selectedChildren.value = [];
+    // }
+    // 移動する生徒の ID を取得
+    const selectedForMoving = [...selectedChildren.value];
 
-    // console.log('移動後 selectedChildren2:', selectedChildren2.value);
-    console.log('selectedChildren の型:', typeof selectedChildren.value);
-    console.log('selectedChildren2 の型:', typeof selectedChildren2.value);
+    // 右のリストに追加
+    selectedChildren2.value = [...selectedChildren2.value, ...selectedForMoving];
+
+    // 左のリストから削除
+    selectedChildren.value = selectedChildren.value.filter(childId => !selectedForMoving.includes(childId));
+
+    nextTick(() => {
+        console.log('DOMが更新された後の状態:', selectedChildren.value, selectedChildren2.value);
+    });
+
+
+    // if (selectedChildren.value.length > 0) {
+    //     selectedChildren2.value = [
+    //         ...selectedChildren2.value,
+    //         ...selectedChildren.value.map(childId => ({ id: childId }))
+    //     ];
+
+    //     // 選択された子供を非表示にする
+    //     selectedChildren.value.forEach(childId => {
+    //         const childIndex = props.children.findIndex(child => child.id === childId);
+    //         if (childIndex !== -1) {
+    //             props.children[childIndex].hidden = true;
+    //         }
+    //     });
+
+    //     selectedChildren.value = [];
+    // }
+
+    console.log('移動後 selectedChildren2:', selectedChildren2.value);
+    console.log('selectedChildren の型:', Array.isArray(selectedChildren.value) ? 'Array' : typeof selectedChildren.value);
+    console.log('selectedChildren2 の型:', Array.isArray(selectedChildren2.value) ? 'Array' : typeof selectedChildren2.value);
 };
 
 const moveToLeft = () => {
@@ -167,7 +197,9 @@ const moveToLeft = () => {
                                                             <!-- 学年クラスに所属していない生徒一覧 -->
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector" v-model="selectedChildren">
                                                                 <option v-for="child in props.childrenNotInGradeClass" :key="child.id" :value="child.id">
-                                                                    {{ child.name }}
+                                                                    <span v-if="!child.hidden">
+                                                                        {{ child.name }}
+                                                                    </span>
                                                                 </option>
                                                             </select>
                                                         </div>
