@@ -9,21 +9,17 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
 
 class ChildController extends Controller
 {
     public function index(Request $request)
 	{
-            $pageNumber = $request->input('page', 1); // デフォルトのページ番号を1に設定
-            \Log::info('Requested page number: ' . $pageNumber);
+            $children = Child::select('id', 'name', 'tel', 'email', 'admission_date')->paginate(20);
 
-            $authUserId = Auth::id();
-            $children = Child::select('id', 'name', 'tel', 'email', 'admission_date')->paginate(50);
-
-            // dd($users);
 			return Inertia::render('Child/Index', [
                 'children' => $children,
-                'authUserId' => $authUserId
+                'currentUserRole' => Auth::user()->role === 1,
 			]);
 	}
 
@@ -51,7 +47,7 @@ class ChildController extends Controller
         $child->movein_date = $request->movein_date;
         $child->graduation_date = $request->graduation_date;
         $child->save();
-        return to_route('child.index')
+        return to_route('admin.child.index')
         ->with([
             'message' => '更新しました。',
             'status' => 'success',

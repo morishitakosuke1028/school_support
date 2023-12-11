@@ -40,10 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-				'child' => [
-					'driver' => 'session',
-					'provider' => 'children',
-			],
+        'child' => [
+            'driver' => 'session',
+            'provider' => 'children',
+        ],
     ],
 
     /*
@@ -70,8 +70,8 @@ return [
         ],
 
         'children' => [
-					'driver' => 'eloquent',
-					'model' => App\Models\Child::class,
+            'driver' => 'eloquent',
+            'model' => App\Models\Child::class,
         ],
     ],
 

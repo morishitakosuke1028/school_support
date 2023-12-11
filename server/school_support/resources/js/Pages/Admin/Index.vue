@@ -7,17 +7,9 @@ import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     users: Object,
-    authUserId: Number,
+    currentUserRole: Boolean,
 });
 
-const currentUserRole = ref(null);
-
-onMounted(() => {
-    const currentUser = props.users.data.find(user => user.id === props.authUserId);
-    if (currentUser) {
-        currentUserRole.value = currentUser.role;
-    }
-});
 </script>
 <template>
     <Head title="職員一覧" />
@@ -49,18 +41,18 @@ onMounted(() => {
                                         </thead>
                                         <tbody v-for="user in users.data" :key="user.id">
                                             <tr>
-                                                <span v-if="currentUserRole === 1">
+                                                <span v-if="currentUserRole">
                                                     <td class="px-4 py-3">
                                                         <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('users.edit', { user: user.id })">
                                                             編集する
                                                         </Link>
                                                     </td>
                                                 </span>
-                                                <span v-else-if="currentUserRole === 2">
+                                                <span v-else>
                                                     <td class="px-4 py-3">
                                                         <span as="button" class="flex mx-auto text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
                                                             編集する
-																												</span>
+                                                        </span>
                                                     </td>
                                                 </span>
                                                 <td class="px-4 py-3">{{ user.name }}</td>
@@ -75,7 +67,9 @@ onMounted(() => {
                                     </table>
                                 </div>
                             </div>
-                            <Pagination :links="users.links"></Pagination>
+                            <div class="text-center">
+                                <Pagination :links="props.users.links"></Pagination>
+                            </div>
                         </section>
                     </div>
                 </div>

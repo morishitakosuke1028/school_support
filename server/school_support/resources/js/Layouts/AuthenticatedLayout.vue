@@ -19,7 +19,7 @@ const showingNavigationDropdown = ref(false);
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
-                            <div class="shrink-0 flex items-center">
+                            <div class="w-10 h-10 shrink-0 flex items-center">
                                 <Link :href="route('dashboard')">
                                     <ApplicationLogo
                                         class="block h-9 w-auto fill-current text-gray-800"
@@ -65,9 +65,42 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <DropdownLink :href="route('register')"> 職員登録</DropdownLink>
-                                        <DropdownLink :href="route('child.register')"> 園児登録</DropdownLink>
+                                        <DropdownLink :href="route('admin.child.register')"> 園児登録</DropdownLink>
                                         <DropdownLink :href="route('users.index')" > 職員一覧</DropdownLink>
-                                        <DropdownLink :href="route('child.index')" > 園児一覧</DropdownLink>
+                                        <DropdownLink :href="route('admin.child.index')" > 園児一覧</DropdownLink>
+                                        <DropdownLink :href="route('gradeClassHistories.index')" > クラス替え</DropdownLink>
+                                    </template>
+                                </Dropdown>
+                            </div>
+                            <!-- Settings Dropdown -->
+                            <div class="ml-3 relative">
+                                <Dropdown align="right" width="48">
+                                    <template #trigger>
+                                        <span class="inline-flex rounded-md">
+                                            <button
+                                                type="button"
+                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                            >
+                                                設定
+
+                                                <svg
+                                                    class="ml-2 -mr-0.5 h-4 w-4"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20"
+                                                    fill="currentColor"
+                                                >
+                                                    <path
+                                                        fill-rule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clip-rule="evenodd"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    </template>
+
+                                    <template #content>
+                                        <DropdownLink :href="route('gradeClasses.index')" > 学年クラスマスタ</DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>
@@ -157,9 +190,9 @@ const showingNavigationDropdown = ref(false);
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('register')"> 職員登録</ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('child.register')"> 園児登録</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('admin.child.register')"> 園児登録</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('users.index')" > 職員一覧</ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('child.index')" > 園児一覧</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('admin.child.index')" > 園児一覧</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 ログアウト

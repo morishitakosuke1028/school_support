@@ -29,7 +29,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('child.register'), {
+    form.post(route('admin.child.register'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };

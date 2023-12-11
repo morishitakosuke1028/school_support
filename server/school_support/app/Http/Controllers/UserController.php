@@ -14,17 +14,12 @@ class UserController extends Controller
 {
 	public function index(Request $request)
 	{
-            $pageNumber = $request->input('page', 1); // デフォルトのページ番号を1に設定
-            \Log::info('Requested page number: ' . $pageNumber);
+        $users = User::select('id', 'name', 'tel', 'email', 'role')->paginate(20);
 
-			$authUserId = Auth::id();
-            $users = User::select('id', 'name', 'tel', 'email', 'role')->paginate(50);
-
-            // dd($users);
-			return Inertia::render('Admin/Index', [
-					'users' => $users,
-					'authUserId' => $authUserId
-			]);
+        return Inertia::render('Admin/Index', [
+            'users' => $users,
+            'currentUserRole' => Auth::user()->role === 1,
+        ]);
 	}
 
     public function edit(User $user)
