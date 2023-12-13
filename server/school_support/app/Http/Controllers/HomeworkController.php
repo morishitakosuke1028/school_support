@@ -15,7 +15,12 @@ class HomeworkController extends Controller
      */
     public function index()
     {
-        //
+        $homeworks = Homework::select('id', 'grade_class_id', 'reading', 'language_drill', 'arithmetic', 'diary', 'ipad', 'other');
+
+        return Inertia::render('Homework/Index', [
+            'homeworks' => $homeworks,
+            'currentUserRole' => Auth::user()->role === 1,
+        ]);
     }
 
     /**
