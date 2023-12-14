@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/gradeClassHistories/{gradeClassHistory}', [GradeClassHistoryController::class, 'destroy'])->name('gradeClasseHistories.destroy');
 
     Route::get('/homeworks/index', [HomeworkController::class, 'index'])->name('homeworks.index');
+    Route::get('/homeworks/{gradeClass}/edit', [HomeworkController::class, 'edit'])->name('homeworks.edit');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');

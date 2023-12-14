@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreHomeworkRequest;
 use App\Http\Requests\UpdateHomeworkRequest;
 use App\Models\Homework;
+use App\Models\GradeClass;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class HomeworkController extends Controller
 {
@@ -15,10 +18,10 @@ class HomeworkController extends Controller
      */
     public function index()
     {
-        $homeworks = Homework::select('id', 'grade_class_id', 'reading', 'language_drill', 'arithmetic', 'diary', 'ipad', 'other');
+        $gradeClasses = gradeClass::select('id', 'grade_name', 'class_name')->paginate(20);
 
         return Inertia::render('Homework/Index', [
-            'homeworks' => $homeworks,
+            'gradeClasses' => $gradeClasses,
             'currentUserRole' => Auth::user()->role === 1,
         ]);
     }
@@ -63,7 +66,12 @@ class HomeworkController extends Controller
      */
     public function edit(Homework $homework)
     {
-        //
+        $gradeClass = GradeClass::findOrFail($gradeClassId);
+        // 必要なデータを取得して、editページに渡す
+        return Inertia::render('Homework/Edit', [
+            'gradeClass' => $gradeClass,
+            // 他の必要なデータ
+        ]);
     }
 
     /**
