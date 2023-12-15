@@ -64,13 +64,13 @@ class HomeworkController extends Controller
      * @param  \App\Models\Homework  $homework
      * @return \Illuminate\Http\Response
      */
-    public function edit(Homework $homework)
+    public function edit($gradeClassId)
     {
         $gradeClass = GradeClass::findOrFail($gradeClassId);
-        // 必要なデータを取得して、editページに渡す
+        $homework = Homework::all();
         return Inertia::render('Homework/Edit', [
             'gradeClass' => $gradeClass,
-            // 他の必要なデータ
+            'homework' => $homework
         ]);
     }
 
