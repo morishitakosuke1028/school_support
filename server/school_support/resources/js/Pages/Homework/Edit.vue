@@ -12,6 +12,16 @@ const { props } = usePage();
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth();
 
+const calendarData = reactive({
+  year: currentYear,
+  month: currentMonth
+});
+
+const changeMonth = (year, month) => {
+  calendarData.year = year;
+  calendarData.month = month;
+};
+
 const getDaysInMonth = (year, month) => {
     const date = new Date(year, month, 1);
     const days = [];
@@ -41,13 +51,38 @@ const form = reactive({
 const updateGradeClass = id => {
     router.put(route('homeworks.update', { homework: id }), form)
 }
-// const deleteGradeClass = id => {
-//     router.delete(route('gradeClasses.destroy', { gradeClass: id }), {
-//         onBefore: () => confirm('本当に削除しますか？')
-//     })
-// }
-</script>
 
+const calendarDays = computed(() => {
+  return getDaysInMonth(calendarData.year, calendarData.month);
+});
+
+const getYearsRange = computed(() => {
+  const startYear = currentYear - 5;
+  const endYear = currentYear + 5;
+  return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+});
+
+const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+const displayedMonth = computed(() => {
+  return `${calendarData.year}年 ${monthNames[calendarData.month]}`;
+});
+</script>
+<style>
+.homework-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.homework-table th, .homework-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.homework-table th {
+  background-color: #f3f3f3;
+  text-align: left;
+}
+</style>
 <template>
     <Head title="宿題編集" />
 
@@ -63,31 +98,52 @@ const updateGradeClass = id => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <section class="text-gray-600 body-font relative">
+                            <div class="date-selector my-5">
+                                <span>対象の年月：　</span>
+                                <select v-model="calendarData.year">
+                                <option v-for="year in getYearsRange" :key="year" :value="year">{{ year }}</option>
+                                </select>
+                                <span class="mx-3">年 </span>
+                                <select v-model="calendarData.month">
+                                <option v-for="(monthName, index) in monthNames" :key="index" :value="index">{{ monthName }}</option>
+                                </select>
+                                <span class="mx-3">月</span>
+                            </div>
                             <form @submit.prevent="submitHomework">
-                                <div v-for="day in getDaysInMonth(currentYear, currentMonth)" :key="day.getDate()" class="day">
-                                    <div>{{ day.getDate() }}</div>
-                                    <label>
-                                    <input type="checkbox" :name="'homework[' + day.getDate() + '][reading]'"> 音読
-                                    </label>
-                                    <label>
-                                    <input type="checkbox" :name="'homework[' + day.getDate() + '][language_drill]'"> 漢字ドリル
-                                    </label>
-                                    <label>
-                                    <input type="checkbox" :name="'homework[' + day.getDate() + '][arithmetic]'"> 算数プリント
-                                    </label>
-                                    <label>
-                                    <input type="checkbox" :name="'homework[' + day.getDate() + '][diary]'"> 日記
-                                    </label>
-                                    <input type="text" :name="'homework[' + day.getDate() + '][ipad]'" placeholder="iPad">
-                                    <input type="text" :name="'homework[' + day.getDate() + '][other]'" placeholder="その他">
-                                    <input type="hidden" :name="'homework[' + day.getDate() + '][homework_day]'" :value="formatDate(day)">
-                                    <input type="hidden" :name="'homework[' + day.getDate() + '][grade_class_id]'" :value="props.gradeClass.id">
+                                <h3 class="text-lg font-semibold mb-5">{{ displayedMonth }}</h3>
+                                <table class="homework-table">
+                                    <thead>
+                                        <tr>
+                                        <th>日付</th>
+                                        <th>音読</th>
+                                        <th>漢字ドリル</th>
+                                        <th>算数プリント</th>
+                                        <th>日記</th>
+                                        <th>iPad</th>
+                                        <th>その他</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="day in calendarDays" :key="day.getDate()">
+                                        <td>{{ day.getDate() }}</td>
+                                        <td><input type="checkbox" :name="'homework[' + day.getDate() + '][reading]'"></td>
+                                        <td><input type="checkbox" :name="'homework[' + day.getDate() + '][language_drill]'"></td>
+                                        <td><input type="checkbox" :name="'homework[' + day.getDate() + '][arithmetic]'"></td>
+                                        <td><input type="checkbox" :name="'homework[' + day.getDate() + '][diary]'"></td>
+                                        <td><input type="text" :name="'homework[' + day.getDate() + '][ipad]'" placeholder="iPad"></td>
+                                        <td><input type="text" :name="'homework[' + day.getDate() + '][other]'" placeholder="その他"></td>
+                                        <input type="hidden" :name="'homework[' + day.getDate() + '][homework_day]'" :value="formatDate(day)">
+                                        <input type="hidden" :name="'homework[' + day.getDate() + '][grade_class_id]'" :value="props.gradeClass.id">
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="my-5 text-center">
+                                    <button class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg mr-5">登録</button>
+                                    <Link as="button" class="text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg ml-5" :href="route('homeworks.index')">
+                                        戻る
+                                    </Link>
                                 </div>
-                                <button type="submit">登録</button>
                             </form>
-                            <!-- <div class="p-2 w-full">
-                                <button @click="deleteGradeClass(gradeClass.id)" class="flex mx-auto text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg">削除する</button>
-                            </div> -->
                         </section>
                     </div>
                 </div>
