@@ -1,7 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { reactive, computed } from 'vue'
+import { reactive, computed } from 'vue';
+import holidayJp from '@holiday-jp/holiday_jp';
 
 // const props = defineProps({
 //     gradeClass: Object,
@@ -66,6 +67,17 @@ const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8�
 const displayedMonth = computed(() => {
   return `${calendarData.year}年 ${monthNames[calendarData.month]}`;
 });
+
+const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
+
+const getDayWithHoliday = (date) => {
+  const dayOfWeek = weekDays[date.getDay()];
+  const holiday = holidayJp.isHoliday(date) ? ' (祝)' : '';
+  return `${dayOfWeek}${holiday}`;
+};
+
+const isSunday = (date) => date.getDay() === 0;
+const isSaturday = (date) => date.getDay() === 6;
 </script>
 <style>
 .homework-table {
@@ -81,6 +93,18 @@ const displayedMonth = computed(() => {
 .homework-table th {
   background-color: #f3f3f3;
   text-align: left;
+}
+
+.sunday {
+  color: red; /* 日曜日を赤色で表示 */
+}
+
+.saturday {
+  color: #007bff; /* 土曜日を水色で表示 */
+}
+
+.holiday {
+  color: red; /* 祝日を赤色で表示 */
 }
 </style>
 <template>
@@ -125,7 +149,9 @@ const displayedMonth = computed(() => {
                                     </thead>
                                     <tbody>
                                         <tr v-for="day in calendarDays" :key="day.getDate()">
-                                        <td>{{ day.getDate() }}</td>
+                                        <td :class="{ 'sunday': isSunday(day), 'saturday': isSaturday(day), 'holiday': holidayJp.isHoliday(day) }">
+                                            {{ day.getDate() }}日 ({{ getDayWithHoliday(day) }})
+                                        </td>
                                         <td><input type="checkbox" :name="'homework[' + day.getDate() + '][reading]'"></td>
                                         <td><input type="checkbox" :name="'homework[' + day.getDate() + '][language_drill]'"></td>
                                         <td><input type="checkbox" :name="'homework[' + day.getDate() + '][arithmetic]'"></td>
