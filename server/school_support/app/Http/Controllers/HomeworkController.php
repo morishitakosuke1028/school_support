@@ -48,17 +48,6 @@ class HomeworkController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Homework  $homework
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Homework $homework)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Homework  $homework
@@ -83,17 +72,29 @@ class HomeworkController extends Controller
      */
     public function update(UpdateHomeworkRequest $request, Homework $homework)
     {
-        //
+        $homework->grade_class_id = $request->grade_class_id;
+        $homework->homework_day = $request->homework_day;
+        $homework->reading = $request->reading;
+        $homework->language_drill = $request->language_drill;
+        $homework->arithmetic = $request->arithmetic;
+        $homework->diary = $request->diary;
+        $homework->ipad = $request->ipad;
+        $homework->other = $request->other;
+        $homework->save();
+        return to_route('homeworks.index')
+        ->with([
+            'message' => '登録しました。',
+            'status' => 'success',
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Homework  $homework
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Homework $homework)
+    public function updateOrCreate(Request $request, $id = null)
     {
-        //
+        $homework = Homework::updateOrCreate(
+            ['id' => $id],
+            $data
+        );
+
+        return redirect()->route('homeworks.index')->with('success', '登録が完了しました。');
     }
 }
