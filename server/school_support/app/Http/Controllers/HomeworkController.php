@@ -8,6 +8,7 @@ use App\Models\Homework;
 use App\Models\GradeClass;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class HomeworkController extends Controller
 {
@@ -90,11 +91,21 @@ class HomeworkController extends Controller
 
     public function updateOrCreate(Request $request, $id = null)
     {
+        // @TODO
+        $data = $request->all();
+        // $data = $request->validate([
+        //     // @TODO バリデーションルールをここに記述
+        // ]);
+
         $homework = Homework::updateOrCreate(
             ['id' => $id],
             $data
         );
 
-        return redirect()->route('homeworks.index')->with('success', '登録が完了しました。');
+        return to_route('homeworks.index')
+        ->with([
+            'message' => '登録しました。',
+            'status' => 'success',
+        ]);
     }
 }

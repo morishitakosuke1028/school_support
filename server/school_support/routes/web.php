@@ -59,7 +59,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/homeworks/index', [HomeworkController::class, 'index'])->name('homeworks.index');
     Route::get('/homeworks/{gradeClass}/edit', [HomeworkController::class, 'edit'])->name('homeworks.edit');
-    Route::get('/homeworks/{homework}', [HomeworkController::class, 'update'])->name('homeworks.update');
+    // Route::get('/homeworks/{homework}', [HomeworkController::class, 'update'])->name('homeworks.update');
+    Route::post('/homeworks/{homework?}', [HomeworkController::class, 'updateOrCreate'])->name('homeworks.updateOrCreate');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');

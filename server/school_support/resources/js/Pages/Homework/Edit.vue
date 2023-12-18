@@ -78,6 +78,11 @@ const getDayWithHoliday = (date) => {
 
 const isSunday = (date) => date.getDay() === 0;
 const isSaturday = (date) => date.getDay() === 6;
+
+const submitForm = () => {
+    const url = form.id ? `/homeworks/${form.id}` : '/homeworks';
+    router.post(url, form);
+};
 </script>
 <style>
 .homework-table {
@@ -164,7 +169,7 @@ const isSaturday = (date) => date.getDay() === 6;
                                     </tbody>
                                 </table>
                                 <div class="my-5 text-center">
-                                    <button class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg mr-5">登録</button>
+                                    <button @click="submitForm" class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg mr-5">登録</button>
                                     <Link as="button" class="text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg ml-5" :href="route('homeworks.index')">
                                         戻る
                                     </Link>
