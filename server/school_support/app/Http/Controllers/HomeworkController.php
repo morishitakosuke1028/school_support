@@ -91,11 +91,16 @@ class HomeworkController extends Controller
 
     public function updateOrCreate(Request $request, $id = null)
     {
-        // @TODO
-        $data = $request->all();
-        // $data = $request->validate([
-        //     // @TODO バリデーションルールをここに記述
-        // ]);
+        $data = $request->validate([
+            'grade_class_id' => 'required|integer',
+            'homework_day' => 'required',
+            'reading' => 'string',
+            'language_drill' => 'string',
+            'arithmetic' => 'string',
+            'diary' => 'string',
+            'ipad' => 'max:50|string',
+            'other' => 'max:50|string',
+        ]);
 
         $homework = Homework::updateOrCreate(
             ['id' => $id],

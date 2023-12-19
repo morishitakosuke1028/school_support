@@ -38,15 +38,24 @@ const formatDate = (date) => {
 };
 
 const form = reactive({
-    id: props.homework.id,
-    grade_class_id: props.homework.grade_class_id,
-    homework_day: props.homework.homework_day,
-    reading: props.homework.reading,
-    language_drill: props.homework.language_drill,
-    arithmetic: props.homework.arithmetic,
-    diary: props.homework.diary,
-    ipad: props.homework.ipad,
-    other: props.homework.other,
+    // id: props.homework.id,
+    // grade_class_id: props.homework.grade_class_id,
+    // homework_day: props.homework.homework_day,
+    // reading: props.homework.reading,
+    // language_drill: props.homework.language_drill,
+    // arithmetic: props.homework.arithmetic,
+    // diary: props.homework.diary,
+    // ipad: props.homework.ipad,
+    // other: props.homework.other,
+    id: props.homework?.id ?? null,
+    grade_class_id: props.homework?.grade_class_id ?? '',
+    homework_day: props.homework?.homework_day ?? '',
+    reading: props.homework?.reading ?? false,
+    language_drill: props.homework?.language_drill ?? false,
+    arithmetic: props.homework?.arithmetic ?? false,
+    diary: props.homework?.diary ?? false,
+    ipad: props.homework?.ipad ?? '',
+    other: props.homework?.other ?? '',
 })
 
 const updateGradeClass = id => {
@@ -138,7 +147,7 @@ const submitForm = () => {
                                 </select>
                                 <span class="mx-3">月</span>
                             </div>
-                            <form @submit.prevent="submitHomework">
+                            <form @submit.prevent="submitForm">
                                 <h3 class="text-lg font-semibold mb-5">{{ displayedMonth }}</h3>
                                 <table class="homework-table">
                                     <thead>
@@ -154,22 +163,22 @@ const submitForm = () => {
                                     </thead>
                                     <tbody>
                                         <tr v-for="day in calendarDays" :key="day.getDate()">
-                                        <td :class="{ 'sunday': isSunday(day), 'saturday': isSaturday(day), 'holiday': holidayJp.isHoliday(day) }">
-                                            {{ day.getDate() }}日 ({{ getDayWithHoliday(day) }})
-                                        </td>
-                                        <td><input type="checkbox" :name="'homework[' + day.getDate() + '][reading]'"></td>
-                                        <td><input type="checkbox" :name="'homework[' + day.getDate() + '][language_drill]'"></td>
-                                        <td><input type="checkbox" :name="'homework[' + day.getDate() + '][arithmetic]'"></td>
-                                        <td><input type="checkbox" :name="'homework[' + day.getDate() + '][diary]'"></td>
-                                        <td><input type="text" :name="'homework[' + day.getDate() + '][ipad]'" placeholder="iPad"></td>
-                                        <td><input type="text" :name="'homework[' + day.getDate() + '][other]'" placeholder="その他"></td>
-                                        <input type="hidden" :name="'homework[' + day.getDate() + '][homework_day]'" :value="formatDate(day)">
-                                        <input type="hidden" :name="'homework[' + day.getDate() + '][grade_class_id]'" :value="props.gradeClass.id">
+                                            <td :class="{ 'sunday': isSunday(day), 'saturday': isSaturday(day), 'holiday': holidayJp.isHoliday(day) }">
+                                                {{ day.getDate() }}日 ({{ getDayWithHoliday(day) }})
+                                            </td>
+                                            <td><input type="checkbox" :name="'homework[' + day.getDate() + '][reading]'"></td>
+                                            <td><input type="checkbox" :name="'homework[' + day.getDate() + '][language_drill]'"></td>
+                                            <td><input type="checkbox" :name="'homework[' + day.getDate() + '][arithmetic]'"></td>
+                                            <td><input type="checkbox" :name="'homework[' + day.getDate() + '][diary]'"></td>
+                                            <td><input type="text" :name="'homework[' + day.getDate() + '][ipad]'" placeholder="iPad"></td>
+                                            <td><input type="text" :name="'homework[' + day.getDate() + '][other]'" placeholder="その他"></td>
+                                            <input type="hidden" :name="'homework[' + day.getDate() + '][homework_day]'" :value="formatDate(day)">
+                                            <input type="hidden" :name="'homework[' + day.getDate() + '][grade_class_id]'" :value="props.gradeClass.id">
                                         </tr>
                                     </tbody>
                                 </table>
                                 <div class="my-5 text-center">
-                                    <button @click="submitForm" class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg mr-5">登録</button>
+                                    <button class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg mr-5">登録</button>
                                     <Link as="button" class="text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg ml-5" :href="route('homeworks.index')">
                                         戻る
                                     </Link>
