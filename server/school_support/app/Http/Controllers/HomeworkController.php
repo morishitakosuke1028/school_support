@@ -113,4 +113,34 @@ class HomeworkController extends Controller
             'status' => 'success',
         ]);
     }
+
+    public function bulkStore(Request $request)
+    {
+        $homeworkEntries = $request->input('homeworkData');
+
+        foreach ($homeworkEntries as $date => $data) {
+            $data['homework_day'] = $date; // homework_day をセット
+            $data['grade_class_id'] = $request->input('grade_class_id');
+
+            // バリデーション
+            Validator::make($data, [
+                'grade_class_id' => 'required|integer',
+                'homework_day' => 'required',
+                'reading' => 'boolean',
+                'language_drill' => 'boolean',
+                'arithmetic' => 'boolean',
+                'diary' => 'boolean',
+                'ipad' => 'max:50|string',
+                'other' => 'max:50|string',
+            ])->validate();
+
+            // ここでデータを保存
+            Homework::updateOrCreate(['homework_day' => $date, 'grade_class_id' => $data['grade_class_id']], $data);
+        }
+
+        return to_route('homeworks.index')->with([
+            'message' => '一括登録が完了しました。',
+            'status' => 'success',
+        ]);
+    }
 }

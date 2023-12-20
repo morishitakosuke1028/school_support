@@ -37,26 +37,27 @@ const formatDate = (date) => {
     return date.toISOString().split('T')[0];
 };
 
-const form = reactive({
-    // id: props.homework.id,
-    // grade_class_id: props.homework.grade_class_id,
-    // homework_day: props.homework.homework_day,
-    // reading: props.homework.reading,
-    // language_drill: props.homework.language_drill,
-    // arithmetic: props.homework.arithmetic,
-    // diary: props.homework.diary,
-    // ipad: props.homework.ipad,
-    // other: props.homework.other,
-    id: props.homework?.id ?? null,
-    grade_class_id: props.homework?.grade_class_id ?? '',
-    homework_day: props.homework?.homework_day ?? '',
-    reading: props.homework?.reading ?? false,
-    language_drill: props.homework?.language_drill ?? false,
-    arithmetic: props.homework?.arithmetic ?? false,
-    diary: props.homework?.diary ?? false,
-    ipad: props.homework?.ipad ?? '',
-    other: props.homework?.other ?? '',
-})
+// const form = reactive({
+//     // id: props.homework.id,
+//     // grade_class_id: props.homework.grade_class_id,
+//     // homework_day: props.homework.homework_day,
+//     // reading: props.homework.reading,
+//     // language_drill: props.homework.language_drill,
+//     // arithmetic: props.homework.arithmetic,
+//     // diary: props.homework.diary,
+//     // ipad: props.homework.ipad,
+//     // other: props.homework.other,
+//     id: props.homework?.id ?? null,
+//     grade_class_id: props.homework?.grade_class_id ?? '',
+//     homework_day: props.homework?.homework_day ?? '',
+//     reading: props.homework?.reading ?? false,
+//     language_drill: props.homework?.language_drill ?? false,
+//     arithmetic: props.homework?.arithmetic ?? false,
+//     diary: props.homework?.diary ?? false,
+//     ipad: props.homework?.ipad ?? '',
+//     other: props.homework?.other ?? '',
+// })
+
 
 const updateGradeClass = id => {
     router.put(route('homeworks.update', { homework: id }), form)
@@ -64,6 +65,24 @@ const updateGradeClass = id => {
 
 const calendarDays = computed(() => {
   return getDaysInMonth(calendarData.year, calendarData.month);
+});
+
+const homeworkData = reactive({});
+
+calendarDays.value.forEach(day => {
+  const formattedDay = formatDate(day);
+  if (!homeworkData[formattedDay]) {
+    homeworkData[formattedDay] = {
+      reading: null,
+      language_drill: null,
+      arithmetic: null,
+      diary: null,
+      ipad: '',
+      other: '',
+      homework_day: formattedDay,
+      grade_class_id: props.gradeClass.id
+    };
+  }
 });
 
 const getYearsRange = computed(() => {
@@ -88,9 +107,13 @@ const getDayWithHoliday = (date) => {
 const isSunday = (date) => date.getDay() === 0;
 const isSaturday = (date) => date.getDay() === 6;
 
+// const submitForm = () => {
+//     const url = form.id ? `/homeworks/${form.id}` : '/homeworks';
+//     router.post(url, form);
+// };
 const submitForm = () => {
-    const url = form.id ? `/homeworks/${form.id}` : '/homeworks';
-    router.post(url, form);
+    const url = '/homeworks/bulk';
+    router.post(url, { homeworkData });
 };
 </script>
 <style>
@@ -166,14 +189,32 @@ const submitForm = () => {
                                             <td :class="{ 'sunday': isSunday(day), 'saturday': isSaturday(day), 'holiday': holidayJp.isHoliday(day) }">
                                                 {{ day.getDate() }}日 ({{ getDayWithHoliday(day) }})
                                             </td>
-                                            <td><input type="checkbox" :name="'homework[' + day.getDate() + '][reading]'"></td>
+                                            <td><input type="checkbox" :checked="homeworkData[formatDate(day)].reading === '1'" @change="e => homeworkData[formatDate(day)].reading = e.target.checked ? '1' : null"></td>
+                                            <td><input type="checkbox" :checked="homeworkData[formatDate(day)].language_drill === '1'" @change="e => homeworkData[formatDate(day)].language_drill = e.target.checked ? '1' : null"></td>
+                                            <td><input type="checkbox" :checked="homeworkData[formatDate(day)].arithmetic === '1'" @change="e => homeworkData[formatDate(day)].arithmetic = e.target.checked ? '1' : null"></td>
+                                            <td><input type="checkbox" :checked="homeworkData[formatDate(day)].diary === '1'" @change="e => homeworkData[formatDate(day)].diary = e.target.checked ? '1' : null"></td>
+                                            <td><input type="text" v-model="homeworkData[formatDate(day)].ipad" :name="'homework[' + day.getDate() + '][ipad]'" placeholder="iPad"></td>
+                                            <td><input type="text" v-model="homeworkData[formatDate(day)].other" :name="'homework[' + day.getDate() + '][other]'" placeholder="その他"></td>
+                                            <input type="hidden" v-model="homeworkData[formatDate(day)].homework_day" :name="'homework[' + day.getDate() + '][homework_day]'">
+                                            <input type="hidden" v-model="homeworkData[formatDate(day)].grade_class_id" :name="'homework[' + day.getDate() + '][grade_class_id]'">
+
+                                            <!-- <td><input type="checkbox" v-model="homeworkData[formatDate(day)].reading" :name="'homework[' + day.getDate() + '][reading]'"></td>
+                                            <td><input type="checkbox" v-model="homeworkData[formatDate(day)].language_drill" :name="'homework[' + day.getDate() + '][language_drill]'"></td>
+                                            <td><input type="checkbox" v-model="homeworkData[formatDate(day)].arithmetic" :name="'homework[' + day.getDate() + '][arithmetic]'"></td>
+                                            <td><input type="checkbox" v-model="homeworkData[formatDate(day)].diary" :name="'homework[' + day.getDate() + '][diary]'"></td>
+                                            <td><input type="text" v-model="homeworkData[formatDate(day)].ipad" :name="'homework[' + day.getDate() + '][ipad]'" placeholder="iPad"></td>
+                                            <td><input type="text" v-model="homeworkData[formatDate(day)].other" :name="'homework[' + day.getDate() + '][other]'" placeholder="その他"></td>
+                                            <input type="hidden" v-model="homeworkData[formatDate(day)].homework_day" :name="'homework[' + day.getDate() + '][homework_day]'">
+                                            <input type="hidden" v-model="homeworkData[formatDate(day)].grade_class_id" :name="'homework[' + day.getDate() + '][grade_class_id]'"> -->
+
+                                            <!-- <td><input type="checkbox" :name="'homework[' + day.getDate() + '][reading]'"></td>
                                             <td><input type="checkbox" :name="'homework[' + day.getDate() + '][language_drill]'"></td>
                                             <td><input type="checkbox" :name="'homework[' + day.getDate() + '][arithmetic]'"></td>
                                             <td><input type="checkbox" :name="'homework[' + day.getDate() + '][diary]'"></td>
                                             <td><input type="text" :name="'homework[' + day.getDate() + '][ipad]'" placeholder="iPad"></td>
                                             <td><input type="text" :name="'homework[' + day.getDate() + '][other]'" placeholder="その他"></td>
                                             <input type="hidden" :name="'homework[' + day.getDate() + '][homework_day]'" :value="formatDate(day)">
-                                            <input type="hidden" :name="'homework[' + day.getDate() + '][grade_class_id]'" :value="props.gradeClass.id">
+                                            <input type="hidden" :name="'homework[' + day.getDate() + '][grade_class_id]'" :value="props.gradeClass.id"> -->
                                         </tr>
                                     </tbody>
                                 </table>
