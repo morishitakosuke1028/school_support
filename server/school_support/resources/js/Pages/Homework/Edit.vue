@@ -34,7 +34,10 @@ const getDaysInMonth = (year, month) => {
 };
 
 const formatDate = (date) => {
-    return date.toISOString().split('T')[0];
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // 0 から始まる月を 1 から始まる月に変換
+    const day = date.getDate();
+    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 };
 
 // const form = reactive({
@@ -59,9 +62,9 @@ const formatDate = (date) => {
 // })
 
 
-const updateGradeClass = id => {
-    router.put(route('homeworks.update', { homework: id }), form)
-}
+// const updateGradeClass = id => {
+//     router.put(route('homeworks.update', { homework: id }), form)
+// }
 
 const calendarDays = computed(() => {
   return getDaysInMonth(calendarData.year, calendarData.month);
@@ -111,9 +114,15 @@ const isSaturday = (date) => date.getDay() === 6;
 //     const url = form.id ? `/homeworks/${form.id}` : '/homeworks';
 //     router.post(url, form);
 // };
+// const submitForm = () => {
+//     const url = '/homeworks/bulk';
+//     router.post(url, { homeworkData });
+// };
 const submitForm = () => {
     const url = '/homeworks/bulk';
-    router.post(url, { homeworkData });
+    const formattedData = Object.values(homeworkData);
+    console.log(formattedData);
+    router.post(url, { homework: formattedData });
 };
 </script>
 <style>
@@ -195,8 +204,8 @@ const submitForm = () => {
                                             <td><input type="checkbox" :checked="homeworkData[formatDate(day)].diary === '1'" @change="e => homeworkData[formatDate(day)].diary = e.target.checked ? '1' : null"></td>
                                             <td><input type="text" v-model="homeworkData[formatDate(day)].ipad" :name="'homework[' + day.getDate() + '][ipad]'" placeholder="iPad"></td>
                                             <td><input type="text" v-model="homeworkData[formatDate(day)].other" :name="'homework[' + day.getDate() + '][other]'" placeholder="その他"></td>
-                                            <input type="hidden" v-model="homeworkData[formatDate(day)].homework_day" :name="'homework[' + day.getDate() + '][homework_day]'">
-                                            <input type="hidden" v-model="homeworkData[formatDate(day)].grade_class_id" :name="'homework[' + day.getDate() + '][grade_class_id]'">
+                                            <input type="text" v-model="homeworkData[formatDate(day)].homework_day">
+                                            <input type="text" v-model="homeworkData[formatDate(day)].grade_class_id">
 
                                             <!-- <td><input type="checkbox" v-model="homeworkData[formatDate(day)].reading" :name="'homework[' + day.getDate() + '][reading]'"></td>
                                             <td><input type="checkbox" v-model="homeworkData[formatDate(day)].language_drill" :name="'homework[' + day.getDate() + '][language_drill]'"></td>

@@ -9,6 +9,7 @@ use App\Models\GradeClass;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class HomeworkController extends Controller
 {
@@ -116,6 +117,8 @@ class HomeworkController extends Controller
 
     public function bulkStore(Request $request)
     {
+        \Log::info($request->all());
+
         $homeworkEntries = $request->input('homeworkData');
 
         foreach ($homeworkEntries as $date => $data) {
@@ -124,12 +127,12 @@ class HomeworkController extends Controller
 
             // バリデーション
             Validator::make($data, [
-                'grade_class_id' => 'required|integer',
+                'grade_class_id' => 'required|string',
                 'homework_day' => 'required',
-                'reading' => 'boolean',
-                'language_drill' => 'boolean',
-                'arithmetic' => 'boolean',
-                'diary' => 'boolean',
+                'reading' => 'string',
+                'language_drill' => 'string',
+                'arithmetic' => 'string',
+                'diary' => 'string',
                 'ipad' => 'max:50|string',
                 'other' => 'max:50|string',
             ])->validate();
