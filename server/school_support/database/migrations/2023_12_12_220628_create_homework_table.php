@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('grade_class_id')->constrained();
             $table->datetime('homework_day');
-            $table->string('reading');
-            $table->string('language_drill');
-            $table->string('arithmetic');
-            $table->string('diary');
-            $table->string('ipad');
-            $table->string('other');
+            $table->string('reading')->nullable();
+            $table->string('language_drill')->nullable();
+            $table->string('arithmetic')->nullable();
+            $table->string('diary')->nullable();
+            $table->string('ipad')->nullable();
+            $table->string('other')->nullable();
             $table->timestamps();
         });
     }
