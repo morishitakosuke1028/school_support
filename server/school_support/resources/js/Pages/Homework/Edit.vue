@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { reactive, computed } from 'vue';
+import { reactive, computed, watch, onMounted } from 'vue';
 import holidayJp from '@holiday-jp/holiday_jp';
 
 const props = defineProps({
@@ -14,13 +14,14 @@ const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth();
 
 const calendarData = reactive({
-  year: currentYear,
-  month: currentMonth
+    year: currentYear,
+    month: currentMonth
 });
 
+
 const changeMonth = (year, month) => {
-  calendarData.year = year;
-  calendarData.month = month;
+    calendarData.year = year;
+    calendarData.month = month;
 };
 
 const getDaysInMonth = (year, month) => {
@@ -44,8 +45,9 @@ const formatDate = (date) => {
 //     router.put(route('homeworks.update', { homework: id }), form)
 // }
 
+
 const calendarDays = computed(() => {
-  return getDaysInMonth(calendarData.year, calendarData.month);
+    return getDaysInMonth(calendarData.year, calendarData.month);
 });
 
 const homeworkData = reactive({
@@ -60,21 +62,33 @@ const homeworkData = reactive({
     other: props.homework.other,
 });
 
-calendarDays.value.forEach(day => {
-  const formattedDay = formatDate(day);
-  if (!homeworkData[formattedDay]) {
-    homeworkData[formattedDay] = {
-      reading: null,
-      language_drill: null,
-      arithmetic: null,
-      diary: null,
-      ipad: '',
-      other: '',
-      homework_day: formattedDay,
-      grade_class_id: props.gradeClass.id
-    };
-  }
+// コンポーネントがマウントされたときに実行される
+onMounted(() => {
+  updateHomeworkData();
 });
+
+// calendarData.year と calendarData.month の変更を監視
+watch(() => [calendarData.year, calendarData.month], () => {
+  updateHomeworkData();
+});
+
+function updateHomeworkData() {
+  calendarDays.value.forEach(day => {
+    const formattedDay = formatDate(day);
+    if (!homeworkData[formattedDay]) {
+      homeworkData[formattedDay] = {
+        reading: false,
+        language_drill: false,
+        arithmetic: false,
+        diary: false,
+        ipad: '',
+        other: '',
+        homework_day: formattedDay,
+        grade_class_id: props.gradeClass.id
+      };
+    }
+  });
+}
 
 const getYearsRange = computed(() => {
   const startYear = currentYear - 5;
@@ -159,7 +173,7 @@ const submitForm = async () => {
                             </div>
                             <form @submit.prevent="submitForm">
                                 <h3 class="text-lg font-semibold mb-5">{{ displayedMonth }}</h3>
-                                <table class="homework-table">
+                                <table class="homework-table" :key="`${calendarData.year}-${calendarData.month}`">
                                     <thead>
                                         <tr>
                                         <th>日付</th>
@@ -176,14 +190,84 @@ const submitForm = async () => {
                                             <td :class="{ 'sunday': isSunday(day), 'saturday': isSaturday(day), 'holiday': holidayJp.isHoliday(day) }">
                                                 {{ day.getDate() }}日 ({{ getDayWithHoliday(day) }})
                                             </td>
-                                            <td><input type="checkbox" :checked="homeworkData[formatDate(day)].reading === '1'" @change="e => homeworkData[formatDate(day)].reading = e.target.checked ? '1' : null"></td>
-                                            <td><input type="checkbox" :checked="homeworkData[formatDate(day)].language_drill === '1'" @change="e => homeworkData[formatDate(day)].language_drill = e.target.checked ? '1' : null"></td>
+                                            <td>
+                                                <input
+                                                    type="checkbox"
+                                                    :checked="homeworkData[formatDate(day)] && homeworkData[formatDate(day)].reading"
+                                                    @input="event => {
+                                                        if (homeworkData[formatDate(day)]) {
+                                                            homeworkData[formatDate(day)].reading = event.target.checked;
+                                                        }}"
+                                                >
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="checkbox"
+                                                    :checked="homeworkData[formatDate(day)] && homeworkData[formatDate(day)].language_drill"
+                                                    @input="event => {
+                                                        if (homeworkData[formatDate(day)]) {
+                                                            homeworkData[formatDate(day)].language_drill = event.target.checked;
+                                                        }}"
+                                                >
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="checkbox"
+                                                    :checked="homeworkData[formatDate(day)] && homeworkData[formatDate(day)].arithmetic"
+                                                    @input="event => {
+                                                        if (homeworkData[formatDate(day)]) {
+                                                            homeworkData[formatDate(day)].arithmetic = event.target.checked;
+                                                        }}"
+                                                >
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="checkbox"
+                                                    :checked="homeworkData[formatDate(day)] && homeworkData[formatDate(day)].diary"
+                                                    @input="event => {
+                                                        if (homeworkData[formatDate(day)]) {
+                                                            homeworkData[formatDate(day)].diary = event.target.checked;
+                                                        }}"
+                                                >
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    :value="homeworkData[formatDate(day)] ? homeworkData[formatDate(day)].ipad : ''"
+                                                    @input="event => {
+                                                        if (homeworkData[formatDate(day)]) {
+                                                            homeworkData[formatDate(day)].ipad = event.target.value;
+                                                        }}"
+                                                >
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    :value="homeworkData[formatDate(day)] ? homeworkData[formatDate(day)].other : ''"
+                                                    @input="event => {
+                                                        if (homeworkData[formatDate(day)]) {
+                                                            homeworkData[formatDate(day)].other = event.target.value;
+                                                        }}"
+                                                >
+                                            </td>
+                                            <input
+                                                type="text"
+                                                :value="homeworkData[formatDate(day)]?.homework_day"
+                                                @input="event => homeworkData[formatDate(day)].homework_day = event.target.value"
+                                            >
+                                            <input
+                                                type="text"
+                                                :value="homeworkData[formatDate(day)]?.grade_class_id"
+                                                @input="event => homeworkData[formatDate(day)].grade_class_id = event.target.value"
+                                            >
+                                            <!-- TODO消す -->
+                                            <!-- <td><input type="checkbox" :checked="homeworkData[formatDate(day)].language_drill === '1'" @change="e => homeworkData[formatDate(day)].language_drill = e.target.checked ? '1' : null"></td>
                                             <td><input type="checkbox" :checked="homeworkData[formatDate(day)].arithmetic === '1'" @change="e => homeworkData[formatDate(day)].arithmetic = e.target.checked ? '1' : null"></td>
                                             <td><input type="checkbox" :checked="homeworkData[formatDate(day)].diary === '1'" @change="e => homeworkData[formatDate(day)].diary = e.target.checked ? '1' : null"></td>
                                             <td><input type="text" v-model="homeworkData[formatDate(day)].ipad" :name="'homework[' + day.getDate() + '][ipad]'" placeholder="iPad"></td>
-                                            <td><input type="text" v-model="homeworkData[formatDate(day)].other" :name="'homework[' + day.getDate() + '][other]'" placeholder="その他"></td>
-                                            <input type="text" v-model="homeworkData[formatDate(day)].homework_day">
-                                            <input type="text" v-model="homeworkData[formatDate(day)].grade_class_id">
+                                            <td><input type="text" v-model="homeworkData[formatDate(day)].other" :name="'homework[' + day.getDate() + '][other]'" placeholder="その他"></td> -->
+                                            <!-- <input type="text" v-model="homeworkData[formatDate(day)].homework_day">
+                                            <input type="text" v-model="homeworkData[formatDate(day)].grade_class_id"> -->
                                         </tr>
                                     </tbody>
                                 </table>
