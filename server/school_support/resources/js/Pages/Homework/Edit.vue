@@ -9,7 +9,6 @@ const props = defineProps({
     homework: Object
 })
 
-// const { props } = usePage();
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth();
 
@@ -62,12 +61,10 @@ const homeworkData = reactive({
     other: props.homework.other,
 });
 
-// コンポーネントがマウントされたときに実行される
 onMounted(() => {
   updateHomeworkData();
 });
 
-// calendarData.year と calendarData.month の変更を監視
 watch(() => [calendarData.year, calendarData.month], () => {
   updateHomeworkData();
 });
@@ -88,6 +85,18 @@ function updateHomeworkData() {
       };
     }
   });
+}
+
+const transformedData = {};
+for (const [key, value] of Object.entries(homeworkData)) {
+  if (key.match(/^\d{4}-\d{2}-\d{2}$/)) { // 日付形式のキーのみをチェック
+    transformedData[key] = { ...value };
+    ['reading', 'language_drill', 'arithmetic', 'diary'].forEach(field => {
+      if (transformedData[key][field] === false) {
+        transformedData[key][field] = null;
+      }
+    });
+  }
 }
 
 const getYearsRange = computed(() => {
@@ -113,8 +122,23 @@ const isSunday = (date) => date.getDay() === 0;
 const isSaturday = (date) => date.getDay() === 6;
 
 const submitForm = async () => {
-    const url = '/homeworks/bulk';
-    router.post(url, { homeworkData })
+  const filteredData = {};
+  for (const [key, value] of Object.entries(homeworkData)) {
+    if (key.match(/^\d{4}-\d{2}-\d{2}$/)) { // 日付形式のキーのみをチェック
+      filteredData[key] = { ...value };
+      ['reading', 'language_drill', 'arithmetic', 'diary'].forEach(field => {
+        // ブール値を文字列 '1' または '' に変換
+        filteredData[key][field] = filteredData[key][field] ? '1' : '';
+      });
+    }
+  }
+
+  const url = '/homeworks/bulk';
+  try {
+    await router.post(url, { homeworkData: filteredData });
+  } catch (error) {
+    console.error('Error on form submission:', error);
+  }
 };
 </script>
 <style>
@@ -260,14 +284,6 @@ const submitForm = async () => {
                                                 :value="homeworkData[formatDate(day)]?.grade_class_id"
                                                 @input="event => homeworkData[formatDate(day)].grade_class_id = event.target.value"
                                             >
-                                            <!-- TODO消す -->
-                                            <!-- <td><input type="checkbox" :checked="homeworkData[formatDate(day)].language_drill === '1'" @change="e => homeworkData[formatDate(day)].language_drill = e.target.checked ? '1' : null"></td>
-                                            <td><input type="checkbox" :checked="homeworkData[formatDate(day)].arithmetic === '1'" @change="e => homeworkData[formatDate(day)].arithmetic = e.target.checked ? '1' : null"></td>
-                                            <td><input type="checkbox" :checked="homeworkData[formatDate(day)].diary === '1'" @change="e => homeworkData[formatDate(day)].diary = e.target.checked ? '1' : null"></td>
-                                            <td><input type="text" v-model="homeworkData[formatDate(day)].ipad" :name="'homework[' + day.getDate() + '][ipad]'" placeholder="iPad"></td>
-                                            <td><input type="text" v-model="homeworkData[formatDate(day)].other" :name="'homework[' + day.getDate() + '][other]'" placeholder="その他"></td> -->
-                                            <!-- <input type="text" v-model="homeworkData[formatDate(day)].homework_day">
-                                            <input type="text" v-model="homeworkData[formatDate(day)].grade_class_id"> -->
                                         </tr>
                                     </tbody>
                                 </table>
