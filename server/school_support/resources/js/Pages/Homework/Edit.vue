@@ -268,12 +268,12 @@ const submitForm = async () => {
                                                 >
                                             </td>
                                             <input
-                                                type="text"
+                                                type="hidden"
                                                 :value="homeworkData[formatDate(day)]?.homework_day"
                                                 @input="event => homeworkData[formatDate(day)].homework_day = event.target.value"
                                             >
                                             <input
-                                                type="text"
+                                                type="hidden"
                                                 :value="homeworkData[formatDate(day)]?.grade_class_id"
                                                 @input="event => homeworkData[formatDate(day)].grade_class_id = event.target.value"
                                             >
