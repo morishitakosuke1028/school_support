@@ -4,11 +4,7 @@ import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { reactive, computed, watch, onMounted } from 'vue';
 import holidayJp from '@holiday-jp/holiday_jp';
 
-const props = defineProps({
-    gradeClass: Object,
-    homework: Object
-})
-
+const { props } = usePage();
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth();
 
@@ -16,7 +12,6 @@ const calendarData = reactive({
     year: currentYear,
     month: currentMonth
 });
-
 
 const changeMonth = (year, month) => {
     calendarData.year = year;
@@ -40,105 +35,103 @@ const formatDate = (date) => {
     return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 };
 
-// const updateGradeClass = id => {
-//     router.put(route('homeworks.update', { homework: id }), form)
-// }
-
-
 const calendarDays = computed(() => {
     return getDaysInMonth(calendarData.year, calendarData.month);
 });
 
-const homeworkData = reactive({
-    id: props.homework.id,
-    grade_class_id: props.homework.grade_class_id,
-    homework_day: props.homework.homework_day,
-    reading: props.homework.reading,
-    language_drill: props.homework.language_drill,
-    arithmetic: props.homework.arithmetic,
-    diary: props.homework.diary,
-    ipad: props.homework.ipad,
-    other: props.homework.other,
+const homeworkData = reactive({});
+props.homeworks.forEach(homework => {
+    const formattedDay = formatDate(new Date(homework.homework_day));
+    homeworkData[formattedDay] = {
+        reading: homework.reading === '1',
+        language_drill: homework.language_drill === '1',
+        arithmetic: homework.arithmetic === '1',
+        diary: homework.diary === '1',
+        ipad: homework.ipad || '',
+        other: homework.other || '',
+        homework_day: formattedDay,
+        grade_class_id: homework.grade_class_id
+    };
 });
 
 onMounted(() => {
-  updateHomeworkData();
+    updateHomeworkData();
 });
 
 watch(() => [calendarData.year, calendarData.month], () => {
-  updateHomeworkData();
+    updateHomeworkData();
 });
 
 function updateHomeworkData() {
-  calendarDays.value.forEach(day => {
-    const formattedDay = formatDate(day);
-    if (!homeworkData[formattedDay]) {
-      homeworkData[formattedDay] = {
-        reading: false,
-        language_drill: false,
-        arithmetic: false,
-        diary: false,
-        ipad: '',
-        other: '',
-        homework_day: formattedDay,
-        grade_class_id: props.gradeClass.id
-      };
-    }
-  });
+    calendarDays.value.forEach(day => {
+        const formattedDay = formatDate(day);
+        if (!homeworkData[formattedDay]) {
+            homeworkData[formattedDay] = {
+                reading: false,
+                language_drill: false,
+                arithmetic: false,
+                diary: false,
+                ipad: '',
+                other: '',
+                homework_day: formattedDay,
+                grade_class_id: props.gradeClass.id
+            };
+        }
+    });
 }
 
 const transformedData = {};
 for (const [key, value] of Object.entries(homeworkData)) {
-  if (key.match(/^\d{4}-\d{2}-\d{2}$/)) { // 日付形式のキーのみをチェック
-    transformedData[key] = { ...value };
-    ['reading', 'language_drill', 'arithmetic', 'diary'].forEach(field => {
-      if (transformedData[key][field] === false) {
-        transformedData[key][field] = null;
-      }
-    });
-  }
+    if (key.match(/^\d{4}-\d{2}-\d{2}$/)) { // 日付形式のキーのみをチェック
+        transformedData[key] = { ...value };
+        ['reading', 'language_drill', 'arithmetic', 'diary'].forEach(field => {
+            if (transformedData[key][field] === false) {
+                transformedData[key][field] = null;
+            }
+        });
+    }
 }
 
 const getYearsRange = computed(() => {
-  const startYear = currentYear - 5;
-  const endYear = currentYear + 5;
-  return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+    const startYear = currentYear - 5;
+    const endYear = currentYear + 5;
+    return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
 });
 
 const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
 const displayedMonth = computed(() => {
-  return `${calendarData.year}年 ${monthNames[calendarData.month]}`;
+    return `${calendarData.year}年 ${monthNames[calendarData.month]}`;
 });
 
 const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
 
 const getDayWithHoliday = (date) => {
-  const dayOfWeek = weekDays[date.getDay()];
-  const holiday = holidayJp.isHoliday(date) ? ' (祝)' : '';
-  return `${dayOfWeek}${holiday}`;
+    const dayOfWeek = weekDays[date.getDay()];
+    const holiday = holidayJp.isHoliday(date) ? ' (祝)' : '';
+    return `${dayOfWeek}${holiday}`;
 };
 
 const isSunday = (date) => date.getDay() === 0;
 const isSaturday = (date) => date.getDay() === 6;
 
 const submitForm = async () => {
-  const filteredData = {};
-  for (const [key, value] of Object.entries(homeworkData)) {
-    if (key.match(/^\d{4}-\d{2}-\d{2}$/)) { // 日付形式のキーのみをチェック
-      filteredData[key] = { ...value };
-      ['reading', 'language_drill', 'arithmetic', 'diary'].forEach(field => {
-        // ブール値を文字列 '1' または '' に変換
-        filteredData[key][field] = filteredData[key][field] ? '1' : '';
-      });
+    const filteredData = {};
+    for (const [key, value] of Object.entries(homeworkData)) {
+        if (key.match(/^\d{4}-\d{2}-\d{2}$/)) { // 日付形式のキーのみをチェック
+            filteredData[key] = { ...value };
+            ['reading', 'language_drill', 'arithmetic', 'diary'].forEach(field => {
+                // ブール値を文字列 '1' または '' に変換
+                filteredData[key][field] = filteredData[key][field] ? '1' : '';
+            });
+        }
     }
-  }
 
-  const url = '/homeworks/bulk';
-  try {
-    await router.post(url, { homeworkData: filteredData });
-  } catch (error) {
-    console.error('Error on form submission:', error);
-  }
+    const url = '/homeworks/bulk';
+    try {
+        await router.post(url, { homeworkData: filteredData });
+    } catch (error) {
+        console.error('Error on form submission:', error);
+    }
 };
 </script>
 <style>

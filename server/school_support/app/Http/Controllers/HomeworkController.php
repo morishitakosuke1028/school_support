@@ -38,10 +38,10 @@ class HomeworkController extends Controller
     public function edit($gradeClassId)
     {
         $gradeClass = GradeClass::findOrFail($gradeClassId);
-        $homework = Homework::all();
+        $homeworks = Homework::where('grade_class_id', $gradeClassId)->get();
         return Inertia::render('Homework/Edit', [
             'gradeClass' => $gradeClass,
-            'homework' => $homework
+            'homeworks' => $homeworks
         ]);
     }
 
