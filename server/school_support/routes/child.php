@@ -10,6 +10,7 @@ use App\Http\Controllers\Child\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\Child\Auth\VerifyEmailController;
 use App\Http\Controllers\ChildController;
+use App\Http\Controllers\Child\HomeworkController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest:child')->group(function () {
@@ -52,4 +53,6 @@ Route::middleware('auth:child')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+
+    Route::get('homework/index', [HomeworkController::class, 'index'])->name('homework.index');
 });

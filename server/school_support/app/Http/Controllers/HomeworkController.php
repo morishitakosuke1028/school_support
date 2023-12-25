@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreHomeworkRequest;
-use App\Http\Requests\UpdateHomeworkRequest;
 use App\Models\Homework;
 use App\Models\GradeClass;
 use Inertia\Inertia;
