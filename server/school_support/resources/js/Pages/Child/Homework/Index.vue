@@ -5,7 +5,8 @@ import { ref, computed, watch } from 'vue';
 import holidayJp from '@holiday-jp/holiday_jp';
 
 const props = defineProps({
-    homework: Object
+    gradeClasses: Array,
+    homeworks: Object
 });
 
 const selectedDate = ref(new Date());
@@ -26,7 +27,7 @@ const availableDates = computed(() => {
 
 // 選択された日付の宿題データを取得
 const selectedHomeworkData = computed(() => {
-    return props.homework.find(hw => {
+    return props.homeworks.find(hw => {
         const hwDate = new Date(hw.homework_day);
         return hwDate.getDate() === selectedDate.value.getDate() &&
                hwDate.getMonth() === selectedDate.value.getMonth() &&
@@ -110,76 +111,12 @@ watch(selectedDate, () => {
                                         <td :class="{ 'sunday': isSunday(day), 'saturday': isSaturday(day), 'holiday': holidayJp.isHoliday(day) }">
                                             {{ day.getDate() }}日 ({{ getDayWithHoliday(day) }})
                                         </td>
-                                        <td>
-                                            <input
-                                                type="checkbox"
-                                                :checked="homeworkData[formatDate(day)] && homeworkData[formatDate(day)].reading"
-                                                @input="event => {
-                                                    if (homeworkData[formatDate(day)]) {
-                                                        homeworkData[formatDate(day)].reading = event.target.checked;
-                                                    }}"
-                                            >
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="checkbox"
-                                                :checked="homeworkData[formatDate(day)] && homeworkData[formatDate(day)].language_drill"
-                                                @input="event => {
-                                                    if (homeworkData[formatDate(day)]) {
-                                                        homeworkData[formatDate(day)].language_drill = event.target.checked;
-                                                    }}"
-                                            >
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="checkbox"
-                                                :checked="homeworkData[formatDate(day)] && homeworkData[formatDate(day)].arithmetic"
-                                                @input="event => {
-                                                    if (homeworkData[formatDate(day)]) {
-                                                        homeworkData[formatDate(day)].arithmetic = event.target.checked;
-                                                    }}"
-                                            >
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="checkbox"
-                                                :checked="homeworkData[formatDate(day)] && homeworkData[formatDate(day)].diary"
-                                                @input="event => {
-                                                    if (homeworkData[formatDate(day)]) {
-                                                        homeworkData[formatDate(day)].diary = event.target.checked;
-                                                    }}"
-                                            >
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                :value="homeworkData[formatDate(day)] ? homeworkData[formatDate(day)].ipad : ''"
-                                                @input="event => {
-                                                    if (homeworkData[formatDate(day)]) {
-                                                        homeworkData[formatDate(day)].ipad = event.target.value;
-                                                    }}"
-                                            >
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                :value="homeworkData[formatDate(day)] ? homeworkData[formatDate(day)].other : ''"
-                                                @input="event => {
-                                                    if (homeworkData[formatDate(day)]) {
-                                                        homeworkData[formatDate(day)].other = event.target.value;
-                                                    }}"
-                                            >
-                                        </td>
-                                        <input
-                                            type="hidden"
-                                            :value="homeworkData[formatDate(day)]?.homework_day"
-                                            @input="event => homeworkData[formatDate(day)].homework_day = event.target.value"
-                                        >
-                                        <input
-                                            type="hidden"
-                                            :value="homeworkData[formatDate(day)]?.grade_class_id"
-                                            @input="event => homeworkData[formatDate(day)].grade_class_id = event.target.value"
-                                        >
+                                        <td>{{ homeworkData[formatDate(day)]?.reading ? '✔️' : '❌' }}</td>
+                                        <td>{{ homeworkData[formatDate(day)]?.language_drill ? '✔️' : '❌' }}</td>
+                                        <td>{{ homeworkData[formatDate(day)]?.arithmetic ? '✔️' : '❌' }}</td>
+                                        <td>{{ homeworkData[formatDate(day)]?.diary ? '✔️' : '❌' }}</td>
+                                        <td>{{ homeworkData[formatDate(day)]?.ipad }}</td>
+                                        <td>{{ homeworkData[formatDate(day)]?.other }}</td>
                                     </tr>
                                 </tbody>
                             </table>

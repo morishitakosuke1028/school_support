@@ -37,7 +37,7 @@ const showingNavigationDropdown = ref(false);
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('homework.index')" :active="route().current('homework.index')">
+                                <NavLink :href="route('child.homework.index')" :active="route().current('child.homework.index')">
                                     宿題
                                 </NavLink>
                             </div>
@@ -132,7 +132,7 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('homework.index')" > 宿題</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('child.homework.index')" > 宿題</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 ログアウト

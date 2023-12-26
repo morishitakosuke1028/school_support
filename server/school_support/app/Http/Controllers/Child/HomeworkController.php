@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Homework;
-use App\Models\GradeClass;
+// use App\Models\GradeClass;
+use App\Models\GradeClassHistory;
 
 class HomeworkController extends Controller
 {
@@ -14,7 +15,11 @@ class HomeworkController extends Controller
     {
         $user = auth()->user();
 
-        $gradeClassId = $user->grade_class_id;
+        $childId = $user->id;
+
+        $gradeClassHistory = GradeClassHistory::where('child_id', $childId)->latest()->first();
+        $gradeClassId = optional($gradeClassHistory)->grade_class_id;
+
         $homeworks = Homework::where('grade_class_id', $gradeClassId)->get();
 
         return Inertia::render('Homework/Index', [
