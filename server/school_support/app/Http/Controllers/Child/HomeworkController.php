@@ -22,7 +22,7 @@ class HomeworkController extends Controller
 
         $homeworks = Homework::where('grade_class_id', $gradeClassId)->get();
 
-        return Inertia::render('Homework/Index', [
+        return Inertia::render('Child/Homework/Index', [
             'homeworks' => $homeworks
         ]);
     }

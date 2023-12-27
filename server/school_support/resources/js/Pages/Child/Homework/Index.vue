@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedChildLayout from '@/Layouts/AuthenticatedChildLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
-import { ref, computed, watch } from 'vue';
+import { Head } from '@inertiajs/vue3';
+import { ref, computed, watch, reactive } from 'vue';
 import holidayJp from '@holiday-jp/holiday_jp';
 
 const props = defineProps({
@@ -10,6 +10,10 @@ const props = defineProps({
 });
 
 const selectedDate = ref(new Date());
+const calendarData = reactive({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth()
+});
 
 // セレクトボックスで選択可能な日付のリストを生成
 const availableDates = computed(() => {
@@ -27,6 +31,10 @@ const availableDates = computed(() => {
 
 // 選択された日付の宿題データを取得
 const selectedHomeworkData = computed(() => {
+    if (!selectedDate.value) {
+        return null; // selectedDateが未定義の場合はnullを返す
+    }
+
     return props.homeworks.find(hw => {
         const hwDate = new Date(hw.homework_day);
         return hwDate.getDate() === selectedDate.value.getDate() &&
