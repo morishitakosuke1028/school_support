@@ -5,7 +5,12 @@
 *.html diff=html
 *.md diff=markdown
 *.php diff=php
-*.vb linguist-detectable=true
+* linguist-vendored
+*.js linguist-vendored=false
+*.vue linguist-vendored=false
+*.php linguist-vendored=false
+*.blade linguist-vendored=false
+*.Dockerfile linguist-vendored=false
 
 /.github export-ignore
 CHANGELOG.md export-ignore
