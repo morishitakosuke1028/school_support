@@ -5,6 +5,7 @@ use App\Http\Controllers\ChildController;
 use App\Http\Controllers\GradeClassController;
 use App\Http\Controllers\GradeClassHistoryController;
 use App\Http\Controllers\HomeworkController;
+use App\Http\Controllers\DailyController;
 use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController as ProfileOfChildController;
@@ -60,6 +61,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/homeworks/index', [HomeworkController::class, 'index'])->name('homeworks.index');
     Route::get('/homeworks/{gradeClass}/edit', [HomeworkController::class, 'edit'])->name('homeworks.edit');
     Route::post('/homeworks/{homework}', [HomeworkController::class, 'bulkStore'])->name('homeworks.bulkStore');
+
+    Route::get('/attendance/index', [DailyController::class, 'index'])->name('attendance.index');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');
