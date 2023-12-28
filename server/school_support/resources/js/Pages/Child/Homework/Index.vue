@@ -9,43 +9,90 @@ const props = defineProps({
     homeworks: Object
 });
 
-const selectedDate = ref(new Date());
+const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // 0 から始まる月を 1 から始まる月に変換
+    const day = date.getDate();
+    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+};
+
+const currentYear = new Date().getFullYear();
+const currentMonth = new Date().getMonth();
+const homeworkData = reactive({});
+
+// props.homeworks を使って homeworkData を初期化
+props.homeworks.forEach(hw => {
+    const hwDate = formatDate(new Date(hw.homework_day));
+    homeworkData[hwDate] = {
+        reading: hw.reading,
+        language_drill: hw.language_drill,
+        arithmetic: hw.arithmetic,
+        diary: hw.diary,
+        ipad: hw.ipad,
+        other: hw.other,
+        homework_day: hw.homework_day,
+        grade_class_id: hw.grade_class_id
+    };
+});
+
 const calendarData = reactive({
-    year: new Date().getFullYear(),
-    month: new Date().getMonth()
+    year: currentYear,
+    month: currentMonth
 });
 
-// セレクトボックスで選択可能な日付のリストを生成
-const availableDates = computed(() => {
-    // ここで現在の月の日付のリストを生成
-    const dates = [];
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+const changeMonth = (year, month) => {
+    calendarData.year = year;
+    calendarData.month = month;
+};
 
-    for (let day = 1; day <= daysInMonth; day++) {
-        dates.push(new Date(currentYear, currentMonth, day));
+const getDaysInMonth = (year, month) => {
+    const date = new Date(year, month, 1);
+    const days = [];
+    while (date.getMonth() === month) {
+        days.push(new Date(date));
+        date.setDate(date.getDate() + 1);
     }
-    return dates;
+    return days;
+};
+
+const calendarDays = computed(() => {
+    return getDaysInMonth(calendarData.year, calendarData.month);
 });
 
-// 選択された日付の宿題データを取得
-const selectedHomeworkData = computed(() => {
-    if (!selectedDate.value) {
-        return null; // selectedDateが未定義の場合はnullを返す
+const transformedData = {};
+for (const [key, value] of Object.entries(homeworkData)) {
+    if (key.match(/^\d{4}-\d{2}-\d{2}$/)) { // 日付形式のキーのみをチェック
+        transformedData[key] = { ...value };
+        ['reading', 'language_drill', 'arithmetic', 'diary'].forEach(field => {
+            if (transformedData[key][field] === false) {
+                transformedData[key][field] = null;
+            }
+        });
     }
+}
 
-    return props.homeworks.find(hw => {
-        const hwDate = new Date(hw.homework_day);
-        return hwDate.getDate() === selectedDate.value.getDate() &&
-               hwDate.getMonth() === selectedDate.value.getMonth() &&
-               hwDate.getFullYear() === selectedDate.value.getFullYear();
-    });
+const getYearsRange = computed(() => {
+    const startYear = currentYear - 5;
+    const endYear = currentYear + 5;
+    return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
 });
 
-watch(selectedDate, () => {
-    // 選択された日付が変更されたときの処理
+const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+const displayedMonth = computed(() => {
+    return `${calendarData.year}年 ${monthNames[calendarData.month]}`;
 });
+
+const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
+
+const getDayWithHoliday = (date) => {
+    const dayOfWeek = weekDays[date.getDay()];
+    const holiday = holidayJp.isHoliday(date) ? ' (祝)' : '';
+    return `${dayOfWeek}${holiday}`;
+};
+
+const isSunday = (date) => date.getDay() === 0;
+const isSaturday = (date) => date.getDay() === 6;
+
 </script>
 <style>
 .homework-table {
@@ -78,7 +125,7 @@ watch(selectedDate, () => {
 <template>
     <Head title="宿題" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedChildLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 宿題
@@ -133,6 +180,6 @@ watch(selectedDate, () => {
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AuthenticatedChildLayout>
 </template>
 
