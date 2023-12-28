@@ -59,4 +59,9 @@ class Child extends Authenticatable
     {
         return $this->hasMany(GradeClassHistory::class);
     }
+
+    public function gradeClass()
+    {
+        return $this->belongsTo(GradeClass::class);
+    }
 }

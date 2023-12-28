@@ -15,12 +15,12 @@ class ChildController extends Controller
 {
     public function index(Request $request)
 	{
-            $children = Child::select('id', 'name', 'tel', 'email', 'admission_date')->paginate(20);
+        $children = Child::select('id', 'name', 'tel', 'email', 'admission_date')->paginate(20);
 
-			return Inertia::render('Child/Index', [
-                'children' => $children,
-                'currentUserRole' => Auth::user()->role === 1,
-			]);
+        return Inertia::render('Child/Index', [
+            'children' => $children,
+            'currentUserRole' => Auth::user()->role === 1,
+        ]);
 	}
 
     public function edit(Child $child)
