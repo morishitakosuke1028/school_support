@@ -13,7 +13,8 @@ const searchFilters = ref({
     gradeName: filtersFromBackend.gradeName || '',
     className: filtersFromBackend.className || '',
     childName: filtersFromBackend.childName || '',
-    childKana: filtersFromBackend.childKana || ''
+    childKana: filtersFromBackend.childKana || '',
+    childDaily: filtersFromBackend.childDaily || ''
 });
 
 const gradeNames = computed(() => {
@@ -36,7 +37,6 @@ const submitSearch = () => {
 
 <template>
     <div class="pl-4 my-6 w-full mx-auto">
-        <!-- 検索フォーム -->
         <form @submit.prevent="submitSearch" class="space-x-4">
             <div class="my-5 mx-4">
                 <label for="childName" class="text-gray-700">生徒名：　</label>
@@ -66,6 +66,11 @@ const submitSearch = () => {
                         {{ className }}
                     </label>
                 </div>
+            </div>
+
+            <div class="my-5">
+                <label for="childDaily" class="text-gray-700">日付：　</label>
+                <input type="date" name="childDaily" v-model="searchFilters.childDaily" class="p-2 border border-gray-300 rounded">
             </div>
 
             <div class="text-center">
