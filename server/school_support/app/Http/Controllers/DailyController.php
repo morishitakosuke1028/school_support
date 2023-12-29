@@ -21,9 +21,8 @@ class DailyController extends Controller
     public function index()
     {
         $children = Child::with('gradeClassHistories.gradeClass', 'dailies')->get();
-        $gradeClasses = GradeClass::all();
 
-        // dd($children);
+        $gradeClasses = GradeClass::all();
 
         return Inertia::render('Attendance/Index', [
             'children' => $children,

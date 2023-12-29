@@ -7,7 +7,11 @@ import SearchForm from '@/Components/SearchForm.vue';
 
 const props = defineProps({
     gradeClasses: Array,
-    children: Object
+    children: Array
+});
+
+onMounted(() => {
+  console.log(props.children);
 });
 </script>
 <template>
@@ -55,8 +59,11 @@ const props = defineProps({
                                         <tr v-for="child in children" :key="child.id">
                                             <td class="border px-4 py-2 border-gray-300">{{ child.name }}</td>
                                             <td class="border px-4 py-2 border-gray-300">
-                                                <td class="border px-4 py-2 border-gray-300">
-                                                    {{ child.gradeClassHistories?.[0]?.gradeClass?.class_name || 'データなし' }}
+                                                <td class="px-4 py-2">
+                                                    <span v-if="child.grade_class_histories && child.grade_class_histories.length > 0">
+                                                        {{ child.grade_class_histories[0].grade_class.grade_name }} {{ child.grade_class_histories[0].grade_class.class_name }}
+                                                    </span>
+                                                    <span v-else></span>
                                                 </td>
                                             </td>
                                             <td class="border px-4 py-2 border-gray-300">
