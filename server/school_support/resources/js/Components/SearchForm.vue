@@ -14,7 +14,7 @@ const searchFilters = ref({
     className: filtersFromBackend.className || '',
     childName: filtersFromBackend.childName || '',
     childKana: filtersFromBackend.childKana || '',
-    childDaily: filtersFromBackend.childDaily || ''
+    childDaily: filtersFromBackend.childDaily || new Date().toISOString().slice(0, 10)
 });
 
 const gradeNames = computed(() => {
@@ -28,8 +28,8 @@ const classNames = computed(() => {
 const submitSearch = () => {
     const searchQuery = {
         ...searchFilters.value,
-        selectedGradeNames: selectedGradeNames.value,
-        selectedClassNames: selectedClassNames.value
+        gradeNames: selectedGradeNames.value.join(','),
+        classNames: selectedClassNames.value.join(',')
     };
     router.get(route('attendance.index'), searchQuery);
 };

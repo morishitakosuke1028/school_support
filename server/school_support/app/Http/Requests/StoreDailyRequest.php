@@ -13,7 +13,7 @@ class StoreDailyRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,13 @@ class StoreDailyRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'dailies.*.child_id' => ['required', 'integer'],
+            'dailies.*.attendance_status' => ['nullable', 'integer'],
+            'dailies.*.absence_reason' => ['nullable', 'string'],
+            'dailies.*.start_time' => ['nullable', 'date_format:Y-m-d H:i'],
+            'dailies.*.end_time' => ['nullable', 'date_format:Y-m-d H:i'],
+            'dailies.*.admin_memo' => ['nullable', 'string'],
+            'dailies.*.parent_memo' => ['nullable', 'string'],
         ];
     }
 }
