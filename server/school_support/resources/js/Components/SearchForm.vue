@@ -3,6 +3,7 @@ import { usePage, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 
 const { props } = usePage();
+
 const gradeClasses = ref(props.gradeClasses || []);
 const selectedGradeNames = ref([]);
 const selectedClassNames = ref([]);
