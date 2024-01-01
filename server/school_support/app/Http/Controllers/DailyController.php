@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDailyRequest;
-use App\Http\Requests\UpdateDailyRequest;
 use App\Models\Daily;
 use App\Models\Child;
 use App\Models\GradeClass;
