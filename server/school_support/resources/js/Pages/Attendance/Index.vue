@@ -11,34 +11,55 @@ const props = defineProps({
 });
 
 const { children } = toRefs(props);
-const editableChildren = reactive(children.value.map(child => ({
-  ...child,
-  daily: child.daily || {
-    attendance_status: null,
-    absence_reason: '',
-    start_time: '',
-    end_time: '',
-    admin_memo: '',
-    parent_memo: ''
-  }
-})));
+const editableChildren = reactive(children.value.map(child => {
+    const latestDaily = child.dailies && child.dailies.length > 0 ? child.dailies[child.dailies.length - 1] : null;
+
+    // 日付と時間を分割してフォーマット
+    const formatTime = (datetime) => {
+        if (!datetime) return '';
+        const time = new Date(datetime);
+        return time.getHours().toString().padStart(2, '0') + ':' + time.getMinutes().toString().padStart(2, '0');
+    };
+
+    return {
+        ...child,
+        daily: latestDaily ? {
+            ...latestDaily,
+            start_time: formatTime(latestDaily.start_time),
+            end_time: formatTime(latestDaily.end_time)
+        } : {
+            attendance_status: null,
+            absence_reason: '',
+            start_time: '',
+            end_time: '',
+            admin_memo: '',
+            parent_memo: ''
+        }
+    };
+}));
 
 onMounted(() => {
-    console.log(children.value);
+    console.log(editableChildren);
 });
-
+const defaultDate = new Date().toISOString().slice(0, 10);
+const searchDate = props.searchDate || defaultDate;
 const submitData = () => {
-    const currentDate = new Date().toISOString().slice(0, 10);
     const data = {
-        dailies: editableChildren.map(child => ({
-            child_id: child.id,
-            attendance_status: child.daily?.attendance_status || null,
-            absence_reason: child.daily?.absence_reason || '',
-            start_time: currentDate + ' ' + (child.daily?.start_time || ''),
-            end_time: currentDate + ' ' + (child.daily?.end_time || ''),
-            admin_memo: child.daily?.admin_memo || '',
-            parent_memo: child.daily?.parent_memo || ''
-        }))
+        dailies: editableChildren.map(child => {
+            const startTime = child.daily?.start_time ? searchDate + ' ' + child.daily.start_time : null;
+            const endTime = child.daily?.end_time ? searchDate + ' ' + child.daily.end_time : null;
+
+            return {
+                id: child.daily.id,
+                child_id: child.id,
+                attendance_status: child.daily?.attendance_status || null,
+                absence_reason: child.daily?.absence_reason || '',
+                start_time: startTime,
+                end_time: endTime,
+                admin_memo: child.daily?.admin_memo || '',
+                parent_memo: child.daily?.parent_memo || ''
+            };
+        })
     };
 
     router.post('/attendance', data);
@@ -90,15 +111,12 @@ const submitData = () => {
                                         </thead>
                                         <tbody>
                                             <tr v-for="child in editableChildren" :key="child.id">
-                                                <input type="hidden" v-model="child.id" />
                                                 <td class="border px-4 py-2 border-gray-300">{{ child.name }}</td>
                                                 <td class="border px-4 py-2 border-gray-300">
-                                                    <td class="px-4 py-2">
-                                                        <span v-if="child.grade_class_histories && child.grade_class_histories.length > 0">
-                                                            {{ child.grade_class_histories[0].grade_class.grade_name }} {{ child.grade_class_histories[0].grade_class.class_name }}
-                                                        </span>
-                                                        <span v-else></span>
-                                                    </td>
+                                                    <span v-if="child.grade_class_histories && child.grade_class_histories.length > 0">
+                                                        {{ child.grade_class_histories[0].grade_class.grade_name }} {{ child.grade_class_histories[0].grade_class.class_name }}
+                                                    </span>
+                                                    <span v-else></span>
                                                 </td>
                                                 <td class="border px-4 py-2 border-gray-300">
                                                     <select v-model="child.daily.attendance_status">
@@ -109,11 +127,21 @@ const submitData = () => {
                                                         <option value="4">欠席</option>
                                                     </select>
                                                 </td>
-                                                <td class="border px-4 py-2 border-gray-300"><input type="text" v-model="child.daily.absence_reason" /></td>
-                                                <td class="border px-4 py-2 border-gray-300"><input type="time" v-model="child.daily.start_time" /></td>
-                                                <td class="border px-4 py-2 border-gray-300"><input type="time" v-model="child.daily.end_time" /></td>
-                                                <td class="border px-4 py-2 border-gray-300"><textarea id="admin_memo" name="admin_memo" v-model="child.daily.admin_memo" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea></td>
-                                                <td class="border px-4 py-2 border-gray-300"><textarea id="parent_memo" name="parent_memo" v-model="child.daily.parent_memo" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea></td>
+                                                <td class="border px-4 py-2 border-gray-300">
+                                                    <input type="text" v-model="child.daily.absence_reason" class="border border-gray-300" />
+                                                </td>
+                                                <td class="border px-4 py-2 border-gray-300">
+                                                    <input type="time" v-model="child.daily.start_time" class="border border-gray-300" />
+                                                </td>
+                                                <td class="border px-4 py-2 border-gray-300">
+                                                    <input type="time" v-model="child.daily.end_time" class="border border-gray-300" />
+                                                </td>
+                                                <td class="border px-4 py-2 border-gray-300">
+                                                    <textarea id="admin_memo" name="admin_memo" v-model="child.daily.admin_memo" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+                                                </td>
+                                                <td class="border px-4 py-2 border-gray-300">
+                                                    <textarea id="parent_memo" name="parent_memo" v-model="child.daily.parent_memo" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>

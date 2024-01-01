@@ -70,48 +70,35 @@ class DailyController extends Controller
     public function store(StoreDailyRequest $request)
     {
         foreach ($request->dailies as $dailyData) {
-            Daily::create([
-                'child_id' => $dailyData['child_id'],
-                'attendance_status' => $dailyData['attendance_status'],
-                'absence_reason' => $dailyData['absence_reason'],
-                'start_time' => $dailyData['start_time'],
-                'end_time' => $dailyData['end_time'],
-                'admin_memo' => $dailyData['admin_memo'],
-                'parent_memo' => $dailyData['parent_memo']
-            ]);
+            if (isset($dailyData['id']) && $daily = Daily::find($dailyData['id'])) {
+                // 既存レコードの更新
+                $daily->update([
+                    'child_id' => $dailyData['child_id'],
+                    'attendance_status' => $dailyData['attendance_status'],
+                    'absence_reason' => $dailyData['absence_reason'],
+                    'start_time' => $dailyData['start_time'],
+                    'end_time' => $dailyData['end_time'],
+                    'admin_memo' => $dailyData['admin_memo'],
+                    'parent_memo' => $dailyData['parent_memo']
+                ]);
+            } else {
+                // 新規レコードの作成
+                Daily::create([
+                    'child_id' => $dailyData['child_id'],
+                    'attendance_status' => $dailyData['attendance_status'],
+                    'absence_reason' => $dailyData['absence_reason'],
+                    'start_time' => $dailyData['start_time'],
+                    'end_time' => $dailyData['end_time'],
+                    'admin_memo' => $dailyData['admin_memo'],
+                    'parent_memo' => $dailyData['parent_memo']
+                ]);
+            }
         }
 
-        return redirect()->back()->with('success', '登下校一覧を作成しました。');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateDailyRequest  $request
-     * @param  \App\Models\Daily  $daily
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateDailyRequest $request, Daily $daily)
-    {
-        $daily->child_id = $request->child_id;
-        $daily->attendance_status = $request->attendance_status;
-        $daily->start_time = $request->start_time;
-        $daily->end_time = $request->end_time;
-        $daily->admin_memo = $request->admin_memo;
-        $daily->parent_memo = $request->parent_memo;
-        $daily->save();
-
-        return redirect()->back()->with('success', '登下校一覧を更新しました。');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Daily  $daily
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Daily $daily)
-    {
-        //
+        return redirect()->back()
+        ->with([
+            'message' => '出欠確認の処理が完了しました。',
+            'status' => 'success',
+        ]);
     }
 }

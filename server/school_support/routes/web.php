@@ -64,7 +64,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/attendance/index', [DailyController::class, 'index'])->name('attendance.index');
     Route::post('/attendance', [DailyController::class, 'store'])->name('attendance.store');
-    Route::put('/attendance/{daily}', [DailyController::class, 'update'])->name('attendance.update');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');
