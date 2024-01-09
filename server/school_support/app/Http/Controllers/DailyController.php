@@ -9,6 +9,8 @@ use App\Models\GradeClass;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DailyController extends Controller
 {
@@ -19,31 +21,34 @@ class DailyController extends Controller
      */
     public function index(Request $request)
     {
+        DB::enableQueryLog();
         $query = Child::with('gradeClassHistories.gradeClass', 'dailies');
 
-        // 日付に基づくフィルタリングのチェック
+        // 日付に基づくフィルタリング
         $date = $request->input('childDaily');
-        if ($date) {
-            $query->whereHas('dailies', function ($query) use ($date) {
-                $query->whereDate('created_at', '=', $date);
-            });
-        }
+        // // 日付に基づくフィルタリング
+        // $query->whereHas('dailies', function ($query) use ($date) {
+        //     $query->whereDate('created_at', '=', $date);
+        // });
 
         $gradeName = $request->input('gradeName');
         $className = $request->input('className');
         $childName = $request->input('childName');
         $childKana = $request->input('childKana');
 
-        if ($gradeName) {
-            $query->whereHas('gradeClassHistories.gradeClass', function ($query) use ($gradeName) {
-                $query->where('grade_name', $gradeName);
+        if ($gradeName = $request->input('gradeName')) {
+            $query->whereHas('gradeClassHistories.gradeClass', function ($q) use ($gradeName) {
+                $q->where('grade_name', $gradeName);
             });
         }
-        if ($className) {
-            $query->whereHas('gradeClassHistories.gradeClass', function ($query) use ($className) {
-                $query->where('class_name', $className);
+
+        // クラスに基づくフィルタリング
+        if ($className = $request->input('className')) {
+            $query->whereHas('gradeClassHistories.gradeClass', function ($q) use ($className) {
+                $q->where('class_name', $className);
             });
         }
+
         if ($childName) {
             $query->where('name', 'like', '%' . $childName . '%');
         }
@@ -53,6 +58,9 @@ class DailyController extends Controller
 
         $children = $query->get();
         $gradeClasses = GradeClass::all();
+
+        $queryLog = DB::getQueryLog();
+        Log::info($queryLog);
 
         return Inertia::render('Attendance/Index', [
             'children' => $children,
