@@ -26,10 +26,9 @@ class DailyController extends Controller
 
         // 日付に基づくフィルタリング
         $date = $request->input('childDaily');
-        // // 日付に基づくフィルタリング
-        // $query->whereHas('dailies', function ($query) use ($date) {
-        //     $query->whereDate('created_at', '=', $date);
-        // });
+        $query->whereHas('dailies', function ($query) use ($date) {
+            $query->whereDate('created_at', $date);
+        });
 
         $gradeName = $request->input('gradeName');
         $className = $request->input('className');
@@ -57,6 +56,24 @@ class DailyController extends Controller
         }
 
         $children = $query->get();
+        if ($children->isEmpty()) {
+            $allChildren = Child::with('gradeClassHistories.gradeClass')->get();
+
+            // 各生徒に対して新規登録用の空のdailiesデータを用意
+            foreach ($allChildren as $child) {
+                $child->dailies = (object)[
+                    'child_id' => $child->id, // child_idを追加
+                    'attendance_status' => null,
+                    'absence_reason' => '',
+                    'start_time' => '',
+                    'end_time' => '',
+                    'admin_memo' => '',
+                    'parent_memo' => ''
+                ];
+            }
+
+            $children = $allChildren;
+        }
         $gradeClasses = GradeClass::all();
 
         $queryLog = DB::getQueryLog();
