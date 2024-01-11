@@ -1,13 +1,13 @@
 <script setup>
 import { usePage, router } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { reactive, ref, computed, watchEffect, onMounted } from 'vue';
 
 const { props } = usePage();
 
+const filtersFromBackend = props.filters || {};
 const gradeClasses = ref(props.gradeClasses || []);
 const selectedGradeNames = ref([]);
 const selectedClassNames = ref([]);
-const filtersFromBackend = props.filters || {};
 
 // 検索フィルターの状態
 const searchFilters = ref({
@@ -16,6 +16,14 @@ const searchFilters = ref({
     childName: filtersFromBackend.childName || '',
     childKana: filtersFromBackend.childKana || '',
     childDaily: filtersFromBackend.childDaily || new Date().toISOString().slice(0, 10)
+});
+
+watchEffect(() => {
+    searchFilters.value.gradeName = filtersFromBackend.gradeName || '';
+    searchFilters.value.className = filtersFromBackend.className || '';
+    searchFilters.value.childName = filtersFromBackend.childName || '';
+    searchFilters.value.childKana = filtersFromBackend.childKana || '';
+    searchFilters.value.childDaily = filtersFromBackend.childDaily || new Date().toISOString().slice(0, 10);
 });
 
 const gradeNames = computed(() => {
@@ -28,12 +36,32 @@ const classNames = computed(() => {
 
 const submitSearch = () => {
     const searchQuery = {
-        ...searchFilters.value,
+        gradeName: searchFilters.value.gradeName,
+        className: searchFilters.value.className,
+        childName: searchFilters.value.childName,
+        childKana: searchFilters.value.childKana,
+        childDaily: searchFilters.value.childDaily,
         gradeNames: selectedGradeNames.value.join(','),
         classNames: selectedClassNames.value.join(',')
     };
+     localStorage.setItem('searchFilters', JSON.stringify(searchFilters.value));
+    const searchState = {
+        filters: searchFilters.value,
+        gradeNames: selectedGradeNames.value,
+        classNames: selectedClassNames.value
+    };
+    localStorage.setItem('searchState', JSON.stringify(searchState));
     router.get(route('attendance.index'), searchQuery);
 };
+
+onMounted(() => {
+    const savedState = JSON.parse(localStorage.getItem('searchState'));
+    if (savedState) {
+        Object.assign(searchFilters.value, savedState.filters);
+        selectedGradeNames.value = savedState.gradeNames;
+        selectedClassNames.value = savedState.classNames;
+    }
+});
 </script>
 
 <template>
