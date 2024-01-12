@@ -55,11 +55,18 @@ const submitSearch = () => {
 };
 
 onMounted(() => {
-    const savedState = JSON.parse(localStorage.getItem('searchState'));
-    if (savedState) {
-        Object.assign(searchFilters.value, savedState.filters);
-        selectedGradeNames.value = savedState.gradeNames;
-        selectedClassNames.value = savedState.classNames;
+    const queryParams = new URLSearchParams(window.location.search);
+
+    // クエリパラメータが存在しない場合、ローカルストレージを削除
+    if ([...queryParams].length === 0) {
+        localStorage.removeItem('searchState');
+    } else {
+        const savedState = JSON.parse(localStorage.getItem('searchState'));
+        if (savedState) {
+            Object.assign(searchFilters.value, savedState.filters);
+            selectedGradeNames.value = savedState.gradeNames;
+            selectedClassNames.value = savedState.classNames;
+        }
     }
 });
 </script>
