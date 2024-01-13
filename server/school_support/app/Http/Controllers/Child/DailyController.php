@@ -4,8 +4,42 @@ namespace App\Http\Controllers\Child;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Models\Daily;
 
 class DailyController extends Controller
 {
-    //
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return Inertia::render('Child/Daily/Create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \App\Http\Requests\StoregradeClassRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreChildDailyRequest $request)
+    {
+        $daily = Daily::create([
+            'child_id' => $request->child_id,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'attendance_status' => $request->attendance_status,
+            'absence_reason' => $request->absence_reason,
+            'parent_memo' => $request->parent_memo,
+        ]);
+
+        return to_route('child.daily.create')
+        ->with([
+            'message' => '申請しました。',
+            'status' => 'success'
+        ]);
+    }
 }
