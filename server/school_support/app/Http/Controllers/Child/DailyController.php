@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Child;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreChildDailyRequest;
 use Inertia\Inertia;
 use App\Models\Daily;
+use Illuminate\Support\Facades\Auth;
 
 class DailyController extends Controller
 {
@@ -16,7 +18,11 @@ class DailyController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Child/Daily/Create');
+        $childId = Auth::id();
+
+        return Inertia::render('Child/Daily/Create', [
+            'childId' => $childId
+        ]);
     }
 
     /**
