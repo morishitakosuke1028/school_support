@@ -2,6 +2,7 @@
 import AuthenticatedChildLayout from '@/Layouts/AuthenticatedChildLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { reactive, onMounted } from 'vue'
+import FlashMessage from '@/Components/FlashMessage.vue';
 
 const props = defineProps({
     childId: Number,
