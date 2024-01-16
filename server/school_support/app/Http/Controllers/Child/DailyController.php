@@ -33,14 +33,29 @@ class DailyController extends Controller
      */
     public function store(StoreChildDailyRequest $request)
     {
-        $daily = Daily::create([
-            'child_id' => $request->child_id,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-            'attendance_status' => $request->attendance_status,
-            'absence_reason' => $request->absence_reason,
-            'parent_memo' => $request->parent_memo,
-        ]);
+        $daily = Daily::firstOrCreate(
+            [
+                'child_id' => $request->child_id,
+                'date_use' => $request->date_use,
+            ],
+            [
+                'start_time' => $request->start_time,
+                'end_time' => $request->end_time,
+                'attendance_status' => $request->attendance_status,
+                'absence_reason' => $request->absence_reason,
+                'parent_memo' => $request->parent_memo,
+            ]
+        );
+
+        if (!$daily->wasRecentlyCreated) {
+            $daily->update([
+                'start_time' => $request->start_time,
+                'end_time' => $request->end_time,
+                'attendance_status' => $request->attendance_status,
+                'absence_reason' => $request->absence_reason,
+                'parent_memo' => $request->parent_memo,
+            ]);
+        }
 
         return to_route('child.daily.create')
         ->with([
