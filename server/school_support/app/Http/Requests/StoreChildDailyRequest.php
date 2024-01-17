@@ -30,6 +30,9 @@ class StoreChildDailyRequest extends FormRequest
             'start_time' => ['nullable', 'date_format:Y-m-d H:i'],
             'end_time' => ['nullable', 'date_format:Y-m-d H:i'],
             'parent_memo' => ['nullable', 'string'],
+            'date_use' => ['nullable', 'date_format:Y-m-d'],
+            'entry_method' => ['nullable', 'string'],
+            'update_method' => ['nullable', 'string'],
         ];
     }
 }

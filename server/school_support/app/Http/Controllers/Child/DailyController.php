@@ -44,6 +44,7 @@ class DailyController extends Controller
                 'attendance_status' => $request->attendance_status,
                 'absence_reason' => $request->absence_reason,
                 'parent_memo' => $request->parent_memo,
+                'entry_method' => $request->entry_method,
             ]
         );
 
@@ -54,6 +55,7 @@ class DailyController extends Controller
                 'attendance_status' => $request->attendance_status,
                 'absence_reason' => $request->absence_reason,
                 'parent_memo' => $request->parent_memo,
+                'update_method' => $request->update_method,
             ]);
         }
 

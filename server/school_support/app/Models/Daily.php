@@ -18,6 +18,9 @@ class Daily extends Model
         'end_time',
         'admin_memo',
         'parent_memo',
+        'date_use',
+        'entry_method',
+        'update_method',
     ];
 
     public function child()

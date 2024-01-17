@@ -15,7 +15,9 @@ const form = reactive({
     start_time: null,
     end_time: null,
     parent_memo: null,
-    date: null
+    date_use: null,
+    entry_method: null,
+    update_method: null
 })
 
 const getCurrentDate = () => {
@@ -44,7 +46,9 @@ const storeDaily = () => {
         absence_reason: form.absence_reason,
         start_time: startDateTime,
         end_time: endDateTime,
+        date_use: form.date,
         parent_memo: form.parent_memo,
+        update_method: form.entry_method,
     };
 
     router.post('/child/daily', data);
@@ -69,6 +73,8 @@ const storeDaily = () => {
                         <section class="text-gray-600 body-font relative">
                             <form @submit.prevent="storeDaily">
                                 <input type="hidden" id="child_id" name="child_id" v-model="form.child_id" required="required" />
+                                <input type="hidden" id="entry_method" name="entry_method" v-model="form.entry_method" required="required" />
+                                <input type="hidden" id="update_method" name="update_method" v-model="form.update_method" required="required" />
                                 <div class="container px-5 py-8 mx-auto">
                                     <div class="lg:w-1/2 md:w-2/3 mx-auto">
                                         <div class="flex flex-wrap -m-2">
