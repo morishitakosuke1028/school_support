@@ -66,7 +66,9 @@ class DailyController extends Controller
                     'start_time' => '',
                     'end_time' => '',
                     'admin_memo' => '',
-                    'parent_memo' => ''
+                    'parent_memo' => '',
+                    'date_use' => '',
+                    'entry_method' => '',
                 ];
             }
 
@@ -101,7 +103,9 @@ class DailyController extends Controller
                     'start_time' => $dailyData['start_time'],
                     'end_time' => $dailyData['end_time'],
                     'admin_memo' => $dailyData['admin_memo'],
-                    'parent_memo' => $dailyData['parent_memo']
+                    'parent_memo' => $dailyData['parent_memo'],
+                    'date_use' => $dailyData['date_use'],
+                    'update_method' => $dailyData['update_method']
                 ]);
             } else {
                 // 新規レコードの作成
@@ -112,7 +116,9 @@ class DailyController extends Controller
                     'start_time' => $dailyData['start_time'],
                     'end_time' => $dailyData['end_time'],
                     'admin_memo' => $dailyData['admin_memo'],
-                    'parent_memo' => $dailyData['parent_memo']
+                    'parent_memo' => $dailyData['parent_memo'],
+                    'date_use' => $dailyData['date_use'],
+                    'entry_method' => $dailyData['entry_method'],
                 ]);
             }
         }

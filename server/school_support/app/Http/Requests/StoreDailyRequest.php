@@ -31,6 +31,9 @@ class StoreDailyRequest extends FormRequest
             'dailies.*.end_time' => ['nullable', 'date_format:Y-m-d H:i'],
             'dailies.*.admin_memo' => ['nullable', 'string'],
             'dailies.*.parent_memo' => ['nullable', 'string'],
+            'dailies.*.date_use' => ['nullable', 'date_format:Y-m-d'],
+            'dailies.*.entry_method' => ['nullable', 'string'],
+            'dailies.*.update_method' => ['nullable', 'string'],
         ];
     }
 }

@@ -33,7 +33,10 @@ const editableChildren = reactive(children.value.map(child => {
             start_time: '',
             end_time: '',
             admin_memo: '',
-            parent_memo: ''
+            parent_memo: '',
+            date_use: '',
+            entry_method: '1',
+            update_method: '1',
         }
     };
 }));
@@ -54,10 +57,13 @@ const submitData = () => {
                 child_id: child.id,
                 attendance_status: child.daily?.attendance_status || null,
                 absence_reason: child.daily?.absence_reason || '',
+                date_use: searchDate,
                 start_time: startTime,
                 end_time: endTime,
                 admin_memo: child.daily?.admin_memo || '',
-                parent_memo: child.daily?.parent_memo || ''
+                parent_memo: child.daily?.parent_memo || '',
+                entry_method: '1',
+                update_method: '1'
             };
         })
     };
@@ -109,6 +115,8 @@ const submitData = () => {
                                         </thead>
                                         <tbody>
                                             <tr v-for="child in editableChildren" :key="child.id">
+                                                <input type="hidden" id="entry_method" name="entry_method" v-model="child.daily.entry_method" />
+                                                <input type="hidden" id="update_method" name="update_method" v-model="child.daily.update_method" />
                                                 <td class="border px-4 py-2 border-gray-300">{{ child.name }}</td>
                                                 <td class="border px-4 py-2 border-gray-300">
                                                     <span v-if="child.grade_class_histories && child.grade_class_histories.length > 0">
