@@ -21,13 +21,14 @@ class DailyController extends Controller
      */
     public function index(Request $request)
     {
-        DB::enableQueryLog();
         $query = Child::with('gradeClassHistories.gradeClass', 'dailies');
 
         $date = $request->input('childDaily');
-        $query->whereHas('dailies', function ($query) use ($date) {
-            $query->whereDate('created_at', $date);
-        });
+        if ($date) {
+            $query->whereHas('dailies', function ($query) use ($date) {
+                $query->whereDate('created_at', $date);
+            });
+        }
 
         $gradeName = $request->input('gradeName');
         $className = $request->input('className');
@@ -75,9 +76,6 @@ class DailyController extends Controller
             $children = $allChildren;
         }
         $gradeClasses = GradeClass::all();
-
-        $queryLog = DB::getQueryLog();
-        Log::info($queryLog);
 
         return Inertia::render('Attendance/Index', [
             'children' => $children,
