@@ -11,6 +11,7 @@ use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\Child\Auth\VerifyEmailController;
 use App\Http\Controllers\ChildController;
 use App\Http\Controllers\Child\HomeworkController;
+use App\Http\Controllers\Child\DailyController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest:child')->group(function () {
@@ -55,4 +56,7 @@ Route::middleware('auth:child')->group(function () {
                 ->name('logout');
 
     Route::get('homework/index', [HomeworkController::class, 'index'])->name('homework.index');
+
+    Route::get('daily/create', [DailyController::class, 'create'])->name('daily.create');
+    Route::post('daily', [DailyController::class, 'store'])->name('daily.store');
 });

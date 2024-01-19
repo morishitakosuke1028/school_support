@@ -64,4 +64,9 @@ class Child extends Authenticatable
     {
         return $this->belongsTo(GradeClass::class);
     }
+
+    public function dailies()
+    {
+        return $this->hasMany(Daily::class);
+    }
 }
