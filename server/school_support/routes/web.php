@@ -66,12 +66,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/attendance/index', [DailyController::class, 'index'])->name('attendance.index');
     Route::post('/attendance', [DailyController::class, 'store'])->name('attendance.store');
 
-    Route::get('/event/index', [EventController::class, 'index'])->name('event.index');
-    Route::get('/event/create', [EventController::class, 'create'])->name('event.create');
-    Route::post('/event', [EventController::class, 'store'])->name('event.store');
-    Route::get('/event/{event}/edit', [EventClassController::class, 'edit'])->name('event.edit');
-    Route::put('/event/{event}', [EventController::class, 'update'])->name('event.update');
-    Route::delete('/event/{event}', [EventClassController::class, 'destroy'])->name('event.destroy');
+    Route::get('/events/index', [EventController::class, 'index'])->name('events.index');
+    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::get('/events/{event}/edit', [EventClassController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+    Route::delete('/events/{event}', [EventClassController::class, 'destroy'])->name('events.destroy');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');

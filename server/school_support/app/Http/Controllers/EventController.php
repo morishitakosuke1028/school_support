@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
+use App\Models\GradeClass;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -15,7 +18,12 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        $events = event::all();
+
+        return Inertia::render('Event/Index', [
+            'events' => $events,
+            'currentUserRole' => Auth::user()->role === 1,
+        ]);
     }
 
     /**
