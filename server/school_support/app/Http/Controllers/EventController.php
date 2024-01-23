@@ -19,9 +19,11 @@ class EventController extends Controller
     public function index()
     {
         $events = event::all();
+        $gradeClasses = gradeClass::all();
 
         return Inertia::render('Event/Index', [
             'events' => $events,
+            'gradeClasses' => $gradeClasses,
             'currentUserRole' => Auth::user()->role === 1,
         ]);
     }
