@@ -1,8 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
     events: Object,
@@ -12,6 +12,7 @@ const props = defineProps({
 
 const selectedYear = ref(new Date().getFullYear());
 const selectedMonth = ref(new Date().getMonth() + 1);
+const selectedClassId = ref('');
 
 const years = computed(() => {
   const year = new Date().getFullYear();
@@ -35,6 +36,13 @@ function getDaysInMonth(year, month) {
   return days;
 }
 
+function handleDayClick(day) {
+    const dateString = `${selectedYear.value}-${selectedMonth.value}-${day}`;
+    const path = `/events/create?date=${dateString}&gradeClassId=${selectedClassId.value}`;
+
+    // ルーターを使用して指定のパスに遷移
+    router.get(path);
+}
 </script>
 <template>
     <Head title="行事一覧" />
@@ -46,22 +54,29 @@ function getDaysInMonth(year, month) {
             </h2>
         </template>
 
+        <FlashMessage />
         <div class="container mx-auto p-4">
             <div class="flex justify-between items-center mb-4">
-            <div>
-                <select v-model="selectedYear" class="mr-2">
-                <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
-                </select>
-                <select v-model="selectedMonth">
-                <option v-for="(month, index) in months" :key="index" :value="index + 1">{{ month }}</option>
-                </select>
-            </div>
+                <div>
+                    <select v-model="selectedYear" class="mr-2">
+                        <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+                    </select>
+                    <select v-model="selectedMonth" class="mr-2">
+                        <option v-for="(month, index) in months" :key="index" :value="index + 1">{{ month }}</option>
+                    </select>
+                    <select id="classSelect" v-model="selectedClassId">
+                        <option disabled value="">クラスを選択してください</option>
+                        <option v-for="(gradeClass, id) in gradeClasses" :key="id" :value="id">
+                            {{ gradeClass.grade_name }}{{ gradeClass.class_name }}
+                        </option>
+                    </select>
+                </div>
             </div>
             <div class="grid grid-cols-7 gap-4 text-center">
-            <div class="font-bold" v-for="day in days" :key="day">{{ day }}</div>
-            <div v-for="day in getDaysInMonth(selectedYear, selectedMonth)" :key="day" class="py-8 bg-gray-100 rounded shadow">
-                {{ day }}
-            </div>
+                <div class="font-bold" v-for="day in days" :key="day">{{ day }}</div>
+                <div v-for="day in getDaysInMonth(selectedYear, selectedMonth)" :key="day" class="py-8 bg-gray-100 rounded shadow cursor-pointer hover:bg-blue-200" @click="handleDayClick(day)">
+                    {{ day }}
+                </div>
             </div>
         </div>
     </AuthenticatedLayout>
