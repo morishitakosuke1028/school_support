@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
-import { reactive, computed } from 'vue';
+import { Head, usePage, router } from '@inertiajs/vue3';
+import { ref, onMounted } from 'vue';
 
 // const props = defineProps({
 //     events: Object,
@@ -9,20 +9,25 @@ import { reactive, computed } from 'vue';
 //     currentUserRole: Boolean,
 // });
 
-const form = reactive({
-    name: null,
-    kana: null,
-    tel: null,
-    email: null,
-    postcode: null,
-    address: null,
-    birthday: null,
-    gender: null,
-    memo: null,
+const { props } = usePage();
+const form = ref({
+    gradeClass_id: '',
 })
 
+onMounted(() => {
+    const params = new URLSearchParams(window.location.search);
+    form.value.date = params.get('date');
+    form.value.gradeClassId = params.get('gradeClassId');
+});
+
 const storeEvent = () => {
-    router.post('/events', form)
+    const startDateTime = `${form.value.date}T${form.value.start_datetime}:00`;
+    const endDateTime = `${form.value.date}T${form.value.end_datetime}:00`;
+    router.post('/events', {
+        ...form.value,
+        start_datetime: startDateTime,
+        end_datetime: endDateTime,
+    });
 }
 </script>
 <template>
@@ -44,7 +49,6 @@ const storeEvent = () => {
                                 <div class="container px-5 py-8 mx-auto">
                                     <div class="lg:w-1/2 md:w-2/3 mx-auto">
                                         <div class="flex flex-wrap -m-2">
-                                            <input type="hidden" id="gradeClass_id" name="gradeClass_id" v-model="form.gradeClass_id">
                                             <div class="p-2 w-full">
                                                 <div class="relative">
                                                     <label for="start_datetime" class="leading-7 text-sm text-gray-600">開始日時</label>

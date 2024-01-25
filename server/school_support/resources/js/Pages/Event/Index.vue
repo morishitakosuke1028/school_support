@@ -66,7 +66,7 @@ function handleDayClick(day) {
                     </select>
                     <select id="classSelect" v-model="selectedClassId">
                         <option disabled value="">クラスを選択してください</option>
-                        <option v-for="(gradeClass, id) in gradeClasses" :key="id" :value="id">
+                        <option v-for="(gradeClass, id) in gradeClasses" :key="id" :value="gradeClass.id">
                             {{ gradeClass.grade_name }}{{ gradeClass.class_name }}
                         </option>
                     </select>
