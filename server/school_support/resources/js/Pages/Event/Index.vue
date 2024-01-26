@@ -43,6 +43,13 @@ function handleDayClick(day) {
     // ルーターを使用して指定のパスに遷移
     router.get(path);
 }
+
+const formatDate = (date) => {
+  const d = new Date(date);
+  const month = `${d.getMonth() + 1}`.padStart(2, '0'); // 月を2桁にフォーマット
+  const day = `${d.getDate()}`.padStart(2, '0'); // 日を2桁にフォーマット
+  return `${d.getFullYear()}${month}${day}`; // YYYYMMDD形式
+};
 </script>
 <template>
     <Head title="行事一覧" />
@@ -76,6 +83,9 @@ function handleDayClick(day) {
                 <div class="font-bold" v-for="day in days" :key="day">{{ day }}</div>
                 <div v-for="day in getDaysInMonth(selectedYear, selectedMonth)" :key="day" class="py-8 bg-gray-100 rounded shadow cursor-pointer hover:bg-blue-200" @click="handleDayClick(day)">
                     {{ day }}
+                    <div v-for="event in events">
+                        <p style="background-color: aqua;" v-if="formatDate(event.start_datetime) == `${selectedYear}${String(selectedMonth).padStart(2, '0')}${String(day).padStart(2, '0')}`">{{ event.title }}</p>
+                    </div>
                 </div>
             </div>
         </div>
