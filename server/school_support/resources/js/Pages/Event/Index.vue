@@ -41,7 +41,11 @@ function handleDayClick(day) {
     const path = `/events/create?date=${dateString}&gradeClassId=${selectedClassId.value}`;
 
     // ルーターを使用して指定のパスに遷移
-    router.get(path);
+    if (selectedClassId.value) {
+        router.get(path);
+    } else {
+        alert('クラスを選択してください');
+    }
 }
 
 const formatDate = (date) => {
@@ -84,7 +88,9 @@ const formatDate = (date) => {
                 <div v-for="day in getDaysInMonth(selectedYear, selectedMonth)" :key="day" class="py-8 bg-gray-100 rounded shadow cursor-pointer hover:bg-blue-200" @click="handleDayClick(day)">
                     {{ day }}
                     <div v-for="event in events">
-                        <p style="background-color: aqua;" v-if="formatDate(event.start_datetime) == `${selectedYear}${String(selectedMonth).padStart(2, '0')}${String(day).padStart(2, '0')}`">{{ event.title }}</p>
+                        <p style="background-color: aqua;" v-if="formatDate(event.start_datetime) == `${selectedYear}${String(selectedMonth).padStart(2, '0')}${String(day).padStart(2, '0')}`">
+                            {{ event.title }}
+                        </p>
                     </div>
                 </div>
             </div>
