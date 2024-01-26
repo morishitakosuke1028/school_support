@@ -46,7 +46,21 @@ class EventController extends Controller
      */
     public function store(StoreEventRequest $request)
     {
-        //
+        Event::create([
+            'grade_class_id' => $request->grade_class_id,
+            'start_datetime' => $request->start_datetime,
+            'end_datetime' => $request->end_datetime,
+            'title' => $request->title,
+            'place' => $request->place,
+            'personal_effect' => $request->personal_effect,
+            'content' => $request->content,
+        ]);
+
+        return to_route('events.index')
+        ->with([
+            'message' => '登録しました。',
+            'status' => 'success',
+        ]);
     }
 
     /**

@@ -11,7 +11,7 @@ import { ref, onMounted } from 'vue';
 
 const { props } = usePage();
 const form = ref({
-    gradeClass_id: '',
+    grade_class_id: '',
 })
 
 onMounted(() => {
