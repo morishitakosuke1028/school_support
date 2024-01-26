@@ -54,6 +54,11 @@ const formatDate = (date) => {
   const day = `${d.getDate()}`.padStart(2, '0'); // 日を2桁にフォーマット
   return `${d.getFullYear()}${month}${day}`; // YYYYMMDD形式
 };
+
+const findGradeClassNameById = (gradeClassId) => {
+  const gradeClass = props.gradeClasses.find((gradeClass) => gradeClass.id === gradeClassId);
+  return gradeClass ? gradeClass.grade_name + gradeClass.class_name : '';
+};
 </script>
 <template>
     <Head title="行事一覧" />
@@ -87,9 +92,9 @@ const formatDate = (date) => {
                 <div class="font-bold" v-for="day in days" :key="day">{{ day }}</div>
                 <div v-for="day in getDaysInMonth(selectedYear, selectedMonth)" :key="day" class="py-8 bg-gray-100 rounded shadow cursor-pointer hover:bg-blue-200" @click="handleDayClick(day)">
                     {{ day }}
-                    <div v-for="event in events">
+                    <div v-for="event in events" :key="event.id">
                         <p style="background-color: aqua;" v-if="formatDate(event.start_datetime) == `${selectedYear}${String(selectedMonth).padStart(2, '0')}${String(day).padStart(2, '0')}`">
-                            {{ event.title }}
+                            {{ findGradeClassNameById(event.grade_class_id) }}：{{ event.title }}
                         </p>
                     </div>
                 </div>
