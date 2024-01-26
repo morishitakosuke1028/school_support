@@ -3,26 +3,33 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, router } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 
-// const props = defineProps({
-//     events: Object,
-//     gradeClasses: Object,
-//     currentUserRole: Boolean,
-// });
-
 const { props } = usePage();
+
 const form = ref({
     grade_class_id: '',
+    start_datetime: null,
+    end_datetime: null,
+    title: null,
+    place: null,
+    personal_effect: null,
+    content: null
 })
 
 onMounted(() => {
     const params = new URLSearchParams(window.location.search);
     form.value.date = params.get('date');
-    form.value.gradeClassId = params.get('gradeClassId');
+    form.value.grade_class_id = params.get('gradeClassId');
+    console.log(form.value.date)
 });
 
+const combineDateTime = (date, time) => {
+    return time ? `${date} ${time}` : null;
+};
+
 const storeEvent = () => {
-    const startDateTime = `${form.value.date}T${form.value.start_datetime}:00`;
-    const endDateTime = `${form.value.date}T${form.value.end_datetime}:00`;
+    const startDateTime = combineDateTime(form.value.date, form.value.start_datetime);
+    const endDateTime = combineDateTime(form.value.date, form.value.end_datetime);
+
     router.post('/events', {
         ...form.value,
         start_datetime: startDateTime,

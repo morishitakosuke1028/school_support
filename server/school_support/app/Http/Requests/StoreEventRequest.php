@@ -25,8 +25,8 @@ class StoreEventRequest extends FormRequest
     {
         return [
             'grade_class_id' => ['required', 'integer'],
-            'start_datetime' => ['nullable', 'date_format:Y-m-d H:i'],
-            'end_datetime' => ['nullable', 'date_format:Y-m-d H:i'],
+            'start_datetime' => ['nullable'],
+            'end_datetime' => ['nullable'],
             'title' => ['nullable', 'string'],
             'place' => ['nullable', 'string'],
             'personal_effect' => ['nullable', 'string'],
