@@ -38,11 +38,15 @@ function getDaysInMonth(year, month) {
 
 function handleDayClick(day) {
     const dateString = `${selectedYear.value}-${selectedMonth.value}-${day}`;
-    const path = `/events/create?date=${dateString}&gradeClassId=${selectedClassId.value}`;
 
-    // ルーターを使用して指定のパスに遷移
     if (selectedClassId.value) {
-        router.get(path);
+        router.visit(`/events/check`, {
+            method: 'get',
+            data: {
+                date: dateString,
+                gradeClassId: selectedClassId.value,
+            },
+        });
     } else {
         alert('クラスを選択してください');
     }

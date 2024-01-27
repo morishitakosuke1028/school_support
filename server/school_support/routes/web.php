@@ -69,8 +69,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/events/index', [EventController::class, 'index'])->name('events.index');
     Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
-    Route::get('/events/{event}/edit', [EventClassController::class, 'edit'])->name('events.edit');
+    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
     Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+    Route::get('/events/check', [EventController::class, 'check'])->name('events.check');
     Route::delete('/events/{event}', [EventClassController::class, 'destroy'])->name('events.destroy');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])

@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\GradeClass;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
@@ -33,8 +34,10 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $date = $request->query('date');
+        $gradeClassId = $request->query('gradeClassId');
         return Inertia::render('Event/Create');
     }
 
@@ -64,17 +67,6 @@ class EventController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Event $event)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Event  $event
@@ -82,7 +74,9 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        //
+        return Inertia::render('Event/Edit', [
+            'event' => $event
+        ]);
     }
 
     /**
@@ -95,6 +89,22 @@ class EventController extends Controller
     public function update(UpdateEventRequest $request, Event $event)
     {
         //
+    }
+
+    public function check(Request $request)
+    {
+        $date = $request->query('date');
+        $gradeClassId = $request->query('gradeClassId');
+
+        $event = Event::whereDate('start_datetime', $date)
+            ->where('grade_class_id', $gradeClassId)
+            ->first();
+
+        if ($event) {
+            return Inertia::location("/events/{$event->id}/edit");
+        } else {
+            return Inertia::location("/events/create?date={$date}&gradeClassId={$gradeClassId}");
+        }
     }
 
     /**
