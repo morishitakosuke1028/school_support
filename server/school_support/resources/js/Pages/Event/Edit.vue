@@ -14,11 +14,16 @@ const extractTime = (datetime) => {
     }
     return datetime.substring(11, 16);
 };
+const extractDate = (datetime) => {
+    if (!datetime || typeof datetime !== 'string') {
+        return '';
+    }
+    return datetime.substring(0, 10);
+};
 
 const form = reactive({
+    id: props.event.id,
     grade_class_id: props.event.grade_class_id,
-    // start_datetime: props.event.start_datetime,
-    // end_datetime: props.event.end_datetime,
     start_datetime: null,
     end_datetime: null,
     title: props.event.title,
@@ -30,30 +35,22 @@ const form = reactive({
 onMounted(() => {
     form.start_datetime = extractTime(props.event.start_datetime);
     form.end_datetime = extractTime(props.event.end_datetime);
+    form.date = extractDate(props.event.start_datetime);
 });
-// onMounted(() => {
-//     const params = new URLSearchParams(window.location.search);
-//     form.value.date = params.get('date');
-//     form.value.grade_class_id = params.get('gradeClassId');
-//     console.log(form.value.date)
-// });
 
-// const combineDateTime = (date, time) => {
-//     return time ? `${date} ${time}` : null;
-// };
+const combineDateTime = (date, time) => {
+    return time ? `${date} ${time}` : null;
+};
 
-// const storeEvent = () => {
-//     const startDateTime = combineDateTime(form.value.date, form.value.start_datetime);
-//     const endDateTime = combineDateTime(form.value.date, form.value.end_datetime);
+const updateEvent = () => {
+    const startDateTime = combineDateTime(form.date, form.start_datetime);
+    const endDateTime = combineDateTime(form.date, form.end_datetime);
 
-//     router.post('/events', {
-//         ...form.value,
-//         start_datetime: startDateTime,
-//         end_datetime: endDateTime,
-//     });
-// }
-const updateEvent = id => {
-    router.put(route('events.update', { event: id }), form)
+    router.put(`/events/${form.id}`, {
+        ...form,
+        start_datetime: startDateTime,
+        end_datetime: endDateTime,
+    });
 }
 </script>
 <template>
@@ -71,7 +68,8 @@ const updateEvent = id => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <section class="text-gray-600 body-font relative">
-                            <form @submit.prevent="updateEvent">
+                            <form @submit.prevent="updateEvent(form.id)">
+                                <input type="hidden" id="grade_class_id" name="grade_class_id" v-model="form.grade_class_id">
                                 <div class="container px-5 py-8 mx-auto">
                                     <div class="lg:w-1/2 md:w-2/3 mx-auto">
                                         <div class="flex flex-wrap -m-2">

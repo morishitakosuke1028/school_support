@@ -13,7 +13,7 @@ class UpdateEventRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,13 @@ class UpdateEventRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'grade_class_id' => ['required', 'integer'],
+            'start_datetime' => ['nullable'],
+            'end_datetime' => ['nullable'],
+            'title' => ['nullable', 'string'],
+            'place' => ['nullable', 'string'],
+            'personal_effect' => ['nullable', 'string'],
+            'content' => ['nullable', 'string'],
         ];
     }
 }

@@ -88,7 +88,20 @@ class EventController extends Controller
      */
     public function update(UpdateEventRequest $request, Event $event)
     {
-        //
+        $event->grade_class_id = $request->grade_class_id;
+        $event->start_datetime = $request->start_datetime;
+        $event->end_datetime = $request->end_datetime;
+        $event->title = $request->title;
+        $event->place = $request->place;
+        $event->personal_effect = $request->personal_effect;
+        $event->content = $request->content;
+        $event->save();
+
+        return to_route('events.index')
+        ->with([
+            'message' => '更新しました。',
+            'status' => 'success',
+        ]);
     }
 
     public function check(Request $request)
@@ -115,6 +128,11 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        //
+        $event->delete();
+        return to_route('events.index')
+        ->with([
+            'message' => '削除しました。',
+            'status' => 'danger',
+        ]);
     }
 }
