@@ -7,16 +7,30 @@ const props = defineProps({
     event: Object
 })
 
+
+const extractTime = (datetime) => {
+    if (!datetime || typeof datetime !== 'string') {
+        return '';
+    }
+    return datetime.substring(11, 16);
+};
+
 const form = reactive({
     grade_class_id: props.event.grade_class_id,
-    start_datetime: props.event.start_datetime,
-    end_datetime: props.event.end_datetime,
+    // start_datetime: props.event.start_datetime,
+    // end_datetime: props.event.end_datetime,
+    start_datetime: null,
+    end_datetime: null,
     title: props.event.title,
     place: props.event.place,
     personal_effect: props.event.personal_effect,
     content: props.event.content
 })
 
+onMounted(() => {
+    form.start_datetime = extractTime(props.event.start_datetime);
+    form.end_datetime = extractTime(props.event.end_datetime);
+});
 // onMounted(() => {
 //     const params = new URLSearchParams(window.location.search);
 //     form.value.date = params.get('date');
