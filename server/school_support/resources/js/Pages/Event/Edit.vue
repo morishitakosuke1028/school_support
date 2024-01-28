@@ -52,6 +52,12 @@ const updateEvent = () => {
         end_datetime: endDateTime,
     });
 }
+
+const deleteEvent = id => {
+    router.delete(route('events.destroy', { event: id }), {
+        onBefore: () => confirm('本当に削除しますか？')
+    })
+}
 </script>
 <template>
     <Head title="行事作成" />
@@ -116,6 +122,9 @@ const updateEvent = () => {
                                     </div>
                                 </div>
                             </form>
+                            <div class="p-2 w-full">
+                                <button @click="deleteEvent(event.id)" class="flex mx-auto text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg">削除</button>
+                            </div>
                         </section>
                     </div>
                 </div>

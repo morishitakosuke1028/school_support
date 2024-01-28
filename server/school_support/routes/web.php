@@ -72,7 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
     Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
     Route::get('/events/check', [EventController::class, 'check'])->name('events.check');
-    Route::delete('/events/{event}', [EventClassController::class, 'destroy'])->name('events.destroy');
+    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');

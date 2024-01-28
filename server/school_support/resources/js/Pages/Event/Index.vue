@@ -97,7 +97,7 @@ const findGradeClassNameById = (gradeClassId) => {
                 <div v-for="day in getDaysInMonth(selectedYear, selectedMonth)" :key="day" class="py-8 bg-gray-100 rounded shadow cursor-pointer hover:bg-blue-200" @click="handleDayClick(day)">
                     {{ day }}
                     <div v-for="event in events" :key="event.id">
-                        <p style="background-color: aqua;" v-if="formatDate(event.start_datetime) == `${selectedYear}${String(selectedMonth).padStart(2, '0')}${String(day).padStart(2, '0')}`">
+                        <p style="background-color: aqua; border: solid 1px;" v-if="formatDate(event.start_datetime) == `${selectedYear}${String(selectedMonth).padStart(2, '0')}${String(day).padStart(2, '0')}`">
                             {{ findGradeClassNameById(event.grade_class_id) }}：{{ event.title }}
                         </p>
                     </div>
