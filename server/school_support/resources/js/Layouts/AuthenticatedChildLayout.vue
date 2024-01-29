@@ -46,6 +46,11 @@ const showingNavigationDropdown = ref(false);
                                     宿題
                                 </NavLink>
                             </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('child.events.index')" :active="route().current('child.events.index')">
+                                    行事
+                                </NavLink>
+                            </div>
                             <!-- Settings Dropdown -->
                             <div class="ml-3 relative">
                                 <Dropdown align="right" width="48">
@@ -139,6 +144,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('child.daily.create')" > 出欠申請</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('child.homework.index')" > 宿題</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('child.events.index')" > 行事</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('child.logout')" method="post" as="button">
                                 ログアウト
