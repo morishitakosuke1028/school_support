@@ -62,5 +62,5 @@ Route::middleware('auth:child')->group(function () {
     Route::post('daily', [DailyController::class, 'store'])->name('daily.store');
 
     Route::get('events/index', [EventController::class, 'index'])->name('events.index');
-    Route::get('events/{event}', [EventController::class, 'show'])->name('events.show');
+    Route::get('events/show/{event}', [EventController::class, 'show'])->name('events.show');
 });

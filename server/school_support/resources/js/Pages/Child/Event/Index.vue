@@ -1,12 +1,11 @@
 <script setup>
 import AuthenticatedChildLayout from '@/Layouts/AuthenticatedChildLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, Link } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 
 const props = defineProps({
     events: Object,
-    // gradeClasses: Object,
-    // currentUserRole: Boolean,
+    gradeClasses: Object,
 });
 
 const selectedYear = ref(new Date().getFullYear());
@@ -35,19 +34,18 @@ function getDaysInMonth(year, month) {
   return days;
 }
 
+// @TODO
 function handleDayClick(day) {
     const dateString = `${selectedYear.value}-${selectedMonth.value}-${day}`;
 
     if (selectedClassId.value) {
-        router.visit(`/events/check`, {
+        router.visit(`child/events/show`, {
             method: 'get',
             data: {
                 date: dateString,
                 gradeClassId: selectedClassId.value,
             },
         });
-    } else {
-        alert('クラスを選択してください');
     }
 }
 
@@ -58,10 +56,10 @@ const formatDate = (date) => {
   return `${d.getFullYear()}${month}${day}`; // YYYYMMDD形式
 };
 
-// const findGradeClassNameById = (gradeClassId) => {
-//   const gradeClass = props.gradeClasses.find((gradeClass) => gradeClass.id === gradeClassId);
-//   return gradeClass ? gradeClass.grade_name + gradeClass.class_name : '';
-// };
+const findGradeClassNameById = (gradeClassId) => {
+  const gradeClass = props.gradeClasses.find((gradeClass) => gradeClass.id === gradeClassId);
+  return gradeClass ? gradeClass.grade_name + gradeClass.class_name : '';
+};
 </script>
 <template>
     <Head title="行事一覧" />
@@ -73,7 +71,6 @@ const formatDate = (date) => {
             </h2>
         </template>
 
-        <FlashMessage />
         <div class="container mx-auto p-4">
             <div class="flex justify-between items-center mb-4">
                 <div>
@@ -83,12 +80,6 @@ const formatDate = (date) => {
                     <select v-model="selectedMonth" class="mr-2">
                         <option v-for="(month, index) in months" :key="index" :value="index + 1">{{ month }}</option>
                     </select>
-                    <!-- <select id="classSelect" v-model="selectedClassId">
-                        <option disabled value="">クラスを選択してください</option>
-                        <option v-for="(gradeClass, id) in gradeClasses" :key="id" :value="gradeClass.id">
-                            {{ gradeClass.grade_name }}{{ gradeClass.class_name }}
-                        </option>
-                    </select> -->
                 </div>
             </div>
             <div class="flex justify-between items-center mb-4 mt-4">
@@ -98,11 +89,13 @@ const formatDate = (date) => {
                 <div class="font-bold" v-for="day in days" :key="day">{{ day }}</div>
                 <div v-for="day in getDaysInMonth(selectedYear, selectedMonth)" :key="day" class="py-8 bg-gray-100 rounded shadow cursor-pointer hover:bg-blue-200" @click="handleDayClick(day)">
                     {{ day }}
-                    <!-- <div v-for="event in events" :key="event.id">
-                        <p style="background-color: aqua; border: solid 1px;" v-if="formatDate(event.start_datetime) == `${selectedYear}${String(selectedMonth).padStart(2, '0')}${String(day).padStart(2, '0')}`">
-                            {{ findGradeClassNameById(event.grade_class_id) }}：{{ event.title }}
-                        </p>
-                    </div> -->
+                    <div v-for="event in events" :key="event.id">
+                        <Link :href="`/child/events/show/${event.id}`" class="cursor-pointer hover:bg-blue-200">
+                            <p style="background-color: aqua; border: solid 1px;" v-if="formatDate(event.start_datetime) == `${selectedYear}${String(selectedMonth).padStart(2, '0')}${String(day).padStart(2, '0')}`">
+                                {{ findGradeClassNameById(event.grade_class_id) }}：{{ event.title }}
+                            </p>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

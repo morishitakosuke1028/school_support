@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Event;
 use App\Models\gradeClassHistory;
+use App\Models\gradeClass;
 use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
@@ -22,8 +23,18 @@ class EventController extends Controller
 
         $events = Event::where('grade_class_id', $gradeClassId)->get();
 
+        $gradeClasses = gradeClass::all();
+
         return Inertia::render('Child/Event/Index', [
+            'gradeClasses' => $gradeClasses,
             'events' => $events
+        ]);
+    }
+
+    public function show(Event $event)
+    {
+        return Inertia::render('Child/Event/Show', [
+            'event' => $event
         ]);
     }
 }
