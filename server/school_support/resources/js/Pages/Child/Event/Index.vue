@@ -34,7 +34,6 @@ function getDaysInMonth(year, month) {
   return days;
 }
 
-// @TODO
 function handleDayClick(day) {
     const dateString = `${selectedYear.value}-${selectedMonth.value}-${day}`;
 
