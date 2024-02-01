@@ -12,6 +12,7 @@ use App\Http\Controllers\Child\Auth\VerifyEmailController;
 use App\Http\Controllers\ChildController;
 use App\Http\Controllers\Child\HomeworkController;
 use App\Http\Controllers\Child\DailyController;
+use App\Http\Controllers\Child\EventController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest:child')->group(function () {
@@ -59,4 +60,7 @@ Route::middleware('auth:child')->group(function () {
 
     Route::get('daily/create', [DailyController::class, 'create'])->name('daily.create');
     Route::post('daily', [DailyController::class, 'store'])->name('daily.store');
+
+    Route::get('events/index', [EventController::class, 'index'])->name('events.index');
+    Route::get('events/show/{event}', [EventController::class, 'show'])->name('events.show');
 });

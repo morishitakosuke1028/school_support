@@ -6,6 +6,7 @@ use App\Http\Controllers\GradeClassController;
 use App\Http\Controllers\GradeClassHistoryController;
 use App\Http\Controllers\HomeworkController;
 use App\Http\Controllers\DailyController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController as ProfileOfChildController;
@@ -64,6 +65,14 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/attendance/index', [DailyController::class, 'index'])->name('attendance.index');
     Route::post('/attendance', [DailyController::class, 'store'])->name('attendance.store');
+
+    Route::get('/events/index', [EventController::class, 'index'])->name('events.index');
+    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+    Route::get('/events/check', [EventController::class, 'check'])->name('events.check');
+    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');
