@@ -65,6 +65,7 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <DropdownLink :href="route('attendance.index')"> 登下校一覧</DropdownLink>
+                                        <DropdownLink :href="route('contacts.index')"> 連絡帳</DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>
