@@ -11,6 +11,7 @@ use App\Models\Child;
 use App\Models\gradeClass;
 use App\Models\gradeClassHistory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ContactController extends Controller
 {
@@ -21,14 +22,13 @@ class ContactController extends Controller
      */
     public function index()
     {
-        $gradeClasses = gradeClass::all();
-        $gradeClassHistories = gradeClassHistory::all();
-        $children = child::all();
-        // $children = Child::with('gradeClassHistory.gradeClass')->get();
+        $children = DB::table('children')
+        ->join('grade_class_histories', 'children.id', '=', 'grade_class_histories.child_id')
+        ->join('grade_classes', 'grade_class_histories.grade_class_id', '=', 'grade_classes.id')
+        ->select('children.*', 'grade_classes.grade_name', 'grade_classes.class_name')
+        ->get();
 
         return Inertia::render('Contact/Index', [
-            'gradeClasses' => $gradeClasses,
-            'gradeClassHistories' => $gradeClassHistories,
             'children' => $children,
         ]);
     }

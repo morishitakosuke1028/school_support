@@ -1,11 +1,16 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import { onMounted } from 'vue';
 
-defineProps({
-    gradeClasses: Array,
-    gradeClassHistories: Array,
-    children: Array,
+const props = defineProps({
+    // gradeClasses: Array,
+    // gradeClassHistories: Array,
+    children: Object,
+});
+
+onMounted(() => {
+    console.log(props.children);
 });
 </script>
 <template>
@@ -44,8 +49,8 @@ defineProps({
                                                         </Link>
                                                     </td>
                                                 </span>
-                                                <td class="px-4 py-3">{{ child.grade_class_id ? child.grade_class_id.grade_name : '' }}</td>
-                                                <td class="px-4 py-3">{{ child.grade_class_id ? child.grade_class_id.class_name : '' }}</td>
+                                                <td class="px-4 py-3">{{ child.grade_name }}</td>
+                                                <td class="px-4 py-3">{{ child.class_name }}</td>
                                                 <td class="px-4 py-3">{{ child.name }}</td>
                                             </tr>
                                         </tbody>
