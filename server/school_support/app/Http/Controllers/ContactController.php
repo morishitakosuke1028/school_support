@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Child;
 use App\Models\gradeClass;
 use App\Models\gradeClassHistory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
