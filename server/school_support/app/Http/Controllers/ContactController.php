@@ -41,15 +41,18 @@ class ContactController extends Controller
      */
     public function create(Request $request)
     {
-        // @TODO
-        $contacts = contact::all();
-        $user = user::all();
-        $child = child::all();
+        $childId = $request->query('contact');
+        $child = Child::find($childId);
+
+        $contacts = Contact::all();
+        $users = User::all();
+
         return Inertia::render('Contact/Create', [
             'contacts' => $contacts,
-            'user' => $user,
+            'users' => $users,
             'child' => $child,
             'currentUserRole' => Auth::user()->role === 1,
+            'currentUser' => Auth::user()->id,
         ]);
     }
 
@@ -61,7 +64,13 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        //
+        Contact::create([
+            'user_id' => $request->user_id,
+            'child_id' => $request->child_id,
+            'content' => $request->content,
+        ]);
+
+        return redirect()->route('contacts.create', ['contact' => $request->child_id]);
     }
 
     /**

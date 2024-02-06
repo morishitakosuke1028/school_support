@@ -19,7 +19,6 @@ onMounted(() => {
     const params = new URLSearchParams(window.location.search);
     form.value.date = params.get('date');
     form.value.grade_class_id = params.get('gradeClassId');
-    console.log(form.value.date)
 });
 
 const combineDateTime = (date, time) => {

@@ -1,16 +1,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
-import { onMounted } from 'vue';
 
 const props = defineProps({
-    // gradeClasses: Array,
-    // gradeClassHistories: Array,
     children: Object,
-});
-
-onMounted(() => {
-    console.log(props.children);
 });
 </script>
 <template>
