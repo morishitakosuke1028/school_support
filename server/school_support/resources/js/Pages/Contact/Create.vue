@@ -1,9 +1,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, router } from '@inertiajs/vue3';
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 
-const { child, currentUser } = usePage().props;
+const { child, currentUser, contacts, users } = usePage().props;
 
 const form = ref({
     user_id: currentUser,
@@ -16,6 +16,54 @@ const storeContact = () => {
 };
 
 </script>
+<style>
+.message {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.message.left .bubble {
+  margin-left: 0;
+  margin-right: auto;
+  background-color: #f0f0f0;
+  position: relative;
+}
+
+.message.left .bubble::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10px;
+  border: 10px solid transparent;
+  border-right-color: #f0f0f0;
+  border-left: 0;
+  margin-top: 5px;
+}
+
+.message.right .bubble {
+  margin-left: auto;
+  margin-right: 0;
+  background-color: #d1e7dd;
+  position: relative;
+}
+
+.message.right .bubble::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -10px;
+  border: 10px solid transparent;
+  border-left-color: #d1e7dd;
+  border-right: 0;
+  margin-top: 5px;
+}
+
+.bubble {
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 60%;
+}
+</style>
 <template>
     <Head title="連絡" />
 
@@ -30,6 +78,14 @@ const storeContact = () => {
             <div class="container mx-auto flex flex-col px-5 py-12 justify-center items-center">
                 <div class="w-full md:w-2/3 flex flex-col items-center text-center">
                     <h3 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">{{ child ? `${child.name}さんの連絡帳` : '連絡帳' }}</h3>
+                    <div class="container mx-auto px-5 py-12">
+                        <div v-for="(contact, index) in contacts" :key="contact.id" class="message" :class="{ 'right': index % 2 === 0, 'left': index % 2 !== 0 }">
+                            <div class="bubble">
+                                <p><strong>内容:</strong> {{ contact.content }}</p>
+                                <p><strong>日付:</strong> {{ new Date(contact.created_at).toLocaleDateString() }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

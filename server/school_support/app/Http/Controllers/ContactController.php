@@ -70,7 +70,11 @@ class ContactController extends Controller
             'content' => $request->content,
         ]);
 
-        return redirect()->route('contacts.create', ['contact' => $request->child_id]);
+        return to_route('contacts.index')
+        ->with([
+            'message' => '送信しました。',
+            'status' => 'success',
+        ]);
     }
 
     /**
