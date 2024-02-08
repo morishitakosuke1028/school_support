@@ -44,7 +44,7 @@ class ContactController extends Controller
         $childId = $request->query('contact');
         $child = Child::find($childId);
 
-        $contacts = Contact::all();
+        $contacts = Contact::where('child_id', $childId)->get();
 
         return Inertia::render('Contact/Create', [
             'contacts' => $contacts,
