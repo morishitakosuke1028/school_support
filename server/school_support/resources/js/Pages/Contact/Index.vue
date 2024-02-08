@@ -1,5 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -16,6 +17,7 @@ const props = defineProps({
             </h2>
         </template>
 
+        <FlashMessage />
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">

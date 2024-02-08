@@ -45,14 +45,13 @@ class ContactController extends Controller
         $child = Child::find($childId);
 
         $contacts = Contact::all();
-        $users = User::all();
 
         return Inertia::render('Contact/Create', [
             'contacts' => $contacts,
-            'users' => $users,
             'child' => $child,
             'currentUserRole' => Auth::user()->role === 1,
             'currentUser' => Auth::user()->id,
+            'currentUserName' => Auth::user()->name,
         ]);
     }
 
@@ -67,6 +66,7 @@ class ContactController extends Controller
         Contact::create([
             'user_id' => $request->user_id,
             'child_id' => $request->child_id,
+            'sender' => $request->sender,
             'content' => $request->content,
         ]);
 

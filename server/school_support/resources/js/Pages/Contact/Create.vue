@@ -1,13 +1,14 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
-const { child, currentUser, contacts, users } = usePage().props;
+const { child, currentUser, contacts, currentUserName } = usePage().props;
 
 const form = ref({
     user_id: currentUser,
     child_id: child.id,
+    sender: currentUserName,
     content: null
 })
 
@@ -17,51 +18,50 @@ const storeContact = () => {
 
 </script>
 <style>
-.message {
-  display: flex;
-  margin-bottom: 10px;
+.contact-note {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  border-collapse: collapse;
 }
 
-.message.left .bubble {
-  margin-left: 0;
-  margin-right: auto;
-  background-color: #f0f0f0;
-  position: relative;
+.contact-note table {
+  width: 100%;
+  writing-mode: vertical-rl;
 }
 
-.message.left .bubble::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -10px;
-  border: 10px solid transparent;
-  border-right-color: #f0f0f0;
-  border-left: 0;
-  margin-top: 5px;
+.contact-note th, .contact-note td {
+  border: 1px solid ;
+  padding: 5px;
 }
 
-.message.right .bubble {
-  margin-left: auto;
-  margin-right: 0;
-  background-color: #d1e7dd;
-  position: relative;
+.contact-note thead th {
+  background-color: #00BFFF;
+  color: white;
 }
 
-.message.right .bubble::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -10px;
-  border: 10px solid transparent;
-  border-left-color: #d1e7dd;
-  border-right: 0;
-  margin-top: 5px;
+.contact-note tbody td {
+  text-align: center;
+  vertical-align: top;
 }
 
-.bubble {
-  padding: 10px;
-  border-radius: 10px;
-  max-width: 60%;
+.contact-note td:last-child {
+  background-color: white;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+.contact-note th, .contact-note td {
+  padding: 8px;
+  border: 1px solid #00BFFF;
+  text-align: center;
+}
+
+.contact-note tbody td {
+  vertical-align: middle;
 }
 </style>
 <template>
@@ -74,19 +74,34 @@ const storeContact = () => {
             </h2>
         </template>
 
-        <section class="text-gray-600 body-font">
-            <div class="container mx-auto flex flex-col px-5 py-12 justify-center items-center">
-                <div class="w-full md:w-2/3 flex flex-col items-center text-center">
-                    <h3 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">{{ child ? `${child.name}さんの連絡帳` : '連絡帳' }}</h3>
-                    <div class="container mx-auto px-5 py-12">
-                        <div v-for="(contact, index) in contacts" :key="contact.id" class="message" :class="{ 'right': index % 2 === 0, 'left': index % 2 !== 0 }">
-                            <div class="bubble">
-                                <p><strong>内容:</strong> {{ contact.content }}</p>
-                                <p><strong>日付:</strong> {{ new Date(contact.created_at).toLocaleDateString() }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <section class="bg-white">
+            <div class="contact-note">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>月</th>
+                        <th>日</th>
+                        <th>内容</th>
+                        <th>記入欄</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(contact, index) in contacts" :key="contact.id">
+                            <td>
+                                <div class="vertical-text">{{ new Date(contact.created_at).getMonth() + 1 }}</div>
+                            </td>
+                            <td>
+                                <div class="vertical-text">{{ new Date(contact.created_at).getDate() }}</div>
+                            </td>
+                            <td>
+                                <div class="content-text">{{ contact.content }}</div>
+                            </td>
+                            <td>
+                                <div class="vertical-text">{{ contact.sender }}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
         <div class="py-12">
@@ -95,6 +110,7 @@ const storeContact = () => {
                     <div class="p-6 bg-white border-b border-gray-200">
                         <section class="text-gray-600 body-font relative">
                             <form @submit.prevent="storeContact">
+                                <input type="hidden" id="sender" name="sender" v-model="currentUserName">
                                 <input type="hidden" id="child_id" name="child_id" v-model="child.id">
                                 <div class="container px-5 py-8 mx-auto">
                                     <div class="lg:w-1/2 md:w-2/3 mx-auto">
