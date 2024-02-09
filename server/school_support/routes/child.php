@@ -63,4 +63,8 @@ Route::middleware('auth:child')->group(function () {
 
     Route::get('events/index', [EventController::class, 'index'])->name('events.index');
     Route::get('events/show/{event}', [EventController::class, 'show'])->name('events.show');
+
+    Route::get('contacts/create', [ContactController::class, 'create'])->name('events.create');
+    Route::post('contacts/store', [ContactController::class, 'store'])->name('events.store');
+
 });
