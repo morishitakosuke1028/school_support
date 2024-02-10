@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 
-const { child, currentUser, contacts, currentUserName } = usePage().props;
+const { child, currentUser, contacts, currentUserName, currentUserRole } = usePage().props;
 
 const form = ref({
     user_id: currentUser,
@@ -16,6 +16,11 @@ const storeContact = () => {
     router.post('/contacts', form.value);
 };
 
+const deleteContact = id => {
+    router.delete(route('contacts.destroy', { contact: id }), {
+        onBefore: () => confirm('本当に削除しますか？')
+    })
+}
 </script>
 <style>
 .contact-note {
@@ -98,6 +103,9 @@ const storeContact = () => {
                             </td>
                             <td>
                                 <div class="vertical-text">{{ contact.sender }}</div>
+                            </td>
+                            <td v-if="currentUserRole">
+                                <button @click="deleteContact(contact.id)" class="text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg">除削</button>
                             </td>
                         </tr>
                     </tbody>
