@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactRequest;
-use App\Http\Requests\UpdateContactRequest;
 use Inertia\Inertia;
 use App\Models\Contact;
 use App\Models\User;
