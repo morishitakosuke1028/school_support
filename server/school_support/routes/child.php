@@ -13,6 +13,7 @@ use App\Http\Controllers\ChildController;
 use App\Http\Controllers\Child\HomeworkController;
 use App\Http\Controllers\Child\DailyController;
 use App\Http\Controllers\Child\EventController;
+use App\Http\Controllers\Child\ContactController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest:child')->group(function () {
@@ -63,4 +64,8 @@ Route::middleware('auth:child')->group(function () {
 
     Route::get('events/index', [EventController::class, 'index'])->name('events.index');
     Route::get('events/show/{event}', [EventController::class, 'show'])->name('events.show');
+
+    Route::get('contacts/create', [ContactController::class, 'create'])->name('contacts.create');
+    Route::post('contacts/', [ContactController::class, 'store'])->name('contacts.store');
+
 });
