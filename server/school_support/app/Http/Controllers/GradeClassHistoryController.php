@@ -49,19 +49,59 @@ class GradeClassHistoryController extends Controller
      * @param  \App\Models\gradeClassHistory  $gradeClassHistory
      * @return \Illuminate\Http\Response
      */
-    public function edit(gradeClassHistory $gradeClassHistory)
+    public function edit(Request $request, gradeClassHistory $gradeClassHistory)
     {
+        // $children = Child::all();
+        // $users = User::all();
+        // $gradeClasses = gradeClass::all();
+        // $gradeClassHistories = gradeClassHistory::all();
+        // $childrenInGradeClass = gradeClassHistory::pluck('child_id')->flatten()->unique()->toArray();
+
+        // $childrenNotInGradeClass = $children->reject(function ($child) use ($childrenInGradeClass) {
+        //     return in_array($child->id, $childrenInGradeClass);
+        // });
+
+        // return Inertia::render('GradeClassHistory/Edit', [
+        //     'gradeClassHistory' => $gradeClassHistory,
+        //     'children' => $children,
+        //     'users' => $users,
+        //     'gradeClasses' => $gradeClasses,
+        //     'gradeClassHistories' => $gradeClassHistories,
+        //     'childrenNotInGradeClass' => $childrenNotInGradeClass,
+        //     'childrenInGradeClass' => $childrenInGradeClass
+        // ]);
+        $query = gradeClassHistory::query();
+
+        // 学年でフィルタリング
+        if ($request->filled('gradeName')) {
+            $gradeNames = $request->input('gradeName');
+            $query->whereIn('grade_name', $gradeNames);
+        }
+
+        // クラスでフィルタリング
+        if ($request->filled('className')) {
+            $classNames = $request->input('className');
+            $query->whereIn('class_name', $classNames);
+        }
+
+        $gradeClassHistories = $query->get();
+
+        // その他のデータを取得
         $children = Child::all();
         $users = User::all();
         $gradeClasses = gradeClass::all();
-        $gradeClassHistories = gradeClassHistory::all();
-        $childrenInGradeClass = gradeClassHistory::pluck('child_id')->flatten()->unique()->toArray();
+        $childrenInGradeClass = $gradeClassHistories->pluck('child_id')->flatten()->unique();
 
         $childrenNotInGradeClass = $children->reject(function ($child) use ($childrenInGradeClass) {
-            return in_array($child->id, $childrenInGradeClass);
+            return $childrenInGradeClass->contains($child->id);
         });
 
+        $gradeNames = $gradeClasses->pluck('grade_name')->unique()->sort()->values();
+        $classNames = $gradeClasses->pluck('class_name')->unique()->sort()->values();
+
         return Inertia::render('GradeClassHistory/Edit', [
+            'gradeNames' => $gradeNames,
+            'classNames' => $classNames,
             'gradeClassHistory' => $gradeClassHistory,
             'children' => $children,
             'users' => $users,

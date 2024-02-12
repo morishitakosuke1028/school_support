@@ -11,6 +11,8 @@ const props = defineProps({
     gradeClasses: Array,
     childrenNotInGradeClass: Object,
     childrenInGradeClass: Object,
+    gradeNames: Array,
+    classNames: Array,
 })
 
 // 1セット目のセレクトボックス用
@@ -122,6 +124,19 @@ const moveToLeft = () => {
 
     selectedChildren2.value = selectedChildren2Array.filter((childId) => !selectedChildrenArray.includes(childId));
 };
+
+const selectedGradeNames = ref([]);
+const selectedClassNames = ref([]);
+
+const submitSearch = () => {
+    Inertia.visit('/gradeClassHistories/edit', {
+        method: 'get',
+        data: {
+            gradeName: selectedGradeNames.value,
+            className: selectedClassNames.value,
+        }
+    });
+};
 </script>
 
 <template>
@@ -133,6 +148,44 @@ const moveToLeft = () => {
                 学年クラス替え
             </h2>
         </template>
+
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 bg-white border-b border-gray-200">
+                        <section class="text-gray-600 body-font relative flex-auto">
+                            <div class="pl-4 my-6 w-full mx-auto">
+                                <form @submit.prevent="submitSearch" class="space-x-4">
+                                    <div class="flex my-5">
+                                        <span class="mr-5">学年：</span>
+                                        <div v-for="gradeName in gradeNames" :key="gradeName">
+                                            <label class="mr-5">
+                                                <input type="checkbox" :value="gradeName" v-model="selectedGradeNames">
+                                                {{ gradeName }}
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex my-5">
+                                        <span class="mr-5">クラス：</span>
+                                        <div v-for="className in classNames" :key="className">
+                                            <label class="mr-5">
+                                                <input type="checkbox" :value="className" v-model="selectedClassNames">
+                                                {{ className }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">検索</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
