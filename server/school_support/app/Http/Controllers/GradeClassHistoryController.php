@@ -51,25 +51,6 @@ class GradeClassHistoryController extends Controller
      */
     public function edit(Request $request, gradeClassHistory $gradeClassHistory)
     {
-        // $children = Child::all();
-        // $users = User::all();
-        // $gradeClasses = gradeClass::all();
-        // $gradeClassHistories = gradeClassHistory::all();
-        // $childrenInGradeClass = gradeClassHistory::pluck('child_id')->flatten()->unique()->toArray();
-
-        // $childrenNotInGradeClass = $children->reject(function ($child) use ($childrenInGradeClass) {
-        //     return in_array($child->id, $childrenInGradeClass);
-        // });
-
-        // return Inertia::render('GradeClassHistory/Edit', [
-        //     'gradeClassHistory' => $gradeClassHistory,
-        //     'children' => $children,
-        //     'users' => $users,
-        //     'gradeClasses' => $gradeClasses,
-        //     'gradeClassHistories' => $gradeClassHistories,
-        //     'childrenNotInGradeClass' => $childrenNotInGradeClass,
-        //     'childrenInGradeClass' => $childrenInGradeClass
-        // ]);
         $query = gradeClassHistory::query();
 
         // 学年でフィルタリング

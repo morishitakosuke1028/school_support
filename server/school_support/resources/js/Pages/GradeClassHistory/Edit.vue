@@ -33,12 +33,10 @@ const form2 = reactive({
 // 1セット目のセレクトボックス用
 const selectedClassId = ref(null);
 const selectedChildren = ref([]);
-// const selectedChildren = ref(props.gradeClassHistory.child_id);
 
 // 2セット目のセレクトボックス用
 const selectedClassId2 = ref(null);
 const selectedChildren2 = ref([]);
-// const selectedChildren2 = ref(props.gradeClassHistory.child_id);
 
 const updateGradeClassHistory = () => {
     form.child_id = selectedChildren.value;
@@ -160,20 +158,28 @@ const submitSearch = () => {
                                         <span class="mr-5">学年：</span>
                                         <div v-for="gradeName in gradeNames" :key="gradeName">
                                             <label class="mr-5">
-                                                <input type="checkbox" :value="gradeName" v-model="selectedGradeNames">
+                                                <input type="radio" :value="gradeName" v-model="selectedGradeNames">
                                                 {{ gradeName }}
                                             </label>
                                         </div>
+                                        <label class="mr-5">
+                                            <input type="radio" value="所属なし" v-model="selectedGradeNames">
+                                            所属なし
+                                        </label>
                                     </div>
 
                                     <div class="flex my-5">
                                         <span class="mr-5">クラス：</span>
                                         <div v-for="className in classNames" :key="className">
                                             <label class="mr-5">
-                                                <input type="checkbox" :value="className" v-model="selectedClassNames">
+                                                <input type="radio" :value="className" v-model="selectedClassNames">
                                                 {{ className }}
                                             </label>
                                         </div>
+                                        <label class="mr-5">
+                                            <input type="radio" value="所属なし" v-model="selectedClassNames">
+                                            所属なし
+                                        </label>
                                     </div>
                                     <div class="text-center">
                                         <button type="submit" class="px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">検索</button>
@@ -211,15 +217,6 @@ const submitSearch = () => {
                                                         </div>
                                                     </div>
                                                     <div class="relative">
-                                                        <label for="classSelector">クラス</label><br>
-                                                        <select id="classSelector" v-model="selectedClassId" @change="handleChangeClass">
-                                                            <option :value="null">所属なし生徒</option>
-                                                            <option v-for="gradeClass in gradeClasses" :key="gradeClass.id" :value="gradeClass.id">
-                                                                {{ gradeClass.grade_name }}{{ gradeClass.class_name }}
-                                                            </option>
-                                                        </select>
-                                                        <br>
-                                                        <br>
                                                         <label class="leading-7 text-sm text-gray-600">生徒名</label>
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div v-if="selectedClassId === null">
@@ -261,15 +258,6 @@ const submitSearch = () => {
                                                         </div>
                                                     </div>
                                                     <div class="relative">
-                                                        <label for="classSelector">クラス</label><br>
-                                                        <select id="classSelector" v-model="selectedClassId2" @change="handleChangeClass2">
-                                                            <option :value="null">---</option>
-                                                            <option v-for="gradeClass in gradeClasses" :key="gradeClass.id" :value="gradeClass.id">
-                                                                {{ gradeClass.grade_name }}{{ gradeClass.class_name }}
-                                                            </option>
-                                                        </select>
-                                                        <br>
-                                                        <br>
                                                         <label class="leading-7 text-sm text-gray-600">生徒名</label>
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div v-if="selectedClassId2 !== null">
