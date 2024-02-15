@@ -123,24 +123,26 @@ const moveToLeft = () => {
     selectedChildren2.value = selectedChildren2Array.filter((childId) => !selectedChildrenArray.includes(childId));
 };
 
-const selectedGradeNames = ref([]);
-const selectedClassNames = ref([]);
+const selectedGradeNamesLeft = ref('');
+const selectedClassNamesLeft = ref('');
+const selectedGradeNamesRight = ref('');
+const selectedClassNamesRight = ref('');
 
 const submitSearch = () => {
-    Inertia.visit('/gradeClassHistories/edit', {
+    router.visit('/gradeClassHistories/edit', {
         method: 'get',
         data: {
-            gradeName: selectedGradeNames.value,
-            className: selectedClassNames.value,
+            gradeName: selectedGradeNamesLeft.value,
+            className: selectedClassNamesLeft.value,
         }
     });
 };
 const submitSearchChange = () => {
-    Inertia.visit('/gradeClassHistories/edit', {
+    router.visit('/gradeClassHistories/edit', {
         method: 'get',
         data: {
-            gradeName: selectedGradeNames.value,
-            className: selectedClassNames.value,
+            gradeName: selectedGradeNamesRight.value,
+            className: selectedClassNamesRight.value,
         }
     });
 };
@@ -163,30 +165,31 @@ const submitSearchChange = () => {
                         <section class="text-gray-600 body-font relative flex-auto">
                             <div class="pl-4 my-6 w-full mx-auto">
                                 <form @submit.prevent="submitSearch" class="space-x-4">
+                                    <!-- 学年（左） -->
                                     <div class="flex my-5">
                                         <span class="mr-5">学年：</span>
                                         <div v-for="gradeName in gradeNames" :key="gradeName">
                                             <label class="mr-5">
-                                                <input type="radio" :value="gradeName" v-model="selectedGradeNames">
+                                                <input type="radio" name="leftGradeName" :value="gradeName" v-model="selectedGradeNamesLeft">
                                                 {{ gradeName }}
                                             </label>
                                         </div>
                                         <label class="mr-5">
-                                            <input type="radio" value="所属なし" v-model="selectedGradeNames">
+                                            <input type="radio" name="leftGradeName" value="所属なし" v-model="selectedGradeNamesLeft">
                                             所属なし
                                         </label>
                                     </div>
-
+                                    <!-- クラス（左） -->
                                     <div class="flex my-5">
                                         <span class="mr-5">クラス：</span>
                                         <div v-for="className in classNames" :key="className">
                                             <label class="mr-5">
-                                                <input type="radio" :value="className" v-model="selectedClassNames">
+                                                <input type="radio" name="leftClassName" :value="className" v-model="selectedClassNamesLeft">
                                                 {{ className }}
                                             </label>
                                         </div>
                                         <label class="mr-5">
-                                            <input type="radio" value="所属なし" v-model="selectedClassNames">
+                                            <input type="radio" name="leftClassName" value="所属なし" v-model="selectedClassNamesLeft">
                                             所属なし
                                         </label>
                                     </div>
@@ -199,30 +202,31 @@ const submitSearchChange = () => {
                         <section class="text-gray-600 body-font relative flex-auto">
                             <div class="pl-4 my-6 w-full mx-auto">
                                 <form @submit.prevent="submitSearchChange" class="space-x-4">
+                                    <!-- 学年（右） -->
                                     <div class="flex my-5">
                                         <span class="mr-5">学年：</span>
                                         <div v-for="gradeName in gradeNames" :key="gradeName">
                                             <label class="mr-5">
-                                                <input type="radio" :value="gradeName" v-model="selectedGradeNames">
+                                                <input type="radio" name="rightGradeName" :value="gradeName" v-model="selectedGradeNamesRight">
                                                 {{ gradeName }}
                                             </label>
                                         </div>
                                         <label class="mr-5">
-                                            <input type="radio" value="所属なし" v-model="selectedGradeNames">
+                                            <input type="radio" name="rightGradeName" value="所属なし" v-model="selectedGradeNamesRight">
                                             所属なし
                                         </label>
                                     </div>
-
+                                    <!-- クラス（右） -->
                                     <div class="flex my-5">
                                         <span class="mr-5">クラス：</span>
                                         <div v-for="className in classNames" :key="className">
                                             <label class="mr-5">
-                                                <input type="radio" :value="className" v-model="selectedClassNames">
+                                                <input type="radio" name="rightClassName" :value="className" v-model="selectedClassNamesRight">
                                                 {{ className }}
                                             </label>
                                         </div>
                                         <label class="mr-5">
-                                            <input type="radio" value="所属なし" v-model="selectedClassNames">
+                                            <input type="radio" name="rightClassName" value="所属なし" v-model="selectedClassNamesRight">
                                             所属なし
                                         </label>
                                     </div>
@@ -265,17 +269,13 @@ const submitSearchChange = () => {
                                                         <label class="leading-7 text-sm text-gray-600">生徒名</label>
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div v-if="selectedClassId === null">
-                                                            <!-- 学年クラスに所属していない生徒一覧 -->
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector" v-model="selectedChildren">
                                                                 <option v-for="child in localData.childrenNotInGradeClass" :key="child.id" :value="child.id">
-                                                                    <span v-if="!child.hidden">
-                                                                        {{ child.name }}
-                                                                    </span>
+                                                                    {{ child.name }}
                                                                 </option>
                                                             </select>
                                                         </div>
                                                         <div v-else>
-                                                            <!-- 選択された学年クラス毎の生徒一覧 -->
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector" v-model="selectedChildren">
                                                                 <option v-for="childId in selectedChildren" :value="childId">
                                                                     {{ getChildName(childId) }}
