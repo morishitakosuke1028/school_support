@@ -49,7 +49,7 @@ const deleteGradeClassHistory = () => {
     })
 }
 
-// 1セット目のセレクトボックス用
+// // 1セット目のセレクトボックス用
 const getChildName = (childId) => {
     const matchingChild = props.children.find((child) => child.id === childId);
     if (matchingChild) {
@@ -123,29 +123,22 @@ const moveToLeft = () => {
     selectedChildren2.value = selectedChildren2Array.filter((childId) => !selectedChildrenArray.includes(childId));
 };
 
-const selectedGradeNamesLeft = ref('');
-const selectedClassNamesLeft = ref('');
-const selectedGradeNamesRight = ref('');
-const selectedClassNamesRight = ref('');
+const selectedGradeNames = ref('');
+const selectedClassNames = ref('');
+
+const urlParams = new URLSearchParams(window.location.search);
+const gradeClassId = urlParams.get('gradeClassId');
 
 const submitSearch = () => {
-    router.visit('/gradeClassHistories/edit', {
+    router.visit(`/gradeClassHistories/${gradeClassId}/edit`, {
         method: 'get',
         data: {
-            gradeName: selectedGradeNamesLeft.value,
-            className: selectedClassNamesLeft.value,
+            gradeName: selectedGradeNames.value,
+            className: selectedClassNames.value,
         }
     });
 };
-const submitSearchChange = () => {
-    router.visit('/gradeClassHistories/edit', {
-        method: 'get',
-        data: {
-            gradeName: selectedGradeNamesRight.value,
-            className: selectedClassNamesRight.value,
-        }
-    });
-};
+
 </script>
 
 <template>
@@ -165,68 +158,29 @@ const submitSearchChange = () => {
                         <section class="text-gray-600 body-font relative flex-auto">
                             <div class="pl-4 my-6 w-full mx-auto">
                                 <form @submit.prevent="submitSearch" class="space-x-4">
-                                    <!-- 学年（左） -->
                                     <div class="flex my-5">
                                         <span class="mr-5">学年：</span>
                                         <div v-for="gradeName in gradeNames" :key="gradeName">
                                             <label class="mr-5">
-                                                <input type="radio" name="leftGradeName" :value="gradeName" v-model="selectedGradeNamesLeft">
+                                                <input type="radio" name="leftGradeName" :value="gradeName" v-model="selectedGradeNames">
                                                 {{ gradeName }}
                                             </label>
                                         </div>
                                         <label class="mr-5">
-                                            <input type="radio" name="leftGradeName" value="所属なし" v-model="selectedGradeNamesLeft">
+                                            <input type="radio" name="leftGradeName" value="所属なし" v-model="selectedGradeNames">
                                             所属なし
                                         </label>
                                     </div>
-                                    <!-- クラス（左） -->
                                     <div class="flex my-5">
                                         <span class="mr-5">クラス：</span>
                                         <div v-for="className in classNames" :key="className">
                                             <label class="mr-5">
-                                                <input type="radio" name="leftClassName" :value="className" v-model="selectedClassNamesLeft">
+                                                <input type="radio" name="leftClassName" :value="className" v-model="selectedClassNames">
                                                 {{ className }}
                                             </label>
                                         </div>
                                         <label class="mr-5">
-                                            <input type="radio" name="leftClassName" value="所属なし" v-model="selectedClassNamesLeft">
-                                            所属なし
-                                        </label>
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="submit" class="px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">検索</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </section>
-                        <section class="text-gray-600 body-font relative flex-auto">
-                            <div class="pl-4 my-6 w-full mx-auto">
-                                <form @submit.prevent="submitSearchChange" class="space-x-4">
-                                    <!-- 学年（右） -->
-                                    <div class="flex my-5">
-                                        <span class="mr-5">学年：</span>
-                                        <div v-for="gradeName in gradeNames" :key="gradeName">
-                                            <label class="mr-5">
-                                                <input type="radio" name="rightGradeName" :value="gradeName" v-model="selectedGradeNamesRight">
-                                                {{ gradeName }}
-                                            </label>
-                                        </div>
-                                        <label class="mr-5">
-                                            <input type="radio" name="rightGradeName" value="所属なし" v-model="selectedGradeNamesRight">
-                                            所属なし
-                                        </label>
-                                    </div>
-                                    <!-- クラス（右） -->
-                                    <div class="flex my-5">
-                                        <span class="mr-5">クラス：</span>
-                                        <div v-for="className in classNames" :key="className">
-                                            <label class="mr-5">
-                                                <input type="radio" name="rightClassName" :value="className" v-model="selectedClassNamesRight">
-                                                {{ className }}
-                                            </label>
-                                        </div>
-                                        <label class="mr-5">
-                                            <input type="radio" name="rightClassName" value="所属なし" v-model="selectedClassNamesRight">
+                                            <input type="radio" name="leftClassName" value="所属なし" v-model="selectedClassNames">
                                             所属なし
                                         </label>
                                     </div>
