@@ -74,15 +74,15 @@ class GradeClassHistoryController extends Controller
         $gradeClasses = $query->get();
 
         // その他のデータを取得
-        $children = Child::all();
+        // $children = Child::all();
         $users = User::all();
-        $gradeClasses = gradeClass::all();
-        $gradeClasseHistories = gradeClassHistory::all();
-        $childrenInGradeClass = $gradeClassHistories->pluck('child_id')->flatten()->unique();
+        // $gradeClasses = gradeClass::all();
+        $gradeClassHistories = gradeClassHistory::all();
+        // $childrenInGradeClass = $gradeClassHistories->pluck('child_id')->flatten()->unique();
 
-        $childrenNotInGradeClass = $children->reject(function ($child) use ($childrenInGradeClass) {
-            return $childrenInGradeClass->contains($child->id);
-        });
+        // $childrenNotInGradeClass = $children->reject(function ($child) use ($childrenInGradeClass) {
+        //     return $childrenInGradeClass->contains($child->id);
+        // });
 
         $gradeNames = $gradeClasses->pluck('grade_name')->unique()->sort()->values();
         $classNames = $gradeClasses->pluck('class_name')->unique()->sort()->values();
@@ -91,12 +91,12 @@ class GradeClassHistoryController extends Controller
             'gradeNames' => $gradeNames,
             'classNames' => $classNames,
             'gradeClassHistory' => $gradeClassHistory,
-            'children' => $children,
+            // 'children' => $children,
             'users' => $users,
-            'gradeClasses' => $gradeClasses,
+            // 'gradeClasses' => $gradeClasses,
             'gradeClassHistories' => $gradeClassHistories,
-            'childrenNotInGradeClass' => $childrenNotInGradeClass,
-            'childrenInGradeClass' => $childrenInGradeClass
+            // 'childrenNotInGradeClass' => $childrenNotInGradeClass,
+            // 'childrenInGradeClass' => $childrenInGradeClass
         ]);
     }
 
