@@ -41,9 +41,7 @@ const editableChildren = reactive(children.value.map(child => {
     };
 }));
 
-onMounted(() => {
-    console.log(editableChildren);
-});
+
 const defaultDate = new Date().toISOString().slice(0, 10);
 const searchDate = props.searchDate || defaultDate;
 const submitData = () => {

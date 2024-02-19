@@ -15,6 +15,8 @@ const props = defineProps({
     classNames: Array,
 })
 
+const gradeClassId = ref(null);
+
 // 1セット目のセレクトボックス用
 const form = reactive({
     id: props.gradeClassHistory.id,
@@ -123,14 +125,22 @@ const moveToLeft = () => {
     // selectedChildren2.value = selectedChildren2Array.filter((childId) => !selectedChildrenArray.includes(childId));
 };
 
+onMounted(() => {
+    const path = window.location.pathname;
+
+    const segments = path.split('/');
+
+    if (segments.length > 2) {
+        gradeClassId.value = segments[2];
+    }
+    console.log(gradeClassId.value);
+});
+
 const selectedGradeNames = ref('');
 const selectedClassNames = ref('');
 
-const urlParams = new URLSearchParams(window.location.search);
-const gradeClassId = urlParams.get('gradeClassId');
-
 const submitSearch = () => {
-    router.visit(`/gradeClassHistories/${gradeClassId}/edit`, {
+    router.visit(`/gradeClassHistories/${gradeClassId.value}/edit`, {
         method: 'get',
         data: {
             gradeName: selectedGradeNames.value,
@@ -138,6 +148,8 @@ const submitSearch = () => {
         }
     });
 };
+
+
 
 </script>
 
@@ -224,6 +236,9 @@ const submitSearch = () => {
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div>
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector" >
+                                                                <option v-for="result in searchResults" :key="result.id" :value="result.id">
+                                                                    {{ result.name }}
+                                                                </option>
                                                             <!-- <select multiple style="height: 20em; width: 12em;" id="classSelector" v-model="selectedChildren"> -->
                                                                 <!-- <option v-for="child in localData.childrenNotInGradeClass" :key="child.id" :value="child.id">
                                                                     {{ child.name }}
