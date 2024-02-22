@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { reactive, ref, computed, watch, onMounted, nextTick } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 
 const props = defineProps({
     gradeClassHistory: Object,
@@ -12,6 +12,12 @@ const props = defineProps({
     childrenNotInGradeClass: Object,
     childrenInGradeClass: Object,
 })
+
+const childrenNotInGradeClassArray = ref([]);
+
+onMounted(() => {
+    childrenNotInGradeClassArray.value = Object.values(props.childrenNotInGradeClass);
+});
 
 // 1セット目のセレクトボックス用
 const form = reactive({
@@ -31,16 +37,17 @@ const form2 = reactive({
 // 1セット目のセレクトボックス用
 const selectedClassId = ref(null);
 const selectedChildren = ref([]);
-// const selectedChildren = ref(props.gradeClassHistory.child_id);
 
 // 2セット目のセレクトボックス用
 const selectedClassId2 = ref(null);
 const selectedChildren2 = ref([]);
-// const selectedChildren2 = ref(props.gradeClassHistory.child_id);
 
 const updateGradeClassHistory = () => {
-    form.child_id = selectedChildren.value;
-    router.put(route('gradeClassHistories.update', { gradeClassHistory: form.id }), form)
+    router.post(`/gradeClassHistories/${form.id}`, {
+        user_id: form2.user_id,
+        grade_class_id: selectedClassId2,
+        child_ids: selectedChildren2,
+    });
 }
 
 const deleteGradeClassHistory = () => {
@@ -56,10 +63,6 @@ const getChildName = (childId) => {
         return matchingChild.name;
     }
 };
-
-const getChildrenNotInClass = computed(() => {
-    return props.childrenNotInGradeClass;
-});
 
 const handleChangeClass = () => {
     if (props.gradeClassHistories) {
@@ -95,33 +98,19 @@ const handleChangeClass2 = () => {
     }
 };
 
-const localData = reactive({
-    childrenNotInGradeClass: props.childrenNotInGradeClass || [] // 初期値を設定
-});
-
 const moveToRight = () => {
     const selectedForMoving = [...selectedChildren.value];
     selectedChildren2.value = [...selectedChildren2.value, ...selectedForMoving];
 
     // 選択された生徒を隠す
     selectedForMoving.forEach(childId => {
-        const child = localData.childrenNotInGradeClass.find(c => c.id === childId);
-        if (child) {
-            child.hidden = true;
+        const childIndex = childrenNotInGradeClassArray.value.findIndex(c => c.id === childId);
+        if (childIndex !== -1) {
+            childrenNotInGradeClassArray.value[childIndex].hidden = true;
         }
     });
-
-    nextTick(() => {
-        console.log('DOMが更新された後の状態:', selectedChildren.value, selectedChildren2.value);
-    });
 };
 
-const moveToLeft = () => {
-    const selectedChildrenArray = Array.isArray(selectedChildren.value) ? selectedChildren.value : [selectedChildren.value];
-    const selectedChildren2Array = Array.isArray(selectedChildren2.value) ? selectedChildren2.value : [selectedChildren2.value];
-
-    selectedChildren2.value = selectedChildren2Array.filter((childId) => !selectedChildrenArray.includes(childId));
-};
 </script>
 
 <template>
@@ -172,7 +161,7 @@ const moveToLeft = () => {
                                                         <div v-if="selectedClassId === null">
                                                             <!-- 学年クラスに所属していない生徒一覧 -->
                                                             <select multiple style="height: 20em; width: 12em;" id="classSelector" v-model="selectedChildren">
-                                                                <option v-for="child in localData.childrenNotInGradeClass" :key="child.id" :value="child.id">
+                                                                <option v-for="child in childrenNotInGradeClassArray" :key="child.id" :value="child.id">
                                                                     <span v-if="!child.hidden">
                                                                         {{ child.name }}
                                                                     </span>
@@ -191,9 +180,6 @@ const moveToLeft = () => {
                                                 </div>
                                                 <div style="margin-top: 15em;" v-if="selectedClassId2 !== null">
                                                     <input type="button" name="right" value="≫" style="font-size: 2em;" @click="moveToRight" />
-                                                    <br />
-                                                    <br />
-                                                    <input type="button" name="left" value="≪" style="font-size: 2em;" @click="moveToLeft" />
                                                 </div>
                                                 <div class="p-2">
                                                     <div class="p-2 w-full">
