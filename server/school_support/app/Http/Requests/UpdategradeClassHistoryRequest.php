@@ -24,8 +24,9 @@ class UpdategradeClassHistoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['nullable'],
-            'child_id' => ['nullable'],
+            'user_id' => ['required'],
+            'child_ids.*' => ['required'],
+            'grade_class_id' => ['required'],
         ];
     }
 }

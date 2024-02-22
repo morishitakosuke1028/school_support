@@ -43,8 +43,11 @@ const selectedClassId2 = ref(null);
 const selectedChildren2 = ref([]);
 
 const updateGradeClassHistory = () => {
-    form.child_id = selectedChildren.value;
-    router.put(route('gradeClassHistories.update', { gradeClassHistory: form.id }), form)
+    router.post(`/gradeClassHistories/${form.id}`, {
+        user_id: form2.user_id,
+        grade_class_id: selectedClassId2,
+        child_ids: selectedChildren2,
+    });
 }
 
 const deleteGradeClassHistory = () => {

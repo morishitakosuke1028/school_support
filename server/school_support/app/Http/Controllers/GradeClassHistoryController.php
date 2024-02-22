@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class GradeClassHistoryController extends Controller
 {
@@ -81,11 +82,29 @@ class GradeClassHistoryController extends Controller
      */
     public function update(UpdategradeClassHistoryRequest $request, gradeClassHistory $gradeClassHistory)
     {
-        $gradeClassHistory->user_id = $request->user_id;
-        $gradeClassHistory->child_id = $request->child_id;
-        $gradeClassHistory->save();
-        return to_route('gradeClassHistories.index')
-        ->with([
+        $userId = $request->input('user_id');
+        // $gradeClassId = $request->input('grade_class_id');
+        $gradeClassIdInput = $request->input('grade_class_id');
+        $gradeClassId = is_array($gradeClassIdInput) && isset($gradeClassIdInput[0]) ? $gradeClassIdInput[0] : $gradeClassIdInput;
+        $gradeClassId = (int) $gradeClassId;
+        $childIds = $request->input('child_ids', []);
+
+        foreach ($childIds as $childId) {
+            $childExists = Child::where('id', $childId)->exists();
+            if ($childExists) {
+                GradeClassHistory::updateOrCreate(
+                    [
+                        'child_id' => $childId,
+                    ],
+                    [
+                        'user_id' => $userId,
+                        'grade_class_id' => $gradeClassId,
+                    ]
+                );
+            }
+        }
+
+        return to_route('gradeClassHistories.index')->with([
             'message' => '更新しました。',
             'status' => 'success',
         ]);

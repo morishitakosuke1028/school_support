@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/gradeClassHistories/index', [GradeClassHistoryController::class, 'index'])->name('gradeClassHistories.index');
     Route::get('/gradeClassHistories/{gradeClassHistory}/edit', [GradeClassHistoryController::class, 'edit'])->name('gradeClassHistories.edit');
-    Route::put('/gradeClassHistories/{gradeClassHistory}', [GradeClassHistoryController::class, 'update'])->name('gradeClassHistories.update');
+    Route::post('/gradeClassHistories/{gradeClassHistory}', [GradeClassHistoryController::class, 'update'])->name('gradeClassHistories.update');
     Route::delete('/gradeClassHistories/{gradeClassHistory}', [GradeClassHistoryController::class, 'destroy'])->name('gradeClasseHistories.destroy');
 
     Route::get('/homeworks/index', [HomeworkController::class, 'index'])->name('homeworks.index');
