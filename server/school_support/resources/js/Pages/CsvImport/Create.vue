@@ -1,6 +1,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, router } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
+const excelDownloadUrl = computed(() => `http://localhost:8000/storage/excel/import_sample.xlsx`);
 
 const storeImport = () => {
     router.post('/csvImport', form.value);
@@ -32,7 +35,7 @@ const storeImport = () => {
                                     <br>
                                     <p>サンプルエクセルデータのダウンロードは下記</p>
                                     <div class="p-2 w-full">
-                                        <a style="padding: 10px; background-color: #87cefa; border-radius: 0.3em;" href="{{ asset('storage/excel/import_sample.xlsx') }}">サンプルエクセルデータダウンロード</a>
+                                        <a style="padding: 10px; background-color: #87cefa; border-radius: 0.3em;" :href="excelDownloadUrl">サンプルエクセルデータダウンロード</a>
                                     </div>
                                 </div>
                             </div>

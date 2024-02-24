@@ -102,6 +102,7 @@ const showingNavigationDropdown = ref(false);
                                         <DropdownLink :href="route('users.index')" > 職員一覧</DropdownLink>
                                         <DropdownLink :href="route('admin.child.index')" > 園児一覧</DropdownLink>
                                         <DropdownLink :href="route('gradeClassHistories.index')" > クラス替え</DropdownLink>
+                                        <DropdownLink :href="route('csvImport.create')" > 園児情報インポート</DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>
