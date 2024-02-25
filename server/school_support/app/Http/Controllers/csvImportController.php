@@ -14,4 +14,13 @@ class csvImportController extends Controller
     {
         return Inertia::render('CsvImport/Create');
     }
+
+    public function store(StoreCsvImportRequest $request)
+    {
+        return to_route('admin.child.index')
+        ->with([
+            'message' => '送信しました。',
+            'status' => 'success',
+        ]);
+    }
 }

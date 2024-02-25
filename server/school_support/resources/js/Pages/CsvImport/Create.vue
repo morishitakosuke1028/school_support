@@ -41,7 +41,7 @@ const storeImport = () => {
                             </div>
                         </section>
                         <section class="text-gray-600 body-font relative">
-                            <form action="{{ route('admin.csvImport.store') }}" method="POST" enctype="multipart/form-data">
+                            <form @submit.prevent="storeImport">
                                 <div class="container px-5 py-8 mx-auto">
                                     <div class="lg:w-1/2 md:w-2/3 mx-auto">
                                         <div class="p-2 w-full">
