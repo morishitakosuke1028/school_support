@@ -32,19 +32,19 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-						'name' => 'required|string|max:255',
-						'kana' => 'nullable|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
-						'email' => 'required|string|email|max:255|unique:'.child::class,
-						'zip' => 'nullable|digits:7',
-						'address' => 'nullable|string|max:255',
-						'tel' => 'required|string|max:13',
-						'gender' => 'required|in:1,2',
-						'admission_date' => 'required|date_format:Y-m-d',
-						'birthday' => 'nullable|date_format:Y-m-d',
-						'pin_code' => 'required|string|max:255',
-						'session_id' => 'required|string|max:255',
-						'school_id' => 'required|string',
-						'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'name' => 'required|string|max:255',
+            'kana' => 'nullable|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
+            'email' => 'required|string|email|max:255|unique:'.child::class,
+            'zip' => 'nullable|digits:7',
+            'address' => 'nullable|string|max:255',
+            'tel' => 'required|string|max:13',
+            'gender' => 'required|in:1,2',
+            'admission_date' => 'required|date_format:Y-m-d',
+            'birthday' => 'nullable|date_format:Y-m-d',
+            'pin_code' => 'required|string|max:255',
+            'session_id' => 'required|string|max:255',
+            'school_id' => 'required|string',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = Child::create([
