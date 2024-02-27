@@ -1,12 +1,34 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, usePage, router } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { Head, router, usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
 
 const excelDownloadUrl = computed(() => `http://localhost:8000/storage/excel/import_sample.xlsx`);
 
+const selectedFile = ref(null);
+const { errors } = usePage().props;
+
+const fileSelected = (event) => {
+  selectedFile.value = event.target.files[0];
+  errors.csv_file = null;
+};
+
 const storeImport = () => {
-    router.post('/csvImport', form.value);
+  if (!selectedFile.value) {
+    errors.csv_file = "ファイルを選択してください。";
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('csv_file', selectedFile.value);
+
+  router.post('/csvImport', formData, {
+    onError: (err) => {
+      if (err.hasOwnProperty('csv_file')) {
+        errors.csv_file = err.csv_file;
+      }
+    }
+  });
 };
 </script>
 
@@ -47,23 +69,15 @@ const storeImport = () => {
                                         <div class="p-2 w-full">
                                             <div class="relative">
                                                 <label for="csv_file" class="leading-7 text-sm text-gray-600"></label>
-                                                <input type="file" name="csv_file" required>
+                                                <input type="file" name="csv_file" @change="fileSelected" required>
                                             </div>
                                         </div>
                                         <div class="p-2 w-full">
-                                            <button type="submit" class="flex mx-auto text-white bg-indigo-500 border-1 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">インポート</button>
+                                            <button type="submit" @click="fileUpload" class="flex mx-auto text-white bg-indigo-500 border-1 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">インポート</button>
                                         </div>
-                                        <!-- @if ($errors->any())
-                                            <div>
-                                                <ul>
-                                                    @foreach ($errors->all() as $error)
-                                                        <li style="color: red;">{{ $error }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        @endif -->
                                     </div>
                                 </div>
+                                <div v-if="errors.name" class="text-red-500">{{ errors.name }}</div>
                             </form>
                         </section>
                     </div>

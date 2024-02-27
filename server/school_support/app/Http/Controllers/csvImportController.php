@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCsvImportRequest;
 use Illuminate\Http\Request;
+use App\Models\Child;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Carbon\Carbon;
 
 class csvImportController extends Controller
 {
@@ -20,34 +24,55 @@ class csvImportController extends Controller
     public function store(StoreCsvImportRequest $request)
     {
         $file = $request->file('csv_file');
-        if (($handle = fopen($file->getRealPath(), 'r')) !== FALSE) {
-            $header = fgetcsv($handle);
 
-            while (($row = fgetcsv($handle)) !== FALSE) {
-                $rowData = array_combine($header, $row);
+        if (($handle = fopen($file->getRealPath(), 'r')) !== false) {
+            fgetcsv($handle);
 
-                $validator = Validator::make($rowData, [
-                    'name' => 'required|string|max:255',
-                    'kana' => 'nullable|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
-                    'email' => 'required|string|email|max:255|unique:'.child::class,
-                    'zip' => 'nullable|digits:7',
-                    'address' => 'nullable|string|max:255',
-                    'tel' => 'required|string|max:13',
-                    'gender' => 'required|in:1,2',
-                    'admission_date' => 'required|date_format:Y-m-d',
-                    'birthday' => 'nullable|date_format:Y-m-d',
-                    'pin_code' => 'required|string|max:255',
-                    'session_id' => 'required|string|max:255',
-                    'school_id' => 'required|string',
-                    'password' => ['required', 'confirmed', Rules\Password::defaults()],
-                ]);
+            while (($row = fgetcsv($handle)) !== false) {
+                if (array(null) !== $row) {
+                    $birthday = \DateTime::createFromFormat('Y/m/d', $row[5]);
+                    $admission_date = \DateTime::createFromFormat('Y/m/d', $row[6]);
 
-                if ($validator->fails()) {
-                    fclose($handle);
-                    return back()->withErrors($validator)->withInput();
+                    $birthday = $birthday ? $birthday->format('Y-m-d') : null;
+                    $admission_date = $admission_date ? $admission_date->format('Y-m-d') : null;
+                    $data = [
+                        'name' => $row[0],
+                        'kana' => $row[1],
+                        'gender' => $row[2],
+                        'zip' => $row[3],
+                        'address' => $row[4],
+                        'birthday' => $birthday,
+                        'admission_date' => $admission_date,
+                        'email' => $row[7],
+                        'tel' => $row[8],
+                        'pin_code' => $row[9],
+                        'session_id' => $row[10],
+                        'password' => Hash::make($row[11]),
+                        'school_id' => 1,
+                    ];
+
+                    $validator = Validator::make($data, [
+                        'name' => 'required|string|max:255',
+                        'kana' => 'nullable|string|max:255',
+                        'email' => 'required|string|email|max:255|unique:children,email',
+                        'zip' => 'nullable|digits:7',
+                        'address' => 'nullable|string|max:255',
+                        'tel' => 'required|string|max:13',
+                        'gender' => 'required|in:1,2',
+                        'admission_date' => 'required|date',
+                        'birthday' => 'nullable|date',
+                        'pin_code' => 'required|string|max:255',
+                        'session_id' => 'required|string|max:255',
+                        'password' => 'required|string|min:8',
+                    ]);
+
+                    if ($validator->fails()) {
+                        fclose($handle);
+                        return response()->json($validator->errors(), 422);
+                    }
+
+                    Child::create($data);
                 }
-
-                Child::create($rowData);
             }
 
             fclose($handle);
