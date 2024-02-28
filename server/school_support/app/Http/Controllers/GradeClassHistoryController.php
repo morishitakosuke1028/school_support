@@ -83,7 +83,6 @@ class GradeClassHistoryController extends Controller
     public function update(UpdategradeClassHistoryRequest $request, gradeClassHistory $gradeClassHistory)
     {
         $userId = $request->input('user_id');
-        // $gradeClassId = $request->input('grade_class_id');
         $gradeClassIdInput = $request->input('grade_class_id');
         $gradeClassId = is_array($gradeClassIdInput) && isset($gradeClassIdInput[0]) ? $gradeClassIdInput[0] : $gradeClassIdInput;
         $gradeClassId = (int) $gradeClassId;
