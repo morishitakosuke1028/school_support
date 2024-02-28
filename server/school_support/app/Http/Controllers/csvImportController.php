@@ -29,7 +29,11 @@ class csvImportController extends Controller
             fgetcsv($handle);
 
             while (($row = fgetcsv($handle)) !== false) {
-                if (array(null) !== $row) {
+                $isEmptyRow = count(array_filter($row, function($value) {
+                    return $value !== null && $value !== '';
+                })) == 0;
+
+                if (!$isEmptyRow) {
                     $birthday = \DateTime::createFromFormat('Y/m/d', $row[5]);
                     $admission_date = \DateTime::createFromFormat('Y/m/d', $row[6]);
 
