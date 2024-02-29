@@ -25,12 +25,12 @@ class UpdateEventRequest extends FormRequest
     {
         return [
             'grade_class_id' => ['required', 'integer'],
-            'start_datetime' => ['nullable'],
-            'end_datetime' => ['nullable'],
-            'title' => ['nullable', 'string'],
-            'place' => ['nullable', 'string'],
-            'personal_effect' => ['nullable', 'string'],
-            'content' => ['nullable', 'string'],
+            'start_datetime' => ['required'],
+            'end_datetime' => ['required'],
+            'title' => ['required', 'string'],
+            'place' => ['required', 'string'],
+            'personal_effect' => ['required', 'string'],
+            'content' => ['required', 'string'],
         ];
     }
 }

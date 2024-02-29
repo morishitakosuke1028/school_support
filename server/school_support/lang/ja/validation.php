@@ -156,6 +156,12 @@ return [
     'attributes' => [
         'grade_name' => '学年名',
         'class_name' => 'クラス名',
+        'start_datetime' => '開始日時',
+        'end_datetime' => '終了日時',
+        'title' => 'タイトル',
+        'place' => '開催場所',
+        'personal_effect' => '持ち物',
+        'content' => '行事内容',
     ],
 
 ];
