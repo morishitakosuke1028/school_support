@@ -153,6 +153,9 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'grade_name' => '学年名',
+        'class_name' => 'クラス名',
+    ],
 
 ];
