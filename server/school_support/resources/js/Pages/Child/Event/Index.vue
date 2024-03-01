@@ -86,7 +86,7 @@ const findGradeClassNameById = (gradeClassId) => {
             </div>
             <div class="grid grid-cols-7 gap-4 text-center">
                 <div class="font-bold" v-for="day in days" :key="day">{{ day }}</div>
-                <div v-for="day in getDaysInMonth(selectedYear, selectedMonth)" :key="day" class="py-8 bg-gray-100 rounded shadow cursor-pointer hover:bg-blue-200" @click="handleDayClick(day)">
+                <div v-for="day in getDaysInMonth(selectedYear, selectedMonth)" :key="day" class="py-8 bg-white rounded shadow cursor-pointer hover:bg-blue-200" @click="handleDayClick(day)">
                     {{ day }}
                     <div v-for="event in events" :key="event.id">
                         <Link :href="`/child/events/show/${event.id}`" class="cursor-pointer hover:bg-blue-200">
