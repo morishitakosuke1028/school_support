@@ -20,18 +20,11 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="w-10 h-10 shrink-0 flex items-center">
-                                <Link :href="route('child.dashboard')">
+                                <Link :href="route('child.daily.create')">
                                     <ApplicationLogo
                                         class="block h-9 w-auto fill-current text-gray-800"
                                     />
                                 </Link>
-                            </div>
-
-                            <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('child.dashboard')" :active="route().current('child.dashboard')">
-                                    Dashboard
-                                </NavLink>
                             </div>
                         </div>
 
@@ -132,8 +125,8 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('child.dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                        <ResponsiveNavLink :href="route('child.daily.create')" :active="route().current('child.daily.create')">
+                            出欠申請
                         </ResponsiveNavLink>
                     </div>
 
@@ -147,7 +140,6 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('child.daily.create')" > 出欠申請</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('child.homework.index')" > 宿題</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('child.events.index')" > 行事</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('child.contacts.create')" > 連絡帳</ResponsiveNavLink>

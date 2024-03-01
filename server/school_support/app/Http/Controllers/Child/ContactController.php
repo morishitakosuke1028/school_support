@@ -54,9 +54,9 @@ class ContactController extends Controller
             'content' => $request->content,
         ]);
 
-        return to_route('child.dashboard')
+        return to_route('child.daily.create')
         ->with([
-            'message' => '送信しました。',
+            'message' => '連絡帳を送信しました。',
             'status' => 'success',
         ]);
     }
