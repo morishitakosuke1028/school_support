@@ -142,7 +142,7 @@ const showingNavigationDropdown = ref(false);
                                                 type="button"
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                @TODOドロップダウン
+                                                {{ $page.props.auth.user.name }}
 
                                                 <svg
                                                     class="ml-2 -mr-0.5 h-4 w-4"
@@ -161,7 +161,7 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
+                                        <DropdownLink :href="route('profile.edit')"> アカウント情報 </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             ログアウト
                                         </DropdownLink>
@@ -222,7 +222,7 @@ const showingNavigationDropdown = ref(false);
                             <ResponsiveNavLink :href="route('admin.child.register')"> 園児登録</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('users.index')" > 職員一覧</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('admin.child.index')" > 園児一覧</ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('profile.edit')">アカウント情報</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 ログアウト
                             </ResponsiveNavLink>
