@@ -25,7 +25,7 @@ class StoreChildDailyRequest extends FormRequest
     {
         return [
             'child_id' => ['required', 'integer'],
-            'attendance_status' => ['nullable', 'integer'],
+            'attendance_status' => ['required', 'integer'],
             'absence_reason' => ['nullable', 'string'],
             'start_time' => ['nullable', 'date_format:Y-m-d H:i'],
             'end_time' => ['nullable', 'date_format:Y-m-d H:i'],

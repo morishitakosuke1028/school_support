@@ -175,6 +175,12 @@ return [
         'admission_date' => '入学日',
         'movein_date' => '転校日',
         'graduation_date' => '卒業日',
+        'attendance_status' => '出欠の種類',
+        'date' => '日付',
+        'parent_memo' => '備考',
+        'start_time' => '登校時間',
+        'end_time' => '下校時間',
+        'absence_reason' => '欠席理由',
     ],
 
 ];
