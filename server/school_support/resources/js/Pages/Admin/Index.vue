@@ -44,7 +44,7 @@ const props = defineProps({
                                                 <span v-if="currentUserRole">
                                                     <td class="px-4 py-3">
                                                         <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('users.edit', { user: user.id })">
-                                                            編集する
+                                                            編集
                                                         </Link>
                                                     </td>
                                                 </span>

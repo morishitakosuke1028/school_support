@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'kana' => 'nullable|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
+            'kana' => 'required|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
             'email' => 'required|string|email|max:255|unique:'.child::class,
             'zip' => 'nullable|digits:7',
             'address' => 'nullable|string|max:255',

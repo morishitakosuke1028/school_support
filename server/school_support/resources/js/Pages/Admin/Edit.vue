@@ -1,9 +1,10 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { reactive } from 'vue';
 
 const props = defineProps({
+    errors: Object,
     user: Object
 })
 const form = reactive({
@@ -43,35 +44,44 @@ const updateUser = id => {
                                             <div class="p-2 w-full">
                                                 <div class="relative">
                                                     <label for="name" class="leading-7 text-sm text-gray-600">職員名</label>
+                                                    <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                     <input type="text" id="name" name="name" v-model="form.name" class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                                 </div>
+                                                <div v-if="errors.name" class="mt-3 text-red-500 text-xs">{{ errors.name }}</div>
                                             </div>
                                             <div class="p-2 w-full">
                                                 <div class="relative">
                                                     <label for="kana" class="leading-7 text-sm text-gray-600">かな</label>
+                                                    <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                     <input type="text" id="kana" name="kana" v-model="form.kana" class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                                 </div>
+                                                <div v-if="errors.kana" class="mt-3 text-red-500 text-xs">{{ errors.kana }}</div>
                                             </div>
                                             <div class="p-2 w-full">
                                                 <div class="relative">
                                                     <label for="email" class="leading-7 text-sm text-gray-600">メールアドレス</label>
+                                                    <span class="font-medium text-sm text-red-700">　(必須)(重複不可)</span>
                                                     <input type="text" id="email" name="email" v-model="form.email" class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                                 </div>
+                                                <div v-if="errors.email" class="mt-3 text-red-500 text-xs">{{ errors.email }}</div>
                                             </div>
                                             <div class="p-2 w-full">
                                                 <div class="relative">
                                                     <label for="tel" class="leading-7 text-sm text-gray-600">電話番号</label>
+                                                    <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                     <input type="text" id="tel" name="tel" v-model="form.tel" class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                                 </div>
                                             </div>
                                             <div class="p-2 w-full">
                                                 <div class="relative">
-                                                    <label for="role_admin" class="leading-7 text-sm text-gray-600 mr-4">権限</label><br>
+                                                    <label for="role_admin" class="leading-7 text-sm text-gray-600 mr-4">権限</label>
+                                                    <span class="font-medium text-sm text-red-700">　(必須)</span><br>
                                                     <input type="radio" id="role_admin" name="role" v-model="form.role" value="1" />
                                                     <label class="ml-2 mr-4">編集者</label>
                                                     <input type="radio" id="role_admin_viewer" name="role" v-model="form.role" value="2" />
                                                     <label class="ml-2 mr-4">閲覧者</label>
                                                 </div>
+                                                <div v-if="errors.role" class="mt-3 text-red-500 text-xs">{{ errors.role }}</div>
                                             </div>
                                             <div class="p-2 w-full">
                                                 <div class="relative">
@@ -82,8 +92,10 @@ const updateUser = id => {
                                             <div class="p-2 w-full">
                                                 <div class="relative">
                                                     <label for="session_id" class="leading-7 text-sm text-gray-600">認証 ID</label>
+                                                    <span class="font-medium text-sm text-red-700">　(必須)(重複不可)</span>
                                                     <input type="text" id="session_id" name="session_id" v-model="form.session_id" class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                                 </div>
+                                                <div v-if="errors.session_id" class="mt-3 text-red-500 text-xs">{{ errors.session_id }}</div>
                                             </div>
                                             <div class="p-2 w-full">
                                                 <button class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">更新する</button>
