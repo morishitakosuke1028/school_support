@@ -161,7 +161,7 @@ return [
         'title' => 'タイトル',
         'place' => '開催場所',
         'personal_effect' => '持ち物',
-        'content' => '行事内容',
+        'content' => '内容',
         'name' => '氏名',
         'kana' => 'かな',
         'email' => 'メールアドレス',

@@ -3,6 +3,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
+defineProps({
+    errors: Object
+})
+
 const { child, currentUser, contacts, currentUserName, currentUserRole } = usePage().props;
 
 const form = ref({
@@ -128,6 +132,7 @@ const deleteContact = id => {
                                                     <label for="content" class="leading-7 text-sm text-gray-600"></label>
                                                     <textarea id="content" name="content" v-model="form.content" class="w-full bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"></textarea>
                                                 </div>
+                                                <div v-if="errors.content" class="mt-3 text-red-500 text-xs">{{ errors.content }}</div>
                                             </div>
                                             <div class="p-2 w-full">
                                                 <button class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">送信</button>
