@@ -11,7 +11,6 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CsvImportController;
 use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProfileController as ProfileOfChildController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -92,12 +91,12 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('child')->name('child.')->group(function(){
 
-	Route::middleware('auth:child')->group(function () {
-        Route::get('/profile', [ProfileOfChildController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileOfChildController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileOfChildController::class, 'destroy'])->name('profile.destroy');
+	// Route::middleware('auth:child')->group(function () {
+    //     Route::get('/profile', [ProfileOfChildController::class, 'edit'])->name('profile.edit');
+    //     Route::patch('/profile', [ProfileOfChildController::class, 'update'])->name('profile.update');
+    //     Route::delete('/profile', [ProfileOfChildController::class, 'destroy'])->name('profile.destroy');
 
-    });
+    // });
 	require __DIR__.'/child.php';
 });
 
