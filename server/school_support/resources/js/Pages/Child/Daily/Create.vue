@@ -7,9 +7,11 @@ import FlashMessage from '@/Components/FlashMessage.vue';
 const props = defineProps({
     errors: Object,
     childId: Number,
+    child: Object
 });
 
 const form = reactive({
+    child: props.child,
     child_id: props.childId,
     attendance_status: null,
     absence_reason: null,
@@ -73,6 +75,7 @@ const storeDaily = () => {
                     <div class="p-6 bg-white border-b border-gray-200">
                         <section class="text-gray-600 body-font relative">
                             <form @submit.prevent="storeDaily">
+                                <input type="text" id="child" name="child" v-model="form.child" required="required" />
                                 <input type="hidden" id="child_id" name="child_id" v-model="form.child_id" required="required" />
                                 <input type="hidden" id="entry_method" name="entry_method" v-model="form.entry_method" />
                                 <input type="hidden" id="update_method" name="update_method" v-model="form.update_method" />

@@ -12,8 +12,10 @@ class ChildController extends Controller
 {
     public function index()
     {
-        $child = Child::find(Auth::guard('child')->id());
+        $user = Child::find(Auth::guard('children')->id());
 
-        return view('child.daily.create', compact('child'));
+        return Inertia::render('Child/Daily/Create', [
+            'user' => $user
+        ]);
     }
 }

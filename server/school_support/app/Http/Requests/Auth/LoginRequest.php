@@ -41,7 +41,11 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-				$this->is('child/*') ? $guard = 'child' : $guard = 'web';
+        if ($this->routeIs('child.*')) {
+            $guard = 'children';
+        } else {
+            $guard = 'web';
+        }
 
         if (! Auth::guard($guard)->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());

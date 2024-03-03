@@ -19,8 +19,8 @@ const form = useForm({
     movein_date: '', //@TODO登録時はいらない
     graduation_date: '', //@TODO登録時はいらない
     pin_code: '',
-	  flg_del: '0',
-	  session_id: '',
+    flg_del: '0',
+    session_id: '',
     email: '',
     school_id: '1',
     password: '',

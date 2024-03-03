@@ -14,10 +14,10 @@ use App\Http\Controllers\Child\HomeworkController;
 use App\Http\Controllers\Child\DailyController;
 use App\Http\Controllers\Child\EventController;
 use App\Http\Controllers\Child\ContactController;
-use App\Http\Controllers\ProfileOfChildController;
+use App\Http\Controllers\Child\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest:child')->group(function () {
+Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');
 
@@ -36,7 +36,7 @@ Route::middleware('guest:child')->group(function () {
                 ->name('password.store');
 });
 
-Route::middleware('auth:child')->group(function () {
+Route::middleware('auth:children')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 
@@ -69,7 +69,7 @@ Route::middleware('auth:child')->group(function () {
     Route::get('contacts/create', [ContactController::class, 'create'])->name('contacts.create');
     Route::post('contacts/', [ContactController::class, 'store'])->name('contacts.store');
 
-    Route::get('/profile', [ProfileOfChildController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileOfChildController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileOfChildController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });

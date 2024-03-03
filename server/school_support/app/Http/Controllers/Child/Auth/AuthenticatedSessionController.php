@@ -16,10 +16,10 @@ class AuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
-     */		
+     */
     public function create()
     {
-			return Inertia::render('Child/Auth/Login', [
+        return Inertia::render('Child/Auth/Login', [
         'canResetPassword' => Route::has('password.request'),
         'status' => session('status'),
     	]);
@@ -44,7 +44,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
-        Auth::guard('child')->logout();
+        Auth::guard('children')->logout();
 
         $request->session()->invalidate();
 
