@@ -77,6 +77,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/child/{child}/edit', [ChildController::class, 'edit'])->name('admin.child.edit');
     Route::put('/admin/child/{child}', [ChildController::class, 'update'])->name('admin.child.update');
 });
+Route::prefix('child')->name('child.')->group(function(){
+    Route::get('/dashboard', function () {
+        return Inertia::render('Child/Dashboard');
+    })->middleware(['auth:children', 'verified'])->name('dashboard');
+    require __DIR__.'/child.php';
+});
 
-require __DIR__.'/child.php';
 require __DIR__.'/auth.php';

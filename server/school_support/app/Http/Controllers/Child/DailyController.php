@@ -19,11 +19,9 @@ class DailyController extends Controller
     public function create()
     {
         $childId = Auth::id();
-        $child = Auth::user();
 
         return Inertia::render('Child/Daily/Create', [
             'childId' => $childId,
-            'child' => $child
         ]);
     }
 

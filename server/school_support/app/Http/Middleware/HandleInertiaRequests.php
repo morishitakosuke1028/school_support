@@ -30,6 +30,19 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $guard = null;
+        foreach (array_keys(config('auth.guards')) as $guardName) {
+            if ($request->user($guardName)) {
+                $guard = $guardName;
+                break;
+            }
+        }
+
+        $user = $guard ? $request->user($guard) : null;
+        if (is_null($user)) {
+            $user = $request->user('children');
+        }
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
