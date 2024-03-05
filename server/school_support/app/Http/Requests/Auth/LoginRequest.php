@@ -42,7 +42,7 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         if ($this->routeIs('child.*')) {
-            $guard = 'children';
+            $guard = 'child';
         } else {
             $guard = 'web';
         }

@@ -8,6 +8,7 @@ use App\Http\Requests\StoreChildDailyRequest;
 use Inertia\Inertia;
 use App\Models\Daily;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class DailyController extends Controller
 {

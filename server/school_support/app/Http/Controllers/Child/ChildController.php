@@ -12,7 +12,7 @@ class ChildController extends Controller
 {
     public function index()
     {
-        $user = Child::find(Auth::guard('children')->id());
+        $user = Child::find(Auth::guard('child')->id());
 
         return Inertia::render('Child/Daily/Create', [
             'user' => $user
