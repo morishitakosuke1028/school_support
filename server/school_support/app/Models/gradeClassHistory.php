@@ -20,16 +20,16 @@ class gradeClassHistory extends Model
 
     public function child()
     {
-        return $this->belongsTo(Child::class);
+        return $this->belongsTo(Child::class, 'child_id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function gradeClass()
     {
-        return $this->belongsTo(GradeClass::class);
+        return $this->belongsTo(GradeClass::class, 'grade_class_id');
     }
 }

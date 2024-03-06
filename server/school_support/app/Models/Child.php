@@ -55,14 +55,19 @@ class Child extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function gradeClassHistories()
-    {
-        return $this->hasMany(GradeClassHistory::class);
-    }
+    // public function gradeClassHistories()
+    // {
+    //     return $this->hasMany(GradeClassHistory::class);
+    // }
+
+    // public function gradeClass()
+    // {
+    //     return $this->belongsTo(GradeClass::class);
+    // }
 
     public function gradeClass()
     {
-        return $this->belongsTo(GradeClass::class);
+        return $this->belongsToMany(GradeClass::class, 'grade_class_histories', 'child_id', 'grade_class_id');
     }
 
     public function dailies()

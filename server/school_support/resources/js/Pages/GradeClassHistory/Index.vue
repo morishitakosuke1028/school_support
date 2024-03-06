@@ -2,10 +2,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import { ref, onMounted } from 'vue';
-import dayjs from 'dayjs';
+import { defineProps } from 'vue';
 
-defineProps({
+const props = defineProps({
     gradeClassHistories: Array,
     gradeClasses: Array,
     children: Array,
@@ -40,31 +39,29 @@ defineProps({
                                                 <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">学年</th>
                                                 <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">クラス</th>
                                                 <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">担任</th>
-                                                <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">更新日</th>
                                             </tr>
                                         </thead>
-                                        <tbody v-for="history in gradeClassHistories" :key="history.id">
-                                            <tr>
-                                                <span v-if="currentUserRole">
+                                            <tbody>
+                                                <tr v-for="gradeClass in gradeClassHistories" :key="gradeClass.id">
                                                     <td class="px-4 py-3">
-                                                        <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('gradeClassHistories.edit', { gradeClassHistory: history.id })">
-                                                            編集
+                                                    <template v-if="currentUserRole">
+                                                        <Link as="button" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" :href="route('gradeClassHistories.edit', { gradeClassHistory: gradeClass.grade_class_id })">
+                                                        編集
                                                         </Link>
-                                                    </td>
-                                                </span>
-                                                <span v-else>
-                                                    <td class="px-4 py-3">
-                                                        <span as="button" class="flex mx-auto text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
-                                                            編集
+                                                    </template>
+                                                    <template v-else>
+                                                        <span class="flex mx-auto text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
+                                                        編集
                                                         </span>
+                                                    </template>
                                                     </td>
-                                                </span>
-                                                <td class="px-4 py-3">{{ history.grade_class.grade_name }}</td>
-                                                <td class="px-4 py-3">{{ history.grade_class.class_name }}</td>
-                                                <td class="px-4 py-3">{{ history.user ? history.user.name : ' ' }}</td>
-                                                <td class="px-4 py-3">{{ dayjs(history.updated_at).format('YYYY-MM-DD HH:mm:ss') }}</td>
-                                            </tr>
-                                        </tbody>
+                                                    <td class="px-4 py-3">{{ gradeClass.grade_name }}</td>
+                                                    <td class="px-4 py-3">{{ gradeClass.class_name }}</td>
+                                                    <td class="px-4 py-3">
+                                                    {{ gradeClass.user_name }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
                                     </table>
                                 </div>
                             </div>

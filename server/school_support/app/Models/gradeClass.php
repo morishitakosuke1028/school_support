@@ -16,8 +16,23 @@ class gradeClass extends Model
         'school_id',
     ];
 
+    // public function gradeClassHistories()
+    // {
+    //     return $this->hasOne(GradeClassHistory::class);
+    // }
+
+    public function child()
+    {
+        return $this->belongsToMany(Child::class, 'grade_class_histories', 'grade_class_id', 'child_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function gradeClassHistories()
     {
-        return $this->hasOne(GradeClassHistory::class);
+        return $this->hasMany(GradeClassHistory::class);
     }
 }

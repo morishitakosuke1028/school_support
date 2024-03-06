@@ -49,8 +49,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function gradeClassHistories()
-    {
-        return $this->hasOne(GradeClassHistory::class);
-    }
+    // public function gradeClassHistories()
+    // {
+    //     return $this->hasOne(GradeClassHistory::class);
+    // }
+
+    // public function gradeClass()
+    // {
+    //     return $this->hasMany(GradeClass::class);
+    // }
 }
