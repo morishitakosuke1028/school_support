@@ -94,22 +94,33 @@ class GradeClassHistoryController extends Controller
      */
     public function update(UpdategradeClassHistoryRequest $request, gradeClassHistory $gradeClassHistory)
     {
+        Log::info('UpdateGradeClassHistoryRequest', $request->all());
         $userId = $request->input('user_id');
-        $gradeClassIdInput = $request->input('grade_class_id');
-        $gradeClassId = is_array($gradeClassIdInput) && isset($gradeClassIdInput[0]) ? $gradeClassIdInput[0] : $gradeClassIdInput;
-        $gradeClassId = (int) $gradeClassId;
-        $childIds = $request->input('child_ids', []);
+        $gradeClassId = $request->input('grade_class_id._value') ?? $request->input('grade_class_id');
+        $childIds = $request->input('child_ids._value') ?? $request->input('child_ids', []);
+
+        $nullRecords = GradeClassHistory::where('grade_class_id', $gradeClassId)
+            ->whereNull('child_id')
+            ->whereNull('user_id')
+            ->first();
+
+        if ($nullRecords) {
+            $childIdToUpdate = array_shift($childIds);
+            $nullRecords->update([
+                'user_id' => $userId,
+                'child_id' => $childIdToUpdate,
+            ]);
+        }
 
         foreach ($childIds as $childId) {
-            $childExists = Child::where('id', $childId)->exists();
-            if ($childExists) {
+            if (Child::where('id', $childId)->exists()) {
                 GradeClassHistory::updateOrCreate(
                     [
                         'child_id' => $childId,
+                        'grade_class_id' => $gradeClassId,
                     ],
                     [
                         'user_id' => $userId,
-                        'grade_class_id' => $gradeClassId,
                     ]
                 );
             }
