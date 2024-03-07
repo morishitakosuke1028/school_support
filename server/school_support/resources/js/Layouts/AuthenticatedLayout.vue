@@ -91,11 +91,11 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <DropdownLink :href="route('register')"> 職員登録</DropdownLink>
-                                        <DropdownLink :href="route('admin.child.register')"> 園児登録</DropdownLink>
+                                        <DropdownLink :href="route('admin.child.register')"> 生徒登録</DropdownLink>
                                         <DropdownLink :href="route('users.index')" > 職員一覧</DropdownLink>
-                                        <DropdownLink :href="route('admin.child.index')" > 園児一覧</DropdownLink>
+                                        <DropdownLink :href="route('admin.child.index')" > 生徒一覧</DropdownLink>
                                         <DropdownLink :href="route('gradeClassHistories.index')" > クラス替え</DropdownLink>
-                                        <DropdownLink :href="route('csvImport.create')" > 園児情報インポート</DropdownLink>
+                                        <DropdownLink :href="route('csvImport.create')" > 生徒情報インポート</DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>
@@ -219,9 +219,9 @@ const showingNavigationDropdown = ref(false);
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('register')"> 職員登録</ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('admin.child.register')"> 園児登録</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('admin.child.register')"> 生徒登録</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('users.index')" > 職員一覧</ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('admin.child.index')" > 園児一覧</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('admin.child.index')" > 生徒一覧</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')">アカウント情報</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 ログアウト

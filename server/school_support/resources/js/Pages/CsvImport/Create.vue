@@ -33,12 +33,12 @@ const storeImport = () => {
 </script>
 
 <template>
-    <Head title="連絡" />
+    <Head title="生徒情報インポート" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                連絡
+                生徒情報インポート
             </h2>
         </template>
 
