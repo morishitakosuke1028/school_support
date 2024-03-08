@@ -124,14 +124,14 @@ const moveToRight = () => {
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <section class="text-gray-600 body-font relative flex-auto">
 
                             <form @submit.prevent="updateGradeClassHistory(form.id)">
                                 <div class="container px-5 py-8 mx-auto">
-                                    <div class="lg:w-1/2 md:w-2/3 mx-auto">
+                                    <div class="mx-auto">
                                         <div>
                                             <div class="flex justify-between mt-8">
                                                 <div class="p-2">
@@ -160,7 +160,7 @@ const moveToRight = () => {
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div v-if="selectedClassId === null">
                                                             <!-- 学年クラスに所属していない生徒一覧 -->
-                                                            <select multiple style="height: 20em; width: 12em;" id="classSelector" v-model="selectedChildren">
+                                                            <select multiple style="height: 30em; width: 30em;" id="classSelector" v-model="selectedChildren">
                                                                 <option v-for="child in childrenNotInGradeClassArray" :key="child.id" :value="child.id">
                                                                     <span v-if="!child.hidden">
                                                                         {{ child.name }}
@@ -170,7 +170,7 @@ const moveToRight = () => {
                                                         </div>
                                                         <div v-else>
                                                             <!-- 選択された学年クラス毎の生徒一覧 -->
-                                                            <select multiple style="height: 20em; width: 12em;" id="classSelector" v-model="selectedChildren">
+                                                            <select multiple style="height: 30em; width: 30em;" id="classSelector" v-model="selectedChildren">
                                                                 <option v-for="childId in selectedChildren" :value="childId">
                                                                     {{ getChildName(childId) }}
                                                                 </option>
@@ -207,7 +207,7 @@ const moveToRight = () => {
                                                         <span class="font-medium text-sm text-red-700">　(必須)</span>
                                                         <div v-if="selectedClassId2 !== null">
                                                             <!-- 選択された学年クラス毎の生徒一覧 -->
-                                                            <select multiple style="height: 20em; width: 12em;" id="classSelector" v-model="selectedChildren2">
+                                                            <select multiple style="height: 30em; width: 30em;" id="classSelector" v-model="selectedChildren2">
                                                                 <option v-for="childId in selectedChildren2" :value="childId">
                                                                     {{ getChildName2(childId) }}
                                                                 </option>

@@ -92,7 +92,7 @@ const submitData = () => {
             </div>
         </div>
         <div>
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <section class="text-gray-600 body-font">
@@ -141,10 +141,10 @@ const submitData = () => {
                                                     <input type="time" v-model="child.daily.end_time" class="border border-gray-300" />
                                                 </td>
                                                 <td class="border px-4 py-2 border-gray-300">
-                                                    <textarea id="admin_memo" name="admin_memo" v-model="child.daily.admin_memo" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+                                                    <textarea id="admin_memo" name="admin_memo" v-model="child.daily.admin_memo" class="w-full bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
                                                 </td>
                                                 <td class="border px-4 py-2 border-gray-300">
-                                                    <textarea id="parent_memo" name="parent_memo" v-model="child.daily.parent_memo" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+                                                    <textarea id="parent_memo" name="parent_memo" v-model="child.daily.parent_memo" class="w-full bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
                                                 </td>
                                             </tr>
                                         </tbody>

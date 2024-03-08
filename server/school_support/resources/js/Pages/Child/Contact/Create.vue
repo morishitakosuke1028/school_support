@@ -24,8 +24,10 @@ const storeContact = () => {
 <style>
 .contact-note {
   width: 100%;
-  max-width: 600px;
+  max-width: 350px;
+  overflow-x: auto;
   margin: auto;
+  padding-bottom: 3em;
   border-collapse: collapse;
 }
 

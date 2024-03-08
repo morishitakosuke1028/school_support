@@ -138,19 +138,19 @@ const isSaturday = (date) => date.getDay() === 6;
                     <div class="p-6 bg-white border-b border-gray-200">
                         <section class="text-gray-600 body-font relative">
                             <div class="date-selector my-5">
-                                <span>対象の年月：　</span>
+                                <span class="text-xs ">対象の年月：　</span>
                                 <select v-model="calendarData.year">
                                 <option v-for="year in getYearsRange" :key="year" :value="year">{{ year }}</option>
                                 </select>
-                                <span class="mx-3">年 </span>
+                                <span class="mx-3 text-xs">年 </span>
                                 <select v-model="calendarData.month">
                                 <option v-for="(monthName, index) in monthNames" :key="index" :value="index">{{ monthName }}</option>
                                 </select>
-                                <span class="mx-3">月</span>
+                                <span class="mx-3 text-xs">月</span>
                             </div>
-                            <h3 class="text-lg font-semibold mb-5">{{ displayedMonth }}</h3>
+                            <h3 class="text-xs font-semibold mb-5">{{ displayedMonth }}</h3>
                             <table class="homework-table" :key="`${calendarData.year}-${calendarData.month}`">
-                                <thead>
+                                <thead class="text-xs">
                                     <tr>
                                     <th>日付</th>
                                     <th>音読</th>
@@ -161,7 +161,7 @@ const isSaturday = (date) => date.getDay() === 6;
                                     <th>その他</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="text-xs">
                                     <tr v-for="day in calendarDays" :key="day.getDate()">
                                         <td :class="{ 'sunday': isSunday(day), 'saturday': isSaturday(day), 'holiday': holidayJp.isHoliday(day) }">
                                             {{ day.getDate() }}日 ({{ getDayWithHoliday(day) }})

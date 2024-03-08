@@ -29,8 +29,10 @@ const deleteContact = id => {
 <style>
 .contact-note {
   width: 100%;
-  max-width: 600px;
+  max-width: 70em;
+  overflow-x: auto;
   margin: auto;
+  padding-bottom: 3em;
   border-collapse: collapse;
 }
 
@@ -117,7 +119,7 @@ const deleteContact = id => {
             </div>
         </section>
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <section class="text-gray-600 body-font relative">
@@ -125,7 +127,7 @@ const deleteContact = id => {
                                 <input type="hidden" id="sender" name="sender" v-model="currentUserName">
                                 <input type="hidden" id="child_id" name="child_id" v-model="child.id">
                                 <div class="container px-5 py-8 mx-auto">
-                                    <div class="lg:w-1/2 md:w-2/3 mx-auto">
+                                    <div class="mx-auto">
                                         <div class="flex flex-wrap -m-2">
                                             <div class="p-2 w-full">
                                                 <div class="relative">
