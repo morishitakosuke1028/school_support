@@ -19,15 +19,13 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
-				if (Auth::guard('child')->check()) {
-					return redirect('/child'.RouteServiceProvider::CHILD_HOME);
-				}
-
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-								if($guard == 'child') return redirect(RouteServiceProvider::CHILD_HOME);
+                if (($guard === 'child') && $request->routeIs('child.*')) {
+                    return redirect(RouteServiceProvider::CHILD_HOME);
+                }
                 return redirect(RouteServiceProvider::HOME);
             }
         }

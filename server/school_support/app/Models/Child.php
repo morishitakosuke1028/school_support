@@ -19,21 +19,21 @@ class Child extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-			'name',
-			'kana',
-			'email',
-			'zip',
-			'address',
-			'tel',
-			'gender',
-			'admission_date',
-			'movein_date',
-			'graduation_date',
-			'birthday',
-			'pin_code',
-			'session_id',
-			'school_id',
-			'password',
+        'name',
+        'kana',
+        'email',
+        'zip',
+        'address',
+        'tel',
+        'gender',
+        'admission_date',
+        'movein_date',
+        'graduation_date',
+        'birthday',
+        'pin_code',
+        'session_id',
+        'school_id',
+        'password',
     ];
 
     /**
@@ -62,7 +62,7 @@ class Child extends Authenticatable
 
     public function gradeClass()
     {
-        return $this->belongsTo(GradeClass::class);
+        return $this->belongsToMany(GradeClass::class, 'grade_class_histories', 'child_id', 'grade_class_id');
     }
 
     public function dailies()

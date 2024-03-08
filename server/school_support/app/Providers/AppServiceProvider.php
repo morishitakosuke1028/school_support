@@ -23,8 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-			if (request()->is('child/*')) {
-        config(['session.cookie' => config('session.cookie_child')]);
+        if (request()->is('child.*')) {
+            config(['session.cookie' => config('session.cookie_child')]);
     	}
     }
 }

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class GradeClassHistoryController extends Controller
@@ -23,15 +24,24 @@ class GradeClassHistoryController extends Controller
      */
     public function index()
     {
-        $gradeClassHistories = GradeClassHistory::with(['gradeClass' => function ($query) {
-            $query->select('id', 'class_name', 'grade_name');
-        }, 'user' => function ($query) {
-            $query->select('id', 'name');
-        }])
-        ->select('id', 'grade_class_id', 'user_id')
-        ->get();
+        $gradeClasses = GradeClass::with('user')->get();
 
-        $gradeClasses = GradeClass::all();
+        $gradeClassHistories = GradeClassHistory::with(['gradeClass', 'child', 'user'])
+            ->get()
+            ->map(function ($history) {
+                return [
+                    'grade_class_id' => $history->gradeClass->id,
+                    'grade_name' => $history->gradeClass->grade_name,
+                    'class_name' => $history->gradeClass->class_name,
+                    'user_name' => $history->user?->name ?? '',
+                ];
+            })
+            ->groupBy('grade_class_id')
+            ->map(function ($group) {
+                return $group->first();
+            })
+            ->values();
+
         $children = Child::all();
         $users = User::all();
 
@@ -50,12 +60,14 @@ class GradeClassHistoryController extends Controller
      * @param  \App\Models\gradeClassHistory  $gradeClassHistory
      * @return \Illuminate\Http\Response
      */
-    public function edit(gradeClassHistory $gradeClassHistory)
+    // public function edit(gradeClassHistory $gradeClassHistory)
+    public function edit($grade_class_id)
     {
         $children = Child::all();
         $users = User::all();
         $gradeClasses = gradeClass::all();
         $gradeClassHistories = gradeClassHistory::all();
+        $gradeClassHistory = GradeClassHistory::where('grade_class_id', $grade_class_id)->firstOrFail();
         $childrenInGradeClass = gradeClassHistory::pluck('child_id')->flatten()->unique()->toArray();
 
         $childrenNotInGradeClass = $children->reject(function ($child) use ($childrenInGradeClass) {
@@ -82,22 +94,33 @@ class GradeClassHistoryController extends Controller
      */
     public function update(UpdategradeClassHistoryRequest $request, gradeClassHistory $gradeClassHistory)
     {
+        Log::info('UpdateGradeClassHistoryRequest', $request->all());
         $userId = $request->input('user_id');
-        $gradeClassIdInput = $request->input('grade_class_id');
-        $gradeClassId = is_array($gradeClassIdInput) && isset($gradeClassIdInput[0]) ? $gradeClassIdInput[0] : $gradeClassIdInput;
-        $gradeClassId = (int) $gradeClassId;
-        $childIds = $request->input('child_ids', []);
+        $gradeClassId = $request->input('grade_class_id._value') ?? $request->input('grade_class_id');
+        $childIds = $request->input('child_ids._value') ?? $request->input('child_ids', []);
+
+        $nullRecords = GradeClassHistory::where('grade_class_id', $gradeClassId)
+            ->whereNull('child_id')
+            ->whereNull('user_id')
+            ->first();
+
+        if ($nullRecords) {
+            $childIdToUpdate = array_shift($childIds);
+            $nullRecords->update([
+                'user_id' => $userId,
+                'child_id' => $childIdToUpdate,
+            ]);
+        }
 
         foreach ($childIds as $childId) {
-            $childExists = Child::where('id', $childId)->exists();
-            if ($childExists) {
+            if (Child::where('id', $childId)->exists()) {
                 GradeClassHistory::updateOrCreate(
                     [
                         'child_id' => $childId,
+                        'grade_class_id' => $gradeClassId,
                     ],
                     [
                         'user_id' => $userId,
-                        'grade_class_id' => $gradeClassId,
                     ]
                 );
             }

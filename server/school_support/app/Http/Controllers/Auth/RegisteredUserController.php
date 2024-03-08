@@ -33,9 +33,9 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'kana' => 'nullable|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
+            'kana' => 'required|string|max:255|regex:/^[\p{Hiragana}\s]+$/u',
             'email' => 'required|string|email|max:255|unique:'.User::class,
-            'tel' => 'nullable|string|max:13',
+            'tel' => 'required|string|max:13',
             'role' => 'required|in:1,2',
             'retirement_date' => 'nullable|date_format:Y-m-d',
             'session_id' => 'required|string|max:255',

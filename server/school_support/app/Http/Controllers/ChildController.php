@@ -9,6 +9,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\UpdateChildRequest;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 
 class ChildController extends Controller
@@ -30,9 +31,8 @@ class ChildController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateChildRequest $request, Child $child)
     {
-        $child = Child::findOrFail($id);
         $child->name = $request->name;
         $child->kana = $request->kana;
         $child->gender = $request->gender;

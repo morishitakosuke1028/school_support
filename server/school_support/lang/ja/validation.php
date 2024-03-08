@@ -153,6 +153,34 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'grade_name' => '学年名',
+        'class_name' => 'クラス名',
+        'start_datetime' => '開始日時',
+        'end_datetime' => '終了日時',
+        'title' => 'タイトル',
+        'place' => '開催場所',
+        'personal_effect' => '持ち物',
+        'content' => '内容',
+        'name' => '氏名',
+        'kana' => 'かな',
+        'email' => 'メールアドレス',
+        'tel' => '電話番号',
+        'role' => '権限',
+        'session_id' => '認証ID',
+        'zip' => '郵便番号',
+        'address' => '住所',
+        'birthday' => '生年月日',
+        'pin_code' => '簡易認証コード',
+        'admission_date' => '入学日',
+        'movein_date' => '転校日',
+        'graduation_date' => '卒業日',
+        'attendance_status' => '出欠の種類',
+        'date' => '日付',
+        'parent_memo' => '備考',
+        'start_time' => '登校時間',
+        'end_time' => '下校時間',
+        'absence_reason' => '欠席理由',
+    ],
 
 ];

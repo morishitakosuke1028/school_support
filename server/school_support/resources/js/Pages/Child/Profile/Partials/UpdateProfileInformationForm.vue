@@ -24,7 +24,7 @@ const form = useForm({
             <h2 class="text-lg font-medium text-gray-900">アカウント情報</h2>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+        <form @submit.prevent="form.patch(route('child.profile.update'))" class="mt-6 space-y-6">
             <div>
                 <InputLabel for="name" value="名前" />
 
@@ -59,7 +59,7 @@ const form = useForm({
             <div v-if="props.mustVerifyEmail && user.email_verified_at === null">
                 <p class="text-sm mt-2 text-gray-800">
                     <Link
-                        :href="route('verification.send')"
+                        :href="route('child.verification.send')"
                         method="post"
                         as="button"
                         class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

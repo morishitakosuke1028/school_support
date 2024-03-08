@@ -1,6 +1,6 @@
 <script setup>
 import { usePage, router } from '@inertiajs/vue3';
-import { reactive, ref, computed, watchEffect, onMounted } from 'vue';
+import { ref, computed, watchEffect, onMounted } from 'vue';
 
 const { props } = usePage();
 
@@ -11,16 +11,12 @@ const selectedClassNames = ref([]);
 
 // 検索フィルターの状態
 const searchFilters = ref({
-    gradeName: filtersFromBackend.gradeName || '',
-    className: filtersFromBackend.className || '',
     childName: filtersFromBackend.childName || '',
     childKana: filtersFromBackend.childKana || '',
     childDaily: filtersFromBackend.childDaily || new Date().toISOString().slice(0, 10)
 });
 
 watchEffect(() => {
-    searchFilters.value.gradeName = filtersFromBackend.gradeName || '';
-    searchFilters.value.className = filtersFromBackend.className || '';
     searchFilters.value.childName = filtersFromBackend.childName || '';
     searchFilters.value.childKana = filtersFromBackend.childKana || '';
     searchFilters.value.childDaily = filtersFromBackend.childDaily || new Date().toISOString().slice(0, 10);
@@ -36,8 +32,6 @@ const classNames = computed(() => {
 
 const submitSearch = () => {
     const searchQuery = {
-        gradeName: searchFilters.value.gradeName,
-        className: searchFilters.value.className,
         childName: searchFilters.value.childName,
         childKana: searchFilters.value.childKana,
         childDaily: searchFilters.value.childDaily,
@@ -60,13 +54,23 @@ onMounted(() => {
     // クエリパラメータが存在しない場合、ローカルストレージを削除
     if ([...queryParams].length === 0) {
         localStorage.removeItem('searchState');
-    } else {
-        const savedState = JSON.parse(localStorage.getItem('searchState'));
-        if (savedState) {
-            Object.assign(searchFilters.value, savedState.filters);
-            selectedGradeNames.value = savedState.gradeNames;
-            selectedClassNames.value = savedState.classNames;
-        }
+    }
+    //  else {
+    //     const savedState = JSON.parse(localStorage.getItem('searchState'));
+    //     if (savedState) {
+    //         Object.assign(searchFilters.value, savedState.filters);
+    //         selectedGradeNames.value = savedState.gradeNames;
+    //         selectedClassNames.value = savedState.classNames;
+    //     }
+    // }
+    searchFilters.value.childDaily = new Date().toISOString().slice(0, 10);
+
+    // ローカルストレージからの状態復元
+    const savedState = JSON.parse(localStorage.getItem('searchState'));
+    if (savedState) {
+        Object.assign(searchFilters.value, savedState.filters);
+        selectedGradeNames.value = savedState.gradeNames;
+        selectedClassNames.value = savedState.classNames;
     }
 });
 </script>

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class DailyController extends Controller
@@ -21,36 +22,33 @@ class DailyController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Child::with('gradeClassHistories.gradeClass', 'dailies');
+        $date = $request->input('childDaily', Carbon::today()->toDateString());
 
-        $date = $request->input('childDaily');
-        if ($date) {
-            $query->whereHas('dailies', function ($query) use ($date) {
-                $query->whereDate('created_at', $date);
-            });
-        }
+        $query = Child::with(['gradeClassHistories.gradeClass', 'dailies' => function ($query) use ($date) {
+            $query->whereDate('created_at', $date);
+        }]);
 
-        $gradeName = $request->input('gradeName');
-        $className = $request->input('className');
-        $childName = $request->input('childName');
-        $childKana = $request->input('childKana');
-
-        if ($gradeName = $request->input('gradeName')) {
+        // gradeNameに基づくフィルタリング
+        if ($gradeName = $request->input('gradeNames')) {
             $query->whereHas('gradeClassHistories.gradeClass', function ($q) use ($gradeName) {
                 $q->where('grade_name', $gradeName);
             });
         }
 
-        if ($className = $request->input('className')) {
+        // classNameに基づくフィルタリング
+        if ($className = $request->input('classNames')) {
             $query->whereHas('gradeClassHistories.gradeClass', function ($q) use ($className) {
                 $q->where('class_name', $className);
             });
         }
 
-        if ($childName) {
+        // childNameに基づくフィルタリング
+        if ($childName = $request->input('childName')) {
             $query->where('name', 'like', '%' . $childName . '%');
         }
-        if ($childKana) {
+
+        // childKanaに基づくフィルタリング
+        if ($childKana = $request->input('childKana')) {
             $query->where('kana', 'like', '%' . $childKana . '%');
         }
 
@@ -58,7 +56,6 @@ class DailyController extends Controller
         if ($children->isEmpty()) {
             $allChildren = Child::with('gradeClassHistories.gradeClass')->get();
 
-            // 各生徒に対して新規登録用の空のdailiesデータを用意
             foreach ($allChildren as $child) {
                 $child->dailies = (object)[
                     'child_id' => $child->id,

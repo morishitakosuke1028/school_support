@@ -11,21 +11,9 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CsvImportController;
 use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProfileController as ProfileOfChildController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -39,10 +27,6 @@ Route::get('/', function () {
 Route::get('/admin/index', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('users.index');
 Route::get('/admin/{user}/edit', [UserController::class, 'edit'])->middleware(['auth', 'verified'])->name('users.edit');
 Route::put('/admin/{user}', [UserController::class, 'update'])->middleware(['auth', 'verified'])->name('users.update');
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -93,20 +77,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/child/{child}/edit', [ChildController::class, 'edit'])->name('admin.child.edit');
     Route::put('/admin/child/{child}', [ChildController::class, 'update'])->name('admin.child.update');
 });
-
 Route::prefix('child')->name('child.')->group(function(){
-
-	Route::get('/dashboard', function () {
-			return Inertia::render('Child/Dashboard');
-	})->middleware(['auth:child', 'verified'])->name('dashboard');
-
-	Route::middleware('auth:child')->group(function () {
-        Route::get('/profile', [ProfileOfChildController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileOfChildController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileOfChildController::class, 'destroy'])->name('profile.destroy');
-
-    });
-	require __DIR__.'/child.php';
+    Route::get('/dashboard', function () {
+        return Inertia::render('Child/Dashboard');
+    })->middleware(['auth:children', 'verified'])->name('dashboard');
+    require __DIR__.'/child.php';
 });
 
 require __DIR__.'/auth.php';

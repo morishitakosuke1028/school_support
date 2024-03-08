@@ -23,18 +23,18 @@ const props = defineProps({
 
         <FlashMessage />
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <section class="text-gray-600 body-font">
                             <div class="container px-5 py-24 mx-auto">
-                                <div class="flex pl-4 my-4 lg:w-2/3 w-full mx-auto">
+                                <div class="flex pl-4 my-4 w-full mx-auto">
                                     <Link as="button" class="inline-flex items-center px-4 py-2 bg-blue-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" :href="route('gradeClasses.create')">
                                         新規作成
                                     </Link>
                                 </div>
 
-                                <div class="lg:w-2/3 w-full mx-auto overflow-auto">
+                                <div class="w-full mx-auto overflow-auto">
                                     <table class="table-auto w-full text-left whitespace-no-wrap" id="sort_table">
                                         <thead>
                                             <tr>

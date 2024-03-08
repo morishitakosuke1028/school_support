@@ -17,8 +17,8 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/dashboard';
-		public const CHILD_HOME = '/child/dashboard';
+    public const HOME = '/attendance/index';
+    public const CHILD_HOME = '/child/daily/create';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -33,6 +33,11 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
+
+            Route::prefix('child')->as('child.')
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/child.php'));
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));

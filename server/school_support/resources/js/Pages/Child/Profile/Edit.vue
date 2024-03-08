@@ -1,5 +1,5 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AuthenticatedChildLayout from '@/Layouts/AuthenticatedChildLayout.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
@@ -12,9 +12,9 @@ defineProps({
 </script>
 
 <template>
-    <Head title="職員情報編集" />
+    <Head title="生徒（保護者）情報編集" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedChildLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">アカウント情報</h2>
         </template>
@@ -38,5 +38,5 @@ defineProps({
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AuthenticatedChildLayout>
 </template>

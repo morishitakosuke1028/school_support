@@ -8,6 +8,7 @@ use App\Http\Requests\StoreChildDailyRequest;
 use Inertia\Inertia;
 use App\Models\Daily;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class DailyController extends Controller
 {
@@ -21,7 +22,7 @@ class DailyController extends Controller
         $childId = Auth::id();
 
         return Inertia::render('Child/Daily/Create', [
-            'childId' => $childId
+            'childId' => $childId,
         ]);
     }
 
