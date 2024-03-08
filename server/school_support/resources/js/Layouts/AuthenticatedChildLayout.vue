@@ -49,6 +49,11 @@ const showingNavigationDropdown = ref(false);
                                     連絡帳
                                 </NavLink>
                             </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('child.growths.index')" :active="route().current('child.growths.index')">
+                                    成長記録
+                                </NavLink>
+                            </div>
                             <!-- Settings Dropdown -->
                             <div class="ml-3 relative">
                                 <Dropdown align="right" width="48">
@@ -143,6 +148,7 @@ const showingNavigationDropdown = ref(false);
                             <ResponsiveNavLink :href="route('child.homework.index')" > 宿題</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('child.events.index')" > 行事</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('child.contacts.create')" > 連絡帳</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('child.growths.index')" > 成長記録</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('child.profile.edit')">アカウント情報</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('child.logout')" method="post" as="button">
                                 ログアウト

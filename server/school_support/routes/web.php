@@ -9,6 +9,7 @@ use App\Http\Controllers\DailyController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CsvImportController;
+use App\Http\Controllers\GrowthController;
 use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -64,6 +65,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/contacts/create', [ContactController::class, 'create'])->name('contacts.create');
     Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
     Route::delete('/contacts/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+
+    Route::get('/growths/index', [GrowthController::class, 'index'])->name('growths.index');
+    Route::get('/growths/create', [GrowthController::class, 'create'])->name('growths.create');
+    Route::post('/growths', [GrowthController::class, 'store'])->name('growths.store');
+    Route::get('/growths/{growth}/edit', [GrowthController::class, 'edit'])->name('growths.edit');
+    Route::put('/growths/{growth}', [GrowthController::class, 'update'])->name('growths.update');
+    Route::delete('/growths/{growth}', [GrowthController::class, 'destroy'])->name('growths.destroy');
 
     Route::get('/csvImport/create', [CsvImportController::class, 'create'])->name('csvImport.create');
     Route::post('/csvImport', [CsvImportController::class, 'store'])->name('csvImport.store');
