@@ -1,30 +1,36 @@
 <script setup>
-import { onMounted, ref, nextTick } from 'vue';
-import { Chart, registerables } from 'chart.js';
+import { Chart, registerables } from "chart.js";
+import { LineChart } from "vue-chart-3";
+import { reactive, computed } from "vue"
+
+// const props = defineProps({
+//   "data" : Object
+// })
+
+// const labels = computed(() => props.data.labels)
+// const totals = computed(() => props.data.totals)
 
 Chart.register(...registerables);
 
-const props = defineProps({
-  chartData: Object,
-  chartOptions: Object,
-});
-
-const canvas = ref(null);
-
-onMounted(() => {
-  nextTick(() => {
-    if (canvas.value) {
-      const ctx = canvas.value.getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: props.chartData,
-        options: props.chartOptions,
-      });
-    }
-  });
-});
+// const lineData = reactive({
+const lineData = reactive({
+    // labels: labels,
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+    datasets: [
+        {
+            label: '身長',
+            // data: totals,
+            data: [125, 126, 128, 130, 131, 131, 132],
+            fill: false,
+            borderColor: "rgb(75, 192, 192)",
+            tension: 0.1,
+        }
+    ]
+})
 </script>
 
 <template>
-    <canvas :ref="canvasRef"></canvas>
+  <div>
+    <LineChart :chartData="lineData" />
+  </div>
 </template>

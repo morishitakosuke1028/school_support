@@ -8,25 +8,25 @@ const props = defineProps({
     growths: Object,
 });
 
-const chartData = {
-  labels: ['January', 'February', 'March', 'April'],
-  datasets: [{
-    label: 'Demo',
-    data: [65, 59, 80, 81],
-    fill: false,
-    borderColor: 'rgb(75, 192, 192)',
-    tension: 0.1
-  }]
-};
+// const chartData = {
+//   labels: ['January', 'February', 'March', 'April'],
+//   datasets: [{
+//     label: 'Demo',
+//     data: [65, 59, 80, 81],
+//     fill: false,
+//     borderColor: 'rgb(75, 192, 192)',
+//     tension: 0.1
+//   }]
+// };
 
 onMounted(async () => {
-  await nextTick();
-  const ctx = canvas.value.getContext('2d');
-  new Chart(ctx, {
-    type: 'line',
-    data: props.chartData,
-    options: props.chartOptions,
-  });
+//   await nextTick();
+//   const ctx = canvas.value.getContext('2d');
+//   new Chart(ctx, {
+//     type: 'line',
+//     data: props.chartData,
+//     options: props.chartOptions,
+//   });
 });
 </script>
 <template>
@@ -49,9 +49,10 @@ onMounted(async () => {
                                     <div class="text-center font-semibold mb-10">
                                         <h2 class="text-lg">成長記録</h2>
                                     </div>
-                                    <template>
-                                        <LineChart :chart-data="chartData" :chart-options="chartOptions" />
-                                    </template>
+
+                                    <!-- <LineChart :data="data" /> -->
+                                    <LineChart />
+
                                     <div class="text-left mt-12 flex items-center">
                                         <div class="text-sm">
                                             期間　
