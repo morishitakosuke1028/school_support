@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import { toRefs, reactive, onMounted } from 'vue';
+import { toRefs, reactive } from 'vue';
 import SearchForm from '@/Components/SearchForm.vue';
 
 const props = defineProps({
@@ -41,7 +41,6 @@ const editableChildren = reactive(children.value.map(child => {
     };
 }));
 
-
 const defaultDate = new Date().toISOString().slice(0, 10);
 const searchDate = props.searchDate || defaultDate;
 const submitData = () => {
@@ -69,6 +68,15 @@ const submitData = () => {
     router.post('/attendance', data);
 };
 </script>
+
+<style>
+.bg-none { background-color: transparent; }
+.bg-attend { background-color: #cfffcf; } /* 出席 */
+.bg-late { background-color: #fcf8e3; } /* 遅刻 */
+.bg-early { background-color: #fde2e2; } /* 早退 */
+.bg-absent { background-color: #fddede; } /* 欠席 */
+</style>
+
 <template>
     <Head title="登下校一覧" />
 
