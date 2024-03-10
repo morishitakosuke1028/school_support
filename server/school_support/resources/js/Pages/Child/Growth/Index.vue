@@ -32,45 +32,27 @@ const props = defineProps({
 
                                     <LineChart :growths="growths" />
 
-                                    <div style="max-height: 500px; overflow-y: auto;" class="mt-6">
-                                        <div class="mt-12 border-t-2 border-zinc-300">
+                                    <div style="max-width: 1000px; overflow-x: auto;" class="mt-6">
+                                        <div class="w-full mt-12 pr-12 border-t-2 border-zinc-300">
                                         </div>
-                                        <div v-for="growth in growths" class="w-full px-5 py-3 flex justify-between border-b-2 border-zinc-300">
-                                            <p class="text-md">
-                                                計測日:
+                                        <div v-for="growth in growths" class="w-full pr-12 py-3 flex justify-between border-b-2 border-zinc-300">
+                                            <p class="text-md mr-3">
+                                                計測日: {{ dayjs(growth.measurement_month).format('YYYY/MM/DD') }}
+                                            </p>
+                                            <p class="text-md mr-3">
+                                                身長: {{ growth.height }}cm
+                                            </p>
+                                            <p class="text-md mr-3">
+                                                体重: {{ growth.weight }}kg
+                                            </p>
+                                            <p class="text-md mr-3">
+                                                胸囲: {{ growth.chest }}cm
+                                            </p>
+                                            <p class="text-md mr-3">
+                                                腹囲: {{ growth.abdomen }}cm
                                             </p>
                                             <p class="text-md">
-                                                {{ dayjs(growth.measurement_month).format('YYYY/MM/DD') }}
-                                            </p>
-                                            <p class="text-md">
-                                                身長:
-                                            </p>
-                                            <p class="text-md">
-                                                {{ growth.height }}
-                                            </p>
-                                            <p class="text-md">
-                                                体重:
-                                            </p>
-                                            <p class="text-md">
-                                                {{ growth.weight }}
-                                            </p>
-                                            <p class="text-md">
-                                                胸囲:
-                                            </p>
-                                            <p class="text-md">
-                                                {{ growth.chest }}
-                                            </p>
-                                            <p class="text-md">
-                                                腹囲:
-                                            </p>
-                                            <p class="text-md">
-                                                {{ growth.abdomen }}
-                                            </p>
-                                            <p class="text-md">
-                                                頭囲:
-                                            </p>
-                                            <p class="text-md">
-                                                {{ growth.head }}
+                                                頭囲: {{ growth.head }}cm
                                             </p>
                                         </div>
                                     </div>
