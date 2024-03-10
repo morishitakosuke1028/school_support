@@ -67,12 +67,14 @@ Route::middleware('auth:child')->group(function () {
     Route::get('events/index', [EventController::class, 'index'])->name('events.index');
     Route::get('events/show/{event}', [EventController::class, 'show'])->name('events.show');
 
-    Route::get('contacts/create', [ContactController::class, 'create'])->name('contacts.create');
-    Route::post('contacts/', [ContactController::class, 'store'])->name('contacts.store');
+    Route::middleware(['auth', 'basic.auth'])->group(function () {
+        Route::get('contacts/create', [ContactController::class, 'create'])->name('contacts.create');
+        Route::post('contacts/', [ContactController::class, 'store'])->name('contacts.store');
+
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
 
     Route::get('growths/index', [GrowthController::class, 'index'])->name('growths.index');
-
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
