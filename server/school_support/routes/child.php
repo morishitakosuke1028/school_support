@@ -14,6 +14,7 @@ use App\Http\Controllers\Child\HomeworkController;
 use App\Http\Controllers\Child\DailyController;
 use App\Http\Controllers\Child\EventController;
 use App\Http\Controllers\Child\ContactController;
+use App\Http\Controllers\Child\GrowthController;
 use App\Http\Controllers\Child\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -68,6 +69,8 @@ Route::middleware('auth:child')->group(function () {
 
     Route::get('contacts/create', [ContactController::class, 'create'])->name('contacts.create');
     Route::post('contacts/', [ContactController::class, 'store'])->name('contacts.store');
+
+    Route::get('growths/index', [GrowthController::class, 'index'])->name('growths.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

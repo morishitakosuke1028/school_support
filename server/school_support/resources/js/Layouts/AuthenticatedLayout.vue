@@ -130,6 +130,7 @@ const showingNavigationDropdown = ref(false);
                                         <DropdownLink :href="route('gradeClasses.index')" > 学年クラスマスタ</DropdownLink>
                                         <DropdownLink :href="route('homeworks.index')" > 宿題マスタ</DropdownLink>
                                         <DropdownLink :href="route('events.index')" > 行事管理</DropdownLink>
+                                        <DropdownLink :href="route('growths.index')" > 成長記録</DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>

@@ -181,6 +181,7 @@ return [
         'start_time' => '登校時間',
         'end_time' => '下校時間',
         'absence_reason' => '欠席理由',
+        'measurement_month' => '計測日',
     ],
 
 ];

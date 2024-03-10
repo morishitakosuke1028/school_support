@@ -69,4 +69,9 @@ class Child extends Authenticatable
     {
         return $this->hasMany(Daily::class);
     }
+
+    public function growths()
+    {
+        return $this->hasMany(Growth::class);
+    }
 }
