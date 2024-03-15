@@ -10,9 +10,21 @@ const showItem = ref({
 });
 
 const isQuestionVisible = ref(false);
+const isQuestionVisible2 = ref(false);
+const isQuestionVisible3 = ref(false);
+const isQuestionVisible4 = ref(false);
 
 function toggleQuestionVisibility() {
   isQuestionVisible.value = !isQuestionVisible.value;
+}
+function toggleQuestionVisibility2() {
+  isQuestionVisible2.value = !isQuestionVisible2.value;
+}
+function toggleQuestionVisibility3() {
+  isQuestionVisible3.value = !isQuestionVisible3.value;
+}
+function toggleQuestionVisibility4() {
+  isQuestionVisible4.value = !isQuestionVisible4.value;
 }
 
 onMounted(() => {
@@ -63,7 +75,19 @@ onMounted(() => {
         <main class="w-full my-10">
             <section id="features" class="animatable my-10">
                 <h2 class="main-background text-2xl font-bold text-center">主な機能</h2>
-                <!-- 機能一覧の内容 -->
+                <div class="icon-container bg-gray-100 border rounded p-4 grid gap-4">
+                    <div class="icon"><img src="images/attendance.png" alt=""></div>
+                    <div class="icon"><img src="images/child.png" alt=""></div>
+                    <div class="icon"><img src="images/staff.png" alt=""></div>
+                    <div class="icon"><img src="images/csvimport.png" alt=""></div>
+                    <div class="icon"><img src="images/gradeclass.png" alt=""></div>
+                    <div class="icon"><img src="images/change.png" alt=""></div>
+                    <div class="icon"><img src="images/contact.png" alt=""></div>
+                    <div class="icon"><img src="images/event.png" alt=""></div>
+                    <div class="icon"><img src="images/homework.png" alt=""></div>
+                    <div class="icon"><img src="images/graph.png" alt=""></div>
+                    <div class="icon"><img src="images/schedule.png" alt=""></div>
+                </div>
             </section>
             <section id="testimonials" class="animatable my-10">
                 <h2 class="login-background text-2xl font-bold text-center">ログイン</h2>
@@ -94,38 +118,61 @@ onMounted(() => {
                             <line v-if="!isQuestionVisible" x1="2" y1="12" x2="22" y2="12" stroke="black" stroke-width="2"/>
                         </svg>
                     </p>
-                    <div v-if="isQuestionVisible" class="md:w-1/2 mx-auto px-2 py- bg-cyan-100 rounded border border-cyan-100">
+                    <div v-if="isQuestionVisible" class="md:w-1/2 mx-auto px-2 pb-2 bg-cyan-100 rounded border border-cyan-100">
                         <p class="pb-3"><span class="text-bold text-xl text-blue-500">Q.</span>無料お試し期間はありますか？</p>
                         <p class="text-gray-500">
-                            はい、最大で2ヶ月間無料でお試しいただけます。気にいっていただけましたらそのまま本契約後、データを引き継いでご利用いただくことも可能です（一部機能の制限があります）。詳しくは導入の流れをご確認ください。
+                            はい、最大で2ヶ月間無料でお試しいただけます。気にいっていただけましたらそのまま本契約後、データを引き継いでご利用いただくことも可能です（一部機能の制限があります）。
+                        </p>
+                        <p class="py-3"><span class="text-bold text-xl text-blue-500">Q.</span>パソコンに不慣れな職員が多いのですが大丈夫でしょうか？</p>
+                        <p class="text-gray-500">
+                            タブレット、スマートフォン、パソコンのいずれでも入力が可能なため、職員の方のなじみある媒体でご利用いただくことができます。
+                            例えば事務関係の機能はパソコンで、出席関連はタブレットやスマートフォンといった運用が可能です。
                         </p>
                     </div>
-                    <p class="flex justify-between md:w-1/2 mx-auto my-4 px-2 py-2 bg-cyan-100 rounded border border-cyan-100 text-center">
+                    <p class="flex justify-between md:w-1/2 mx-auto my-4 px-2 py-2 bg-cyan-100 rounded border border-cyan-100">
                         <span class="pr-12">運用関連のご質問</span>
-                        <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg @click="toggleQuestionVisibility2" width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <line x1="12" y1="2" x2="12" y2="22" stroke="black" stroke-width="2"/>
-                            <line x1="å2" y1="12" x2="22" y2="12" stroke="black" stroke-width="2"/>
+                            <line v-if="!isQuestionVisible2" x1="2" y1="12" x2="22" y2="12" stroke="black" stroke-width="2"/>
                         </svg>
                     </p>
-                    <p class="flex justify-between md:w-1/2 mx-auto my-4 px-2 py-2 bg-cyan-100 rounded border border-cyan-100 text-center">
+                    <div v-if="isQuestionVisible2" class="md:w-1/2 mx-auto px-2 bg-cyan-100 rounded border border-cyan-100">
+                        <p class="pb-3"><span class="text-bold text-xl text-blue-500">Q.</span>校内にWi-fi環境がないとき、あるけど不安定な場合はどうすればよいですか？</p>
+                        <p class="text-gray-500">
+                            iPadの通信モデル（モバイルショップや専門業者様とのご契約）をご利用いただくと、wi-fiに依存することなく、スムーズに運用可能です。また月額料金を抑えたい場合など、wi-fi環境の構築も別途費用にて承っておりますのでご相談ください。
+                        </p>
+                    </div>
+                    <p class="flex justify-between md:w-1/2 mx-auto my-4 px-2 py-2 bg-cyan-100 rounded border border-cyan-100">
                         <span class="pr-12">サポート関連のご質問</span>
-                        <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg @click="toggleQuestionVisibility3" width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <line x1="12" y1="2" x2="12" y2="22" stroke="black" stroke-width="2"/>
-                            <line x1="å2" y1="12" x2="22" y2="12" stroke="black" stroke-width="2"/>
+                            <line v-if="!isQuestionVisible3" x1="2" y1="12" x2="22" y2="12" stroke="black" stroke-width="2"/>
                         </svg>
                     </p>
-                    <p class="flex justify-between md:w-1/2 mx-auto my-4 px-2 py-2 bg-cyan-100 rounded border border-cyan-100 text-center">
+                    <div v-if="isQuestionVisible3" class="md:w-1/2 mx-auto px-2 bg-cyan-100 rounded border border-cyan-100">
+                        <p class="pb-3"><span class="text-bold text-xl text-blue-500">Q.</span>使っていて不便に思ったこと、その他要望など現場の声は反映されますか？</p>
+                        <p class="text-gray-500">
+                            皆様からのご要望やご意見などを真摯に受けとめ、次回アップデートの参考にさせていただいております。そのためアップデートの回数が多く、またより便利なシステムを目指しておりますので、どしどしご意見いただければと思います。
+                        </p>
+                    </div>
+                    <p class="flex justify-between md:w-1/2 mx-auto my-4 px-2 py-2 bg-cyan-100 rounded border border-cyan-100">
                         <span class="pr-12">保護者関連のご質問</span>
-                        <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg @click="toggleQuestionVisibility4" width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <line x1="12" y1="2" x2="12" y2="22" stroke="black" stroke-width="2"/>
-                            <line x1="å2" y1="12" x2="22" y2="12" stroke="black" stroke-width="2"/>
+                            <line v-if="!isQuestionVisible4" x1="2" y1="12" x2="22" y2="12" stroke="black" stroke-width="2"/>
                         </svg>
                     </p>
+                    <div v-if="isQuestionVisible4" class="md:w-1/2 mx-auto px-2 bg-cyan-100 rounded border border-cyan-100">
+                        <p class="pb-3"><span class="text-bold text-xl text-blue-500">Q.</span>保護者が外出中に連絡帳などを見ることはできますか？</p>
+                        <p class="text-gray-500">
+                            はい、スマートフォンにて確認いただくことができますので、外出先でも手の空いた時間にゆっくり連絡帳などを見ていただけます。
+                        </p>
+                    </div>
                 </div>
             </section>
         </main>
     </div>
-    <footer class="text-center py-5 bg-blue-200">
+    <footer class="text-center py-24 bg-blue-200">
         © 2024 すくサポ. All rights reserved.
     </footer>
 </template>
@@ -144,6 +191,17 @@ onMounted(() => {
     .hidden-start {
         opacity: 0;
         transform: translateX(-50px);
+    }
+    .icon-container {
+        grid-template-columns: repeat(4, 1fr);
+        width: 75%;
+        margin: 0 auto;
+    }
+    .icon {
+        background: lightgray;
+        padding: 20px;
+        text-align: center;
+        border-radius: 8px;
     }
     .slide-in {
         opacity: 0;
@@ -196,7 +254,7 @@ onMounted(() => {
         padding: 1.5em 0;
     }
     .main-background::before {
-        content: 'MAIN';
+        content: 'FUNCTION';
         position: absolute;
         top: 35%;
         left: 50%;
@@ -265,6 +323,9 @@ onMounted(() => {
     }
 
     @media only screen and (max-width: 960px) {
+        .icon-container {
+            grid-template-columns: repeat(4, 1fr);
+        }
         .fade-in {
             animation: fadeInAnimation 2s ease-in forwards;
             height: 600px;
@@ -293,6 +354,11 @@ onMounted(() => {
         }
     }
     @media only screen and (max-width: 520px) {
+        .icon-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
         .fade-in {
             animation: fadeInAnimation 2s ease-in forwards;
             height: 500px;
