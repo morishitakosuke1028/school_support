@@ -9,6 +9,12 @@ const showItem = ref({
     image: false
 });
 
+const isQuestionVisible = ref(false);
+
+function toggleQuestionVisibility() {
+  isQuestionVisible.value = !isQuestionVisible.value;
+}
+
 onMounted(() => {
     setTimeout(() => showItem.value.logo = true, 100);
     setTimeout(() => showItem.value.text1 = true, 600);
@@ -79,8 +85,43 @@ onMounted(() => {
                 </div>
             </section>
             <section id="faq" class="animatable my-10">
-            <h2 class="question-background text-2xl font-bold text-center">よくあるご質問</h2>
-            <!-- FAQの内容 -->
+                <h2 class="question-background text-2xl font-bold text-center">よくあるご質問</h2>
+                <div class="text-center">
+                    <p class="flex justify-between md:w-1/2 mx-auto my-4 px-2 py-2 bg-cyan-100 rounded border border-cyan-100">
+                        <span class="pr-12">導入前のご質問</span>
+                        <svg @click="toggleQuestionVisibility" width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="12" y1="2" x2="12" y2="22" stroke="black" stroke-width="2"/>
+                            <line v-if="!isQuestionVisible" x1="2" y1="12" x2="22" y2="12" stroke="black" stroke-width="2"/>
+                        </svg>
+                    </p>
+                    <div v-if="isQuestionVisible" class="md:w-1/2 mx-auto px-2 py- bg-cyan-100 rounded border border-cyan-100">
+                        <p class="pb-3"><span class="text-bold text-xl text-blue-500">Q.</span>無料お試し期間はありますか？</p>
+                        <p class="text-gray-500">
+                            はい、最大で2ヶ月間無料でお試しいただけます。気にいっていただけましたらそのまま本契約後、データを引き継いでご利用いただくことも可能です（一部機能の制限があります）。詳しくは導入の流れをご確認ください。
+                        </p>
+                    </div>
+                    <p class="flex justify-between md:w-1/2 mx-auto my-4 px-2 py-2 bg-cyan-100 rounded border border-cyan-100 text-center">
+                        <span class="pr-12">運用関連のご質問</span>
+                        <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="12" y1="2" x2="12" y2="22" stroke="black" stroke-width="2"/>
+                            <line x1="å2" y1="12" x2="22" y2="12" stroke="black" stroke-width="2"/>
+                        </svg>
+                    </p>
+                    <p class="flex justify-between md:w-1/2 mx-auto my-4 px-2 py-2 bg-cyan-100 rounded border border-cyan-100 text-center">
+                        <span class="pr-12">サポート関連のご質問</span>
+                        <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="12" y1="2" x2="12" y2="22" stroke="black" stroke-width="2"/>
+                            <line x1="å2" y1="12" x2="22" y2="12" stroke="black" stroke-width="2"/>
+                        </svg>
+                    </p>
+                    <p class="flex justify-between md:w-1/2 mx-auto my-4 px-2 py-2 bg-cyan-100 rounded border border-cyan-100 text-center">
+                        <span class="pr-12">保護者関連のご質問</span>
+                        <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="12" y1="2" x2="12" y2="22" stroke="black" stroke-width="2"/>
+                            <line x1="å2" y1="12" x2="22" y2="12" stroke="black" stroke-width="2"/>
+                        </svg>
+                    </p>
+                </div>
             </section>
         </main>
     </div>
@@ -213,7 +254,7 @@ onMounted(() => {
         padding: 1.5em 0;
     }
     .question-background::before {
-        content: 'QUESTION';
+        content: 'FAQ';
         position: absolute;
         top: 35%;
         left: 50%;
