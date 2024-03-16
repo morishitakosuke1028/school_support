@@ -1,6 +1,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+import IconModal from '@/Components/IconModal.vue';
 
 const showItem = ref({
     logo: false,
@@ -8,6 +9,15 @@ const showItem = ref({
     text2: false,
     image: false
 });
+
+const icons = ref(['attendance', 'child', 'staff', 'csvimport', 'gradeclass', 'change', 'contact', 'event', 'homework', 'graph', 'schedule']);
+const isModalVisible = ref(false);
+const clickedIcon = ref('');
+
+function openModal(icon) {
+  clickedIcon.value = icon;
+  isModalVisible.value = true;
+}
 
 const isQuestionVisible = ref(false);
 const isQuestionVisible2 = ref(false);
@@ -76,7 +86,7 @@ onMounted(() => {
             <section id="features" class="animatable my-10">
                 <h2 class="main-background text-2xl font-bold text-center">主な機能</h2>
                 <div class="icon-container bg-gray-100 border rounded p-4 grid gap-4">
-                    <div class="icon"><img src="images/attendance.png" alt=""></div>
+                    <!-- <div class="icon"><img src="images/attendance.png" alt=""></div>
                     <div class="icon"><img src="images/child.png" alt=""></div>
                     <div class="icon"><img src="images/staff.png" alt=""></div>
                     <div class="icon"><img src="images/csvimport.png" alt=""></div>
@@ -86,7 +96,16 @@ onMounted(() => {
                     <div class="icon"><img src="images/event.png" alt=""></div>
                     <div class="icon"><img src="images/homework.png" alt=""></div>
                     <div class="icon"><img src="images/graph.png" alt=""></div>
-                    <div class="icon"><img src="images/schedule.png" alt=""></div>
+                    <div class="icon"><img src="images/schedule.png" alt=""></div> -->
+
+
+                    <!-- <div class="icon-container bg-gray-100 border rounded p-4 grid gap-4"> -->
+                        <div v-for="icon in icons" :key="icon" class="icon" @click="openModal(icon)">
+                            <img :src="`images/${icon}.png`" alt="">
+                        </div>
+                    <!-- </div> -->
+
+                    <IconModal :isVisible="isModalVisible" :iconName="clickedIcon" @close="isModalVisible = false" />
                 </div>
             </section>
             <section id="testimonials" class="animatable my-10">
