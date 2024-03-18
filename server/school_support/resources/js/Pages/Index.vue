@@ -86,25 +86,9 @@ onMounted(() => {
             <section id="features" class="animatable my-10">
                 <h2 class="main-background text-2xl font-bold text-center">主な機能</h2>
                 <div class="icon-container bg-gray-100 border rounded p-4 grid gap-4">
-                    <!-- <div class="icon"><img src="images/attendance.png" alt=""></div>
-                    <div class="icon"><img src="images/child.png" alt=""></div>
-                    <div class="icon"><img src="images/staff.png" alt=""></div>
-                    <div class="icon"><img src="images/csvimport.png" alt=""></div>
-                    <div class="icon"><img src="images/gradeclass.png" alt=""></div>
-                    <div class="icon"><img src="images/change.png" alt=""></div>
-                    <div class="icon"><img src="images/contact.png" alt=""></div>
-                    <div class="icon"><img src="images/event.png" alt=""></div>
-                    <div class="icon"><img src="images/homework.png" alt=""></div>
-                    <div class="icon"><img src="images/graph.png" alt=""></div>
-                    <div class="icon"><img src="images/schedule.png" alt=""></div> -->
-
-
-                    <!-- <div class="icon-container bg-gray-100 border rounded p-4 grid gap-4"> -->
-                        <div v-for="icon in icons" :key="icon" class="icon" @click="openModal(icon)">
-                            <img :src="`images/${icon}.png`" alt="">
-                        </div>
-                    <!-- </div> -->
-
+                    <div v-for="icon in icons" :key="icon" class="icon" @click="openModal(icon)">
+                        <img :src="`images/${icon}.png`" alt="">
+                    </div>
                     <IconModal :isVisible="isModalVisible" :iconName="clickedIcon" @close="isModalVisible = false" />
                 </div>
             </section>
