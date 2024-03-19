@@ -28,6 +28,17 @@ defineProps({
             </div>
         </div>
       </div>
+      <div v-if="iconName === 'staff'" class="modal-content">
+        <span class="close" @click="$emit('close')">&times;</span>
+        <div class="mx-auto my-auto">
+            <h3 class="font-bold">職員関連の機能</h3>
+            <p class="text-gray-300 text-md">職員の登録、編集などを行なえます。また登録した情報は職員様のログイン時に使用できます。</p>
+            <div class="md:flex">
+                <p><img src="images/staff-register.png" alt=""></p>
+                <p><img src="images/staff-index.png" alt=""></p>
+            </div>
+        </div>
+      </div>
     </div>
 </template>
 <style>
