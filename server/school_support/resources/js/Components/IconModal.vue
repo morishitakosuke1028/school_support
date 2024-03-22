@@ -49,6 +49,16 @@ defineProps({
             </div>
         </div>
       </div>
+      <div v-if="iconName === 'gradeclass'" class="modal-content">
+        <span class="close" @click="$emit('close')">&times;</span>
+        <div class="mx-auto my-auto">
+            <h3 class="font-bold">学年クラス作成</h3>
+            <p class="text-gray-300 text-md my-2">学年クラス登録、編集を行なえます。また登録した情報でクラス替え、宿題マスタの作成などと連携できます。</p>
+            <div class="md:flex">
+                <p><img src="images/create-c.png" alt=""></p>
+            </div>
+        </div>
+      </div>
     </div>
 </template>
 <style>
