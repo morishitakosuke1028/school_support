@@ -59,6 +59,16 @@ defineProps({
             </div>
         </div>
       </div>
+      <div v-if="iconName === 'change'" class="modal-content">
+        <span class="close" @click="$emit('close')">&times;</span>
+        <div class="mx-auto my-auto">
+            <h3 class="font-bold">クラス替え機能</h3>
+            <p class="text-gray-300 text-md my-2">登録した生徒をクラスに一括登録することができます。</p>
+            <div class="md:flex">
+                <p><img src="images/change-pc.png" alt=""></p>
+            </div>
+        </div>
+      </div>
     </div>
 </template>
 <style>
