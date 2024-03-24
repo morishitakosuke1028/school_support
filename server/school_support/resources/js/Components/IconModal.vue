@@ -69,6 +69,17 @@ defineProps({
             </div>
         </div>
       </div>
+      <div v-if="iconName === 'contact'" class="modal-content">
+        <span class="close" @click="$emit('close')">&times;</span>
+        <div class="mx-auto my-auto">
+            <h3 class="font-bold">連絡帳機能</h3>
+            <p class="text-gray-300 text-md my-2">職員、保護者間で連絡することができます。また保護者側では簡易認証を用いています。</p>
+            <div class="md:flex">
+                <p><img src="images/contact-child.png" alt=""></p>
+                <p><img src="images/contact-pc.png" alt=""></p>
+            </div>
+        </div>
+      </div>
     </div>
 </template>
 <style>
