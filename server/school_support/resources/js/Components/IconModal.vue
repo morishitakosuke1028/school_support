@@ -80,6 +80,17 @@ defineProps({
             </div>
         </div>
       </div>
+      <div v-if="iconName === 'event'" class="modal-content">
+        <span class="close" @click="$emit('close')">&times;</span>
+        <div class="mx-auto my-auto">
+            <h3 class="font-bold">行事管理機能</h3>
+            <p class="text-gray-300 text-md my-2">職員、保護者間で行事予定の管理ができます。カレンダー形式で使い勝手に優れています。</p>
+            <div class="md:flex">
+                <p><img src="images/event-child.png" alt=""></p>
+                <p><img src="images/event-pc.png" alt=""></p>
+            </div>
+        </div>
+      </div>
     </div>
 </template>
 <style>
