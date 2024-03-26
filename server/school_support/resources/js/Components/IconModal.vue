@@ -91,6 +91,17 @@ defineProps({
             </div>
         </div>
       </div>
+      <div v-if="iconName === 'homework'" class="modal-content">
+        <span class="close" @click="$emit('close')">&times;</span>
+        <div class="mx-auto my-auto">
+            <h3 class="font-bold">宿題管理機能</h3>
+            <p class="text-gray-300 text-md my-2">職員、生徒間で宿題の情報の共有ができます。</p>
+            <div class="md:flex">
+                <p><img src="images/homework-child.png" alt=""></p>
+                <p><img src="images/homework-pc.png" alt=""></p>
+            </div>
+        </div>
+      </div>
     </div>
 </template>
 <style>
