@@ -102,6 +102,17 @@ defineProps({
             </div>
         </div>
       </div>
+      <div v-if="iconName === 'graph'" class="modal-content">
+        <span class="close" @click="$emit('close')">&times;</span>
+        <div class="mx-auto my-auto">
+            <h3 class="font-bold">成長記録機能</h3>
+            <p class="text-gray-300 text-md my-2">グラフ化された成長曲線を表示することができます。</p>
+            <div class="md:flex">
+                <p><img src="images/growth-child.png" alt=""></p>
+                <p><img src="images/growth-pc.png" alt=""></p>
+            </div>
+        </div>
+      </div>
     </div>
 </template>
 <style>
