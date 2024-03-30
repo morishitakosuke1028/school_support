@@ -21,9 +21,12 @@ class GrowthController extends Controller
      */
     public function index()
     {
-        $growths = Growth::with('child')
-            ->orderBy('measurement_month', 'asc')
-            ->get();
+        $childId = Auth::user()->id;
+        $child = Child::find($childId);
+
+        $growths = Growth::where('child_id', $childId)
+                    ->orderBy('measurement_month', 'asc')
+                    ->get();
 
         return Inertia::render('Child/Growth/Index', [
             'growths' => $growths,
