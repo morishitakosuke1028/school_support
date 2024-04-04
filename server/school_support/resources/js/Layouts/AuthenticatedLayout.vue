@@ -131,6 +131,7 @@ const showingNavigationDropdown = ref(false);
                                         <DropdownLink :href="route('homeworks.index')" > 宿題マスタ</DropdownLink>
                                         <DropdownLink :href="route('events.index')" > 行事管理</DropdownLink>
                                         <DropdownLink :href="route('growths.index')" > 成長記録</DropdownLink>
+                                        <DropdownLink :href="route('subjects.index')" > 教科管理</DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>

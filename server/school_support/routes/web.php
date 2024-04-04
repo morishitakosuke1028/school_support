@@ -13,6 +13,7 @@ use App\Http\Controllers\GrowthController;
 use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaticController;
+use App\Http\Controllers\SubjectController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -78,6 +79,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/csvImport/create', [CsvImportController::class, 'create'])->name('csvImport.create');
     Route::post('/csvImport', [CsvImportController::class, 'store'])->name('csvImport.store');
+
+    Route::get('/subjects/index', [SubjectController::class, 'index'])->name('subjects.index');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');
