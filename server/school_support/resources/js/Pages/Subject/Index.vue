@@ -6,7 +6,7 @@ import FlashMessage from '@/Components/FlashMessage.vue';
 import dayjs from 'dayjs';
 
 const props = defineProps({
-    subject: Object,
+    subjects: Object,
     currentUserRole: Boolean,
 });
 </script>
@@ -28,7 +28,7 @@ const props = defineProps({
                         <section class="text-gray-600 body-font">
                             <div class="container px-5 py-24 mx-auto">
                                 <div class="flex pl-4 my-4 w-full mx-auto">
-                                    <Link as="button" class="inline-flex items-center px-4 py-2 bg-blue-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" :href="route('subject.create')">
+                                    <Link as="button" class="inline-flex items-center px-4 py-2 bg-blue-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" :href="route('subjects.create')">
                                         新規作成
                                     </Link>
                                 </div>
@@ -69,7 +69,7 @@ const props = defineProps({
                                 </div>
                             </div>
                             <div class="text-center">
-                                <Pagination :links="props.gradeClasses.links"></Pagination>
+                                <Pagination :links="props.subjects.links"></Pagination>
                             </div>
                         </section>
                     </div>

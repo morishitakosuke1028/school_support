@@ -81,6 +81,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/csvImport', [CsvImportController::class, 'store'])->name('csvImport.store');
 
     Route::get('/subjects/index', [SubjectController::class, 'index'])->name('subjects.index');
+    Route::get('/subjects/create', [SubjectController::class, 'create'])->name('subjects.create');
+    Route::get('/subjects/{subject}/edit', [SubjectController::class, 'edit'])->name('subjects.edit');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');

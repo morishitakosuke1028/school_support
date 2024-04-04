@@ -23,4 +23,11 @@ class SubjectController extends Controller
     {
         return Inertia::render('Subject/Create');
     }
+
+    public function edit(subject $subject)
+    {
+        return Inertia::render('Subject/Edit', [
+            'subject' => $subject
+        ]);
+    }
 }
