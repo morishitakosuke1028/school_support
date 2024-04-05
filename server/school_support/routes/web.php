@@ -82,6 +82,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/subjects/index', [SubjectController::class, 'index'])->name('subjects.index');
     Route::get('/subjects/create', [SubjectController::class, 'create'])->name('subjects.create');
+    Route::get('/subjects', [SubjectController::class, 'store'])->name('subjects.store');
     Route::get('/subjects/{subject}/edit', [SubjectController::class, 'edit'])->name('subjects.edit');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])

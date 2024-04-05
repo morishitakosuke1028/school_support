@@ -24,6 +24,19 @@ class SubjectController extends Controller
         return Inertia::render('Subject/Create');
     }
 
+    public function store(StoreSubjectRequest $request)
+    {
+        $subject = Subject::create([
+            'name' => $request->name,
+        ]);
+
+        return to_route('subjects.index')
+        ->with([
+            'message' => '登録しました。',
+            'status' => 'success'
+        ]);
+    }
+
     public function edit(subject $subject)
     {
         return Inertia::render('Subject/Edit', [
