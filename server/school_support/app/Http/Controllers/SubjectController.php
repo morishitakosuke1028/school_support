@@ -45,4 +45,25 @@ class SubjectController extends Controller
             'subject' => $subject
         ]);
     }
+
+    public function update(UpdateSubjectRequest $request, subject $subject)
+    {
+        $subject->name = $request->name;
+        $subject->save();
+        return to_route('subjects.index')
+        ->with([
+            'message' => '更新しました。',
+            'status' => 'success',
+        ]);
+    }
+
+    public function destroy(subject $subject)
+    {
+        $subject->delete();
+        return to_route('subjects.index')
+        ->with([
+            'message' => '削除しました。',
+            'status' => 'danger',
+        ]);
+    }
 }
