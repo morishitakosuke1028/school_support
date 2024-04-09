@@ -13,7 +13,7 @@ const form = reactive({
 })
 
 const updateSubject = id => {
-    router.put(route('subject.update', { subject: id }), form)
+    router.put(route('subjects.update', { subject: id }), form)
 }
 const deleteSubject = id => {
     router.delete(route('subjects.destroy', { subject: id }), {
