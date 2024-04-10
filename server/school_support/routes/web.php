@@ -87,6 +87,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/subjects/{subject}', [SubjectController::class, 'update'])->name('subjects.update');
     Route::delete('/subjects/{subject}', [SubjectController::class, 'destroy'])->name('subjects.destroy');
 
+    Route::get('/schedules/index', [ScheduleController::class, 'index'])->name('schedules.index');
+
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');
 
