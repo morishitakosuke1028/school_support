@@ -10,12 +10,12 @@ const props = defineProps({
 });
 </script>
 <template>
-    <Head title="宿題マスタ" />
+    <Head title="時間割" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                宿題マスタ
+                時間割
             </h2>
         </template>
 

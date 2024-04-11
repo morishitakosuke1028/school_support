@@ -15,7 +15,12 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        //
+        $gradeClasses = gradeClass::select('id', 'grade_name', 'class_name')->paginate(20);
+
+        return Inertia::render('Homework/Index', [
+            'gradeClasses' => $gradeClasses,
+            'currentUserRole' => Auth::user()->role === 1,
+        ]);
     }
 
     /**
