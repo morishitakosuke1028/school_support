@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreScheduleRequest;
 use App\Http\Requests\UpdateScheduleRequest;
 use App\Models\Schedule;
+use App\Models\GradeClass;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {

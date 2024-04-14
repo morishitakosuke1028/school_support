@@ -14,6 +14,7 @@ use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaticController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
