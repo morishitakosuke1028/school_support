@@ -27,46 +27,19 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreScheduleRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreScheduleRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Schedule  $schedule
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Schedule $schedule)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Schedule  $schedule
      * @return \Illuminate\Http\Response
      */
-    public function edit(Schedule $schedule)
+    public function edit($gradeClassId)
     {
-        //
+        $gradeClass = GradeClass::findOrFail($gradeClassId);
+        $schdules = Schedule::where('grade_class_id', $gradeClassId)->get();
+        return Inertia::render('Schedule/Edit', [
+            'gradeClass' => $gradeClass,
+            'schedules' => $schedules
+        ]);
     }
 
     /**
@@ -77,17 +50,6 @@ class ScheduleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateScheduleRequest $request, Schedule $schedule)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Schedule  $schedule
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Schedule $schedule)
     {
         //
     }
