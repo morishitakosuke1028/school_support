@@ -90,6 +90,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/schedules/index', [ScheduleController::class, 'index'])->name('schedules.index');
     Route::get('/schedules/{gradeClass}/edit', [SucheduleController::class, 'edit'])->name('schedules.edit');
+    Route::post('/schedules/{schedule}', [ScheduleController::class, 'bulkStore'])->name('schedules.bulkStore');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');
