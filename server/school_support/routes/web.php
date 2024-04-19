@@ -89,7 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/subjects/{subject}', [SubjectController::class, 'destroy'])->name('subjects.destroy');
 
     Route::get('/schedules/index', [ScheduleController::class, 'index'])->name('schedules.index');
-    Route::get('/schedules/{gradeClass}/edit', [SucheduleController::class, 'edit'])->name('schedules.edit');
+    Route::get('/schedules/{gradeClass}/edit', [ScheduleController::class, 'edit'])->name('schedules.edit');
     Route::post('/schedules/{schedule}', [ScheduleController::class, 'bulkStore'])->name('schedules.bulkStore');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])

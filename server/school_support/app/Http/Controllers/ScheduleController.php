@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreScheduleRequest;
 use App\Http\Requests\UpdateScheduleRequest;
 use App\Models\Schedule;
+use App\Models\Subject;
 use App\Models\GradeClass;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class ScheduleController extends Controller
     {
         $gradeClasses = gradeClass::select('id', 'grade_name', 'class_name')->paginate(20);
 
-        return Inertia::render('Homework/Index', [
+        return Inertia::render('Schedule/Index', [
             'gradeClasses' => $gradeClasses,
             'currentUserRole' => Auth::user()->role === 1,
         ]);
@@ -35,9 +36,11 @@ class ScheduleController extends Controller
     public function edit($gradeClassId)
     {
         $gradeClass = GradeClass::findOrFail($gradeClassId);
-        $schdules = Schedule::where('grade_class_id', $gradeClassId)->get();
+        $subjects = subject::select('id', 'name');
+        $schedules = Schedule::where('grade_class_id', $gradeClassId)->get();
         return Inertia::render('Schedule/Edit', [
             'gradeClass' => $gradeClass,
+            'subjects' => $subjects,
             'schedules' => $schedules
         ]);
     }

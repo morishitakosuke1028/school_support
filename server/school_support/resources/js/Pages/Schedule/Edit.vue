@@ -3,6 +3,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { reactive, computed, watch, onMounted } from 'vue';
 
+const props = defineProps({
+    subjects: Array,
+});
 
 const submitForm = async () => {
 
