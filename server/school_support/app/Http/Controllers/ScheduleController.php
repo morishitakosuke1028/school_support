@@ -36,7 +36,7 @@ class ScheduleController extends Controller
     public function edit($gradeClassId)
     {
         $gradeClass = GradeClass::findOrFail($gradeClassId);
-        $subjects = subject::select('id', 'name');
+        $subjects = subject::select('id', 'name')->get();
         $schedules = Schedule::where('grade_class_id', $gradeClassId)->get();
         return Inertia::render('Schedule/Edit', [
             'gradeClass' => $gradeClass,

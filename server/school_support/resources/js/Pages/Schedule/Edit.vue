@@ -1,17 +1,32 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { reactive, computed, watch, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import draggable from 'vuedraggable';
 
 const props = defineProps({
-    subjects: Array,
+    subjects: Object,
+});
+
+const drag = ref(false);
+
+onMounted(() => {
+  console.log(props.subjects);  // props.subjects の内容を確認
 });
 
 const submitForm = async () => {
 
 };
 </script>
-
+<style scoped>
+.draggable-item {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  background-color: white;
+}
+</style>
 <template>
     <Head title="時間割編集" />
 
@@ -29,6 +44,13 @@ const submitForm = async () => {
                         <section class="text-gray-600 body-font relative">
 
                             <form @submit.prevent="submitForm">
+                                <draggable v-model="props.subjects" group="subjects" @start="drag=true" @end="drag=false">
+                                    <!-- <transition-group>
+                                        <div v-for="subject in props.subjects" :key="subject.id" class="draggable-item">
+                                            <input type="text" v-model="subject.name" readonly>
+                                        </div>
+                                    </transition-group> -->
+                                </draggable>
 
                                 <div class="my-5 text-center">
                                     <button class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg mr-5">登録</button>
