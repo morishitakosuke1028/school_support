@@ -2,29 +2,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
-import draggable from 'vuedraggable';
+// import { VueDraggableNext } from 'vue-draggable-next'
+// import draggable from 'vuedraggable';
+import { Draggable } from 'vue-draggable-next';
 
 const props = defineProps({
     subjects: Object,
-});
-
-const data = ref([
-  {
-    id: 1,
-    content: "test1",
-  },
-  {
-    id: 2,
-    content: "test2",
-  },
-  {
-    id: 3,
-    content: "teat3",
-  },
-]);
-
-onMounted(() => {
-  console.log(props.subjects);  // props.subjects の内容を確認
 });
 
 const submitForm = async () => {
@@ -32,11 +15,11 @@ const submitForm = async () => {
 };
 </script>
 <style scoped>
-.drag-area {
+ul {
   list-style-type: none;
   padding: 0;
 }
-.drag-item {
+li.drag-item {
   padding: 10px;
   margin: 5px 0;
   background-color: #f4f4f4;
@@ -61,19 +44,12 @@ const submitForm = async () => {
                         <section class="text-gray-600 body-font relative">
 
                             <form @submit.prevent="submitForm">
-                                <!-- <draggable v-model="props.subjects" item-key="id" class="drag-area" tag="ul"> -->
-                                    <!-- <transition-group>
-                                        <div v-for="subject in props.subjects" :key="subject.id" class="draggable-item">
-                                            <input type="text" v-model="subject.name" readonly>
-                                        </div>
-                                    </transition-group> -->
-                                <!-- </draggable> -->
-                                <draggable v-model="data" item-key="id">
-                                <template #item="{ element }">
-                                    <div class="drag-item">
-                                    {{ element.id }}
-                                    </div>
-                                </template>
+                                <draggable v-model="props.subjects" item-key="id" class="drag-area" tag="ul">
+                                    <template v-slot:item="{ element }">
+                                        <li :key="element.id" class="drag-item">
+                                            {{ element.name }}
+                                        </li>
+                                    </template>
                                 </draggable>
 
                                 <div class="my-5 text-center">
