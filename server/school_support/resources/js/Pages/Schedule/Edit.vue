@@ -2,9 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
-// import { VueDraggableNext } from 'vue-draggable-next'
-// import draggable from 'vuedraggable';
-import { Draggable } from 'vue-draggable-next';
+import draggable from 'vuedraggable';
 
 const props = defineProps({
     subjects: Object,
