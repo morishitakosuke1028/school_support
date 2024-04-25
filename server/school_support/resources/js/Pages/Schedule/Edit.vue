@@ -1,12 +1,14 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { ref, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import draggable from 'vuedraggable';
 
 const props = defineProps({
-    subjects: Object,
+    subjects: Array
 });
+
+const localSubjects = ref([...props.subjects]);
 
 const submitForm = async () => {
 
@@ -42,11 +44,11 @@ li.drag-item {
                         <section class="text-gray-600 body-font relative">
 
                             <form @submit.prevent="submitForm">
-                                <draggable v-model="props.subjects" item-key="id" class="drag-area" tag="ul">
+                                <draggable v-model="localSubjects" item-key="id" tag="ul">
                                     <template v-slot:item="{ element }">
-                                        <li :key="element.id" class="drag-item">
-                                            {{ element.name }}
-                                        </li>
+                                    <li :key="element.id" class="drag-item">
+                                        {{ element.name }}
+                                    </li>
                                     </template>
                                 </draggable>
 
