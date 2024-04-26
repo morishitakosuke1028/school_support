@@ -21,6 +21,20 @@ const weekDays = computed(() => {
   });
 });
 
+const weekSchedules = ref({});
+
+const initWeekSchedules = () => {
+  weekDays.value.forEach(day => {
+    const dateKey = formatDate(day);
+    if (!weekSchedules.value[dateKey]) {
+      weekSchedules.value[dateKey] = Array(7).fill(null);  // 7つの空のスロット
+    }
+  });
+};
+
+watch(displayedWeek, initWeekSchedules, { immediate: true });
+
+
 // 次の週へ移動
 function nextWeek() {
   displayedWeek.value = addWeeks(displayedWeek.value, 1);
@@ -36,8 +50,9 @@ function formatDate(date) {
   return format(date, 'yyyy-MM-dd');
 }
 
-const submitForm = async () => {
-
+const submitWeekSchedules = () => {
+  // 全スケジュールの登録処理
+  console.log('Submitting week schedules:', weekSchedules.value);
 };
 </script>
 <style scoped>
@@ -52,30 +67,26 @@ li.drag-item {
   border: 1px solid #ccc;
   cursor: grab;
 }
+.week-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  overflow-x: auto;
+}
 
-button {
+.day {
+  flex: 0 0 14%;
   margin: 5px;
   padding: 10px;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-button:hover {
-  background-color: #0056b3;
-}
-.calendar .week-grid {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-}
-
-.calendar .day {
-  flex: 1;
-  padding: 10px;
-  background: #eee;
+  background: #f9f9f9;
   border: 1px solid #ddd;
-  text-align: center;
+  min-width: 120px;
+}
+.slots input {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px;
 }
 </style>
 <template>
@@ -103,19 +114,24 @@ button:hover {
                                     </template>
                                 </draggable>
 
-                                <div>
-                                    <h3>週の表示：{{ formatDate(displayedWeek) }} - {{ formatDate(addWeeks(displayedWeek, 1)) }}</h3>
-                                    <button @click="prevWeek">前の週</button>
-                                    <button @click="nextWeek">次の週</button>
-                                    <div class="week-grid">
-                                        <div class="day" v-for="(day, index) in weekDays" :key="index">
-                                        {{ formatDate(day) }}
+                                <div class="week-grid">
+                                    <div class="day" v-for="(day, index) in weekDays" :key="index">
+                                        <h4>{{ formatDate(day) }}</h4>
+                                        <div class="slots">
+                                            <input
+                                            v-for="(item, idx) in weekSchedules[formatDate(day)]"
+                                            :key="`slot-${index}-${idx}`"
+                                            type="text"
+                                            v-model="weekSchedules[formatDate(day)][idx]"
+                                            @blur="updateSchedule(day, idx)"
+                                            placeholder="Enter subject"
+                                            />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="my-5 text-center">
-                                    <button class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg mr-5">登録</button>
+                                    <button @click="submitWeekSchedules" class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg mr-5">登録</button>
                                     <Link as="button" class="text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg ml-5" :href="route('schedules.index')">
                                         戻る
                                     </Link>
