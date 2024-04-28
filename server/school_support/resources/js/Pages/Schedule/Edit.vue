@@ -3,7 +3,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { ref, watch, computed } from 'vue';
 import draggable from 'vuedraggable';
-import { startOfWeek, addWeeks, format, eachDayOfInterval } from 'date-fns';
+import { startOfWeek, addWeeks, format, eachDayOfInterval, isSunday } from 'date-fns';
+import holidayJp from '@holiday-jp/holiday_jp';
 
 const props = defineProps({
     subjects: Array
@@ -11,48 +12,45 @@ const props = defineProps({
 
 const localSubjects = ref([...props.subjects]);
 
-const currentDate = ref(new Date());  // 現在の日付を保持
-const displayedWeek = ref(startOfWeek(currentDate.value, { weekStartsOn: 1 }));  // 週の開始を月曜日に設定
+const currentDate = ref(new Date());
+const displayedWeek = ref(startOfWeek(currentDate.value, { weekStartsOn: 1 }));
 
 const weekDays = computed(() => {
-  return eachDayOfInterval({
-    start: displayedWeek.value,
-    end: addWeeks(displayedWeek.value, 1)
-  });
+    return eachDayOfInterval({
+        start: displayedWeek.value,
+        end: addWeeks(displayedWeek.value, 1)
+    }).filter(day =>
+        !isSunday(day) && !holidayJp.isHoliday(day)
+    );
 });
 
 const weekSchedules = ref({});
 
 const initWeekSchedules = () => {
-  weekDays.value.forEach(day => {
-    const dateKey = formatDate(day);
-    if (!weekSchedules.value[dateKey]) {
-      weekSchedules.value[dateKey] = Array(7).fill(null);  // 7つの空のスロット
-    }
-  });
+    weekDays.value.forEach(day => {
+        const dateKey = formatDate(day);
+        if (!weekSchedules.value[dateKey]) {
+            weekSchedules.value[dateKey] = Array(7).fill(null);
+        }
+    });
 };
 
 watch(displayedWeek, initWeekSchedules, { immediate: true });
 
-
-// 次の週へ移動
 function nextWeek() {
-  displayedWeek.value = addWeeks(displayedWeek.value, 1);
+    displayedWeek.value = addWeeks(displayedWeek.value, 1);
 }
 
-// 前の週へ移動
 function prevWeek() {
-  displayedWeek.value = addWeeks(displayedWeek.value, -1);
+    displayedWeek.value = addWeeks(displayedWeek.value, -1);
 }
 
-// 日付の表示形式を整形
 function formatDate(date) {
-  return format(date, 'yyyy-MM-dd');
+    return format(date, 'yyyy-MM-dd');
 }
 
 const submitWeekSchedules = () => {
-  // 全スケジュールの登録処理
-  console.log('Submitting week schedules:', weekSchedules.value);
+    console.log('Submitting week schedules:', weekSchedules.value);
 };
 </script>
 <style scoped>
