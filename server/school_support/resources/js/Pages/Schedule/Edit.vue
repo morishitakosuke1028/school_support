@@ -106,9 +106,9 @@ li.drag-item {
                         <section class="text-gray-600 body-font relative">
 
                             <form @submit.prevent="submitForm">
-                                <div class="week-navigation">
-                                    <button @click="prevWeek" class="text-white bg-gray-500 border-0 py-2 px-4 focus:outline-none hover:bg-gray-600 rounded text-lg">前の週</button>
-                                    <button @click="nextWeek" class="text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded text-lg">次の週</button>
+                                <div class="week-navigation text-center">
+                                    <button @click="prevWeek" class="mr-6 text-white bg-gray-500 border-0 py-2 px-4 focus:outline-none hover:bg-gray-600 rounded text-lg">前の週</button>
+                                    <button @click="nextWeek" class="ml-6 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded text-lg">次の週</button>
                                 </div>
                                 <draggable v-model="localSubjects" item-key="id" tag="ul">
                                     <template v-slot:item="{ element }">
