@@ -30,7 +30,7 @@ const initWeekSchedules = () => {
     weekDays.value.forEach(day => {
         const dateKey = formatDate(day);
         if (!weekSchedules.value[dateKey]) {
-            weekSchedules.value[dateKey] = Array(7).fill(null);
+            weekSchedules.value[dateKey] = localSubjects.value.map(subject => ({ ...subject, schedule: '' }));
         }
     });
 };
@@ -122,14 +122,13 @@ li.drag-item {
                                     <div class="day" v-for="(day, index) in weekDays" :key="index">
                                         <h4>{{ formatDate(day) }}</h4>
                                         <div class="slots">
-                                            <input
-                                            v-for="(item, idx) in weekSchedules[formatDate(day)]"
-                                            :key="`slot-${index}-${idx}`"
-                                            type="text"
-                                            v-model="weekSchedules[formatDate(day)][idx]"
-                                            @blur="updateSchedule(day, idx)"
-                                            placeholder="Enter subject"
-                                            />
+                                            <div v-for="(item, idx) in weekSchedules[formatDate(day)]" :key="`slot-${index}-${idx}`">
+                                                <input
+                                                    type="text"
+                                                    v-model="item.schedule"
+                                                    placeholder="Enter subject"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
