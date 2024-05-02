@@ -2,15 +2,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { ref, watch, computed } from 'vue';
-import draggable from 'vuedraggable';
 import { startOfWeek, addWeeks, format, eachDayOfInterval, isSunday } from 'date-fns';
 import holidayJp from '@holiday-jp/holiday_jp';
 
 const props = defineProps({
     subjects: Array
 });
-
-const localSubjects = ref([...props.subjects]);
 
 const currentDate = ref(new Date());
 const displayedWeek = ref(startOfWeek(currentDate.value, { weekStartsOn: 1 }));
@@ -30,7 +27,7 @@ const initWeekSchedules = () => {
     weekDays.value.forEach(day => {
         const dateKey = formatDate(day);
         if (!weekSchedules.value[dateKey]) {
-            weekSchedules.value[dateKey] = localSubjects.value.map(subject => ({ ...subject, schedule: '' }));
+            weekSchedules.value[dateKey] = props.subjects.map(subject => ({ id: subject.id, name: subject.name, schedule: '' }));
         }
     });
 };
@@ -110,25 +107,14 @@ li.drag-item {
                                     <button @click="prevWeek" class="mr-6 text-white bg-gray-500 border-0 py-2 px-4 focus:outline-none hover:bg-gray-600 rounded text-lg">前の週</button>
                                     <button @click="nextWeek" class="ml-6 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded text-lg">次の週</button>
                                 </div>
-                                <draggable v-model="localSubjects" item-key="id" tag="ul">
-                                    <template v-slot:item="{ element }">
-                                    <li :key="element.id" class="drag-item">
-                                        {{ element.name }}
-                                    </li>
-                                    </template>
-                                </draggable>
-
                                 <div class="week-grid">
                                     <div class="day" v-for="(day, index) in weekDays" :key="index">
                                         <h4>{{ formatDate(day) }}</h4>
                                         <div class="slots">
-                                            <div v-for="(item, idx) in weekSchedules[formatDate(day)]" :key="`slot-${index}-${idx}`">
-                                                <input
-                                                    type="text"
-                                                    v-model="item.schedule"
-                                                    placeholder="Enter subject"
-                                                />
-                                            </div>
+                                            <select v-for="item in weekSchedules[formatDate(day)]" v-model="item.schedule">
+                                                <option disabled value="">科目を選択</option>
+                                                <option v-for="subject in props.subjects" :value="subject.id">{{ subject.name }}</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
