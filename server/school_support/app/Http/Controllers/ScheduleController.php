@@ -27,33 +27,9 @@ class ScheduleController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Schedule  $schedule
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($gradeClassId)
+    public function bulkStore(Request $request)
     {
-        $gradeClass = GradeClass::findOrFail($gradeClassId);
-        $subjects = subject::select('id', 'name')->get();
-        $schedules = Schedule::where('grade_class_id', $gradeClassId)->get();
-        return Inertia::render('Schedule/Edit', [
-            'gradeClass' => $gradeClass,
-            'subjects' => $subjects,
-            'schedules' => $schedules
-        ]);
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateScheduleRequest  $request
-     * @param  \App\Models\Schedule  $schedule
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateScheduleRequest $request, Schedule $schedule)
-    {
-        //
+
     }
 }
