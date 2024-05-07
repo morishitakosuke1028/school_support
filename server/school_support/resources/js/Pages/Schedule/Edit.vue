@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, watch, computed } from 'vue';
 import { startOfWeek, addWeeks, format, eachDayOfInterval, isSunday } from 'date-fns';
 import holidayJp from '@holiday-jp/holiday_jp';
@@ -12,27 +12,29 @@ const props = defineProps({
 const currentDate = ref(new Date());
 const displayedWeek = ref(startOfWeek(currentDate.value, { weekStartsOn: 1 }));
 
-const weekDays = computed(() => {
-    return eachDayOfInterval({
-        start: displayedWeek.value,
-        end: addWeeks(displayedWeek.value, 1)
-    }).filter(day =>
-        !isSunday(day) && !holidayJp.isHoliday(day)
-    );
-});
+// const weekDays = computed(() => {
+//     return eachDayOfInterval({
+//         start: displayedWeek.value,
+//         end: addWeeks(displayedWeek.value, 1)
+//     }).filter(day =>
+//         !isSunday(day) && !holidayJp.isHoliday(day)
+//     );
+// });
 
-const weekSchedules = ref({});
+// const weekSchedules = ref({});
 
-const initWeekSchedules = () => {
-    weekDays.value.forEach(day => {
-        const dateKey = formatDate(day);
-        if (!weekSchedules.value[dateKey]) {
-            weekSchedules.value[dateKey] = props.subjects.map(subject => ({ id: subject.id, name: subject.name, schedule: '' }));
-        }
-    });
-};
+// const initWeekSchedules = () => {
+//     weekDays.value.forEach(day => {
+//         const dateKey = formatDate(day);
+//         if (!weekSchedules.value[dateKey]) {
+//             weekSchedules.value[dateKey] = props.subjects.map(subject => ({ id: subject.id, name: subject.name, schedule: '' }));
+//         }
+//     });
+// };
 
-watch(displayedWeek, initWeekSchedules, { immediate: true });
+
+
+// watch(displayedWeek, initWeekSchedules, { immediate: true });
 
 function nextWeek() {
     displayedWeek.value = addWeeks(displayedWeek.value, 1);
@@ -44,12 +46,51 @@ function prevWeek() {
     initWeekSchedules();
 }
 
+// function formatDate(date) {
+//     return format(date, 'yyyy-MM-dd');
+// }
+
+
+const weekDays = computed(() => {
+    return eachDayOfInterval({
+        start: displayedWeek.value,
+        end: addWeeks(displayedWeek.value, 1)
+    }).filter(day => !isSunday(day) && !holidayJp.isHoliday(day));
+});
+
+const weekSchedules = ref({});
+
+const initWeekSchedules = () => {
+    weekDays.value.forEach(day => {
+        const dateKey = formatDate(day);
+        if (!weekSchedules.value[dateKey]) {
+            weekSchedules.value[dateKey] = props.subjects.map(subject => ({
+                id: subject.id,
+                name: subject.name,
+                grade_class_id: subject.grade_class_id,
+                schedule: ''
+            }));
+        }
+    });
+};
+
+watch(displayedWeek, initWeekSchedules, { immediate: true });
+
 function formatDate(date) {
     return format(date, 'yyyy-MM-dd');
 }
 
 const submitWeekSchedules = () => {
-    console.log('Submitting week schedules:', weekSchedules.value);
+    const formattedData = Object.keys(weekSchedules.value).reduce((acc, date) => {
+        const daySchedules = weekSchedules.value[date];
+        acc[date] = daySchedules.reduce((scheduleAcc, scheduleItem, index) => {
+            scheduleAcc[`subject_id_${index + 1}`] = scheduleItem.schedule || '';
+            return scheduleAcc;
+        });
+        return acc;
+    }, {});
+
+    router.post('/schedules/bulkStore', { scheduleData: formattedData });
 };
 </script>
 <style scoped>
