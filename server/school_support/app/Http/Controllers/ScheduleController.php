@@ -9,6 +9,9 @@ use App\Models\Subject;
 use App\Models\GradeClass;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class ScheduleController extends Controller
 {
