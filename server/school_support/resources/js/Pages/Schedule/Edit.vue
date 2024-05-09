@@ -80,13 +80,18 @@ function formatDate(date) {
     return format(date, 'yyyy-MM-dd');
 }
 
+const englishSuffixes = [
+    'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'other'
+];
+
 const submitWeekSchedules = () => {
     const formattedData = Object.keys(weekSchedules.value).reduce((acc, date) => {
         const daySchedules = weekSchedules.value[date];
         acc[date] = daySchedules.reduce((scheduleAcc, scheduleItem, index) => {
-            scheduleAcc[`subject_id_${index + 1}`] = scheduleItem.schedule || '';
+            const suffix = englishSuffixes[index] || 'additional';
+            scheduleAcc[`subject_id_${suffix}`] = scheduleItem.schedule || '';
             return scheduleAcc;
-        });
+        }, {});
         return acc;
     }, {});
 
