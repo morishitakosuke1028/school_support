@@ -70,6 +70,7 @@ const initWeekSchedules = () => {
                 grade_class_id: subject.grade_class_id,
                 schedule: ''
             }));
+            weekSchedules.value[dateKey]['other'] = [];
         }
     });
 };
@@ -81,20 +82,25 @@ function formatDate(date) {
 }
 
 const englishSuffixes = [
-    'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'other'
+    'first', 'second', 'third', 'fourth', 'five', 'six', 'other'
 ];
 
 const submitWeekSchedules = () => {
     const formattedData = Object.keys(weekSchedules.value).reduce((acc, date) => {
         const daySchedules = weekSchedules.value[date];
-        acc[date] = daySchedules.reduce((scheduleAcc, scheduleItem, index) => {
-            const suffix = englishSuffixes[index] || 'additional';
-            scheduleAcc[`subject_id_${suffix}`] = scheduleItem.schedule || '';
-            return scheduleAcc;
-        }, {});
+        acc[date] = {};
+        daySchedules.forEach((scheduleItem, index) => {
+            const suffix = index < 6 ? englishSuffixes[index] : 'other';
+            if (suffix !== 'other') {
+                acc[date][`subject_id_${suffix}`] = scheduleItem.schedule || '';
+            }
+        });
+        // otherのデータを配列として追加
+        acc[date]['subject_id_other'] = [daySchedules.other || ''];
         return acc;
     }, {});
 
+    console.log('Final formatted data:', formattedData);  // 送信直前のデータ確認
     router.post('/schedules/bulkStore', { scheduleData: formattedData });
 };
 </script>
@@ -158,6 +164,10 @@ li.drag-item {
                                         <h4>{{ formatDate(day) }}</h4>
                                         <div class="slots">
                                             <select v-for="item in weekSchedules[formatDate(day)]" v-model="item.schedule">
+                                                <option disabled value="">科目を選択</option>
+                                                <option v-for="subject in props.subjects" :value="subject.id">{{ subject.name }}</option>
+                                            </select>
+                                            <select v-model="weekSchedules[formatDate(day)].other">
                                                 <option disabled value="">科目を選択</option>
                                                 <option v-for="subject in props.subjects" :value="subject.id">{{ subject.name }}</option>
                                             </select>
