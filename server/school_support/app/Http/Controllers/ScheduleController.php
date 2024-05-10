@@ -42,6 +42,7 @@ class ScheduleController extends Controller
         $subjects = subject::select('id', 'name')->get();
         $schedules = Schedule::where('grade_class_id', $gradeClassId)->get();
         return Inertia::render('Schedule/Edit', [
+            'gradeClassId' => (int)$gradeClassId,
             'gradeClass' => $gradeClass,
             'subjects' => $subjects,
             'schedules' => $schedules

@@ -1,12 +1,13 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { startOfWeek, addWeeks, format, eachDayOfInterval, isSunday } from 'date-fns';
 import holidayJp from '@holiday-jp/holiday_jp';
 
 const props = defineProps({
-    subjects: Array
+    subjects: Array,
+    gradeClassId: Number,
 });
 
 const currentDate = ref(new Date());
@@ -88,14 +89,16 @@ const englishSuffixes = [
 const submitWeekSchedules = () => {
     const formattedData = Object.keys(weekSchedules.value).reduce((acc, date) => {
         const daySchedules = weekSchedules.value[date];
-        acc[date] = {};
+        acc[date] = {
+            grade_class_id: props.gradeClassId  // 各日付のデータに gradeClassId を追加
+        };
         daySchedules.forEach((scheduleItem, index) => {
             const suffix = index < 6 ? englishSuffixes[index] : 'other';
             if (suffix !== 'other') {
                 acc[date][`subject_id_${suffix}`] = scheduleItem.schedule || '';
             }
         });
-        // otherのデータを配列として追加
+        // 'other' のデータを配列として追加
         acc[date]['subject_id_other'] = [daySchedules.other || ''];
         return acc;
     }, {});
@@ -161,6 +164,7 @@ li.drag-item {
                                 </div>
                                 <div class="week-grid">
                                     <div class="day" v-for="(day, index) in weekDays" :key="index">
+                                        <!-- <input type="text" name="grade_class_id" value={{ props.gradeClassId }}> -->
                                         <h4>{{ formatDate(day) }}</h4>
                                         <div class="slots">
                                             <select v-for="item in weekSchedules[formatDate(day)]" v-model="item.schedule">
