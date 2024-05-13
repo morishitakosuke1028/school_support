@@ -164,7 +164,6 @@ li.drag-item {
                                 </div>
                                 <div class="week-grid">
                                     <div class="day" v-for="(day, index) in weekDays" :key="index">
-                                        <!-- <input type="text" name="grade_class_id" value={{ props.gradeClassId }}> -->
                                         <h4>{{ formatDate(day) }}</h4>
                                         <div class="slots">
                                             <select v-for="item in weekSchedules[formatDate(day)]" v-model="item.schedule">
