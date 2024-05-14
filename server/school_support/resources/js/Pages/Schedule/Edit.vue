@@ -175,7 +175,7 @@ li.drag-item {
                                                 <option v-for="subject in props.subjects" :value="subject.id">{{ subject.name }}</option>
                                             </select>
                                         </div>
-                                        <input type="radio" id="all_check" name="subject_id_all_check" value="1">
+                                        <input type="checkbox" id="all_check" name="subject_id_all_check" value="1">
                                         <label for="all_check" class="mx-3 my-3">全ての時間割
                                         </label>
                                     </div>
