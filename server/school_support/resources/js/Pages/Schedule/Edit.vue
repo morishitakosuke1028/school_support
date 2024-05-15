@@ -13,30 +13,6 @@ const props = defineProps({
 const currentDate = ref(new Date());
 const displayedWeek = ref(startOfWeek(currentDate.value, { weekStartsOn: 1 }));
 
-// const weekDays = computed(() => {
-//     return eachDayOfInterval({
-//         start: displayedWeek.value,
-//         end: addWeeks(displayedWeek.value, 1)
-//     }).filter(day =>
-//         !isSunday(day) && !holidayJp.isHoliday(day)
-//     );
-// });
-
-// const weekSchedules = ref({});
-
-// const initWeekSchedules = () => {
-//     weekDays.value.forEach(day => {
-//         const dateKey = formatDate(day);
-//         if (!weekSchedules.value[dateKey]) {
-//             weekSchedules.value[dateKey] = props.subjects.map(subject => ({ id: subject.id, name: subject.name, schedule: '' }));
-//         }
-//     });
-// };
-
-
-
-// watch(displayedWeek, initWeekSchedules, { immediate: true });
-
 function nextWeek() {
     displayedWeek.value = addWeeks(displayedWeek.value, 1);
     initWeekSchedules();
@@ -46,11 +22,6 @@ function prevWeek() {
     displayedWeek.value = addWeeks(displayedWeek.value, -1);
     initWeekSchedules();
 }
-
-// function formatDate(date) {
-//     return format(date, 'yyyy-MM-dd');
-// }
-
 
 const weekDays = computed(() => {
     return eachDayOfInterval({
