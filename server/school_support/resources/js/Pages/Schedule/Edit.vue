@@ -61,7 +61,8 @@ const submitWeekSchedules = () => {
     const formattedData = Object.keys(weekSchedules.value).reduce((acc, date) => {
         const daySchedules = weekSchedules.value[date];
         acc[date] = {
-            grade_class_id: props.gradeClassId  // 各日付のデータに gradeClassId を追加
+            grade_class_id: props.gradeClassId,  // 各日付のデータに gradeClassId を追加
+            subject_id_all_check: daySchedules.allChecked ? '1' : '0'
         };
         daySchedules.forEach((scheduleItem, index) => {
             const suffix = index < 6 ? englishSuffixes[index] : 'other';
