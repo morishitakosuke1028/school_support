@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, watch, computed, onMounted } from 'vue';
-import { startOfWeek, addWeeks, format, eachDayOfInterval, isSunday } from 'date-fns';
+import { addDays, startOfWeek, addWeeks, format, eachDayOfInterval, isSunday } from 'date-fns';
 import holidayJp from '@holiday-jp/holiday_jp';
 
 const props = defineProps({
@@ -24,10 +24,9 @@ function prevWeek() {
 }
 
 const weekDays = computed(() => {
-    return eachDayOfInterval({
-        start: displayedWeek.value,
-        end: addWeeks(displayedWeek.value, 1)
-    }).filter(day => !isSunday(day) && !holidayJp.isHoliday(day));
+    const start = startOfWeek(currentDate.value, { weekStartsOn: 1 });
+    const end = addDays(start, 5);
+    return eachDayOfInterval({ start, end }).filter(day => !isSunday(day));
 });
 
 const weekSchedules = ref({});
