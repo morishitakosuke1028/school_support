@@ -56,18 +56,34 @@ class ScheduleController extends Controller
         $scheduleEntries = $request->input('scheduleData');
 
         foreach ($scheduleEntries as $date => $data) {
-            $data['schedule_day'] = $date;
+            $data['schedule_date'] = $date;
+
+            if (isset($data['subject_id_other']) && is_array($data['subject_id_other'])) {
+                $data['subject_id_other'] = json_encode($data['subject_id_other']);
+            }
+
+            $fields = [
+                'subject_id_first', 'subject_id_second', 'subject_id_third',
+                'subject_id_fourth', 'subject_id_five', 'subject_id_six'
+            ];
+
+            foreach ($fields as $field) {
+                if (is_null($data[$field])) {
+                    $data[$field] = '';
+                }
+            }
+
             $validator = Validator::make($data, [
                 'grade_class_id' => 'required|integer',
-                'schedule_day' => 'required',
-                'subject_id_first' => 'nullable|string',
-                'subject_id_second' => 'nullable|string',
-                'subject_id_third' => 'nullable|string',
-                'subject_id_fourth' => 'nullable|string',
-                'subject_id_five' => 'nullable|string',
-                'subject_id_six' => 'nullable|string',
+                'schedule_date' => 'required',
+                'subject_id_first' => 'nullable|integer',
+                'subject_id_second' => 'nullable|integer',
+                'subject_id_third' => 'nullable|integer',
+                'subject_id_fourth' => 'nullable|integer',
+                'subject_id_five' => 'nullable|integer',
+                'subject_id_six' => 'nullable|integer',
                 'subject_id_other' => 'nullable|string',
-                'subject_id_all_check' => 'nullable|string',
+                'subject_id_all_check' => 'nullable|integer',
             ]);
 
             if ($validator->fails()) {
@@ -77,7 +93,7 @@ class ScheduleController extends Controller
             }
 
             // ここでデータを保存
-            Schedule::updateOrCreate(['schedule_day' => $date, 'grade_class_id' => $data['grade_class_id']], $data);
+            Schedule::updateOrCreate(['schedule_date' => $date, 'grade_class_id' => $data['grade_class_id']], $data);
         }
 
         return to_route('schedules.index')->with([
