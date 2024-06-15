@@ -59,17 +59,10 @@ class ScheduleController extends Controller
             $data['schedule_date'] = $date;
 
             if (isset($data['subject_id_other']) && is_array($data['subject_id_other'])) {
-                $data['subject_id_other'] = json_encode($data['subject_id_other']);
-            }
-
-            $fields = [
-                'subject_id_first', 'subject_id_second', 'subject_id_third',
-                'subject_id_fourth', 'subject_id_five', 'subject_id_six'
-            ];
-
-            foreach ($fields as $field) {
-                if (is_null($data[$field])) {
-                    $data[$field] = '';
+                if (empty($data['subject_id_other'][0])) {
+                    $data['subject_id_other'] = null;
+                } else {
+                    $data['subject_id_other'] = $data['subject_id_other'][0];
                 }
             }
 
