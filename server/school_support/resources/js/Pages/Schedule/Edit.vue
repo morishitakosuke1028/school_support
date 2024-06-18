@@ -8,23 +8,26 @@ import holidayJp from '@holiday-jp/holiday_jp';
 const props = defineProps({
     subjects: Array,
     gradeClassId: Number,
+    schedules: Object
 });
 
 const currentDate = ref(new Date());
 const displayedWeek = ref(startOfWeek(currentDate.value, { weekStartsOn: 1 }));
 
-function nextWeek() {
+function nextWeek(event) {
+    event.preventDefault();
     displayedWeek.value = addWeeks(displayedWeek.value, 1);
     initWeekSchedules();
 }
 
-function prevWeek() {
+function prevWeek(event) {
+    event.preventDefault();
     displayedWeek.value = addWeeks(displayedWeek.value, -1);
     initWeekSchedules();
 }
 
 const weekDays = computed(() => {
-    const start = startOfWeek(currentDate.value, { weekStartsOn: 1 });
+    const start = startOfWeek(displayedWeek.value, { weekStartsOn: 1 });
     const end = addDays(start, 5);
     return eachDayOfInterval({ start, end }).filter(day => !isSunday(day));
 });
@@ -35,13 +38,28 @@ const initWeekSchedules = () => {
     weekDays.value.forEach(day => {
         const dateKey = formatDate(day);
         if (!weekSchedules.value[dateKey]) {
-            weekSchedules.value[dateKey] = props.subjects.map(subject => ({
-                id: subject.id,
-                name: subject.name,
-                grade_class_id: subject.grade_class_id,
-                schedule: ''
-            }));
-            weekSchedules.value[dateKey]['other'] = [];
+            if (props.schedules[dateKey]) {
+                weekSchedules.value[dateKey] = [
+                    { id: 'first', schedule: props.schedules[dateKey].subject_id_first || '' },
+                    { id: 'second', schedule: props.schedules[dateKey].subject_id_second || '' },
+                    { id: 'third', schedule: props.schedules[dateKey].subject_id_third || '' },
+                    { id: 'fourth', schedule: props.schedules[dateKey].subject_id_fourth || '' },
+                    { id: 'fifth', schedule: props.schedules[dateKey].subject_id_five || '' },
+                    { id: 'sixth', schedule: props.schedules[dateKey].subject_id_six || '' },
+                    { id: 'other', schedule: props.schedules[dateKey].subject_id_other ? [props.schedules[dateKey].subject_id_other] : [] }
+                ];
+                weekSchedules.value[dateKey].allChecked = props.schedules[dateKey].subject_id_all_check === '1';
+            } else {
+                // 初期値を設定
+                weekSchedules.value[dateKey] = props.subjects.map(subject => ({
+                    id: subject.id,
+                    name: subject.name,
+                    grade_class_id: subject.grade_class_id,
+                    schedule: ''
+                }));
+                weekSchedules.value[dateKey].push({ id: 'other', schedule: '' });
+                weekSchedules.value[dateKey].allChecked = false;
+            }
         }
     });
 };
@@ -53,28 +71,27 @@ function formatDate(date) {
 }
 
 const englishSuffixes = [
-    'first', 'second', 'third', 'fourth', 'five', 'six', 'other'
+    'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'other'
 ];
 
 const submitWeekSchedules = () => {
     const formattedData = Object.keys(weekSchedules.value).reduce((acc, date) => {
         const daySchedules = weekSchedules.value[date];
         acc[date] = {
-            grade_class_id: props.gradeClassId,  // 各日付のデータに gradeClassId を追加
+            grade_class_id: props.gradeClassId,
             subject_id_all_check: daySchedules.allChecked ? '1' : '0'
         };
         daySchedules.forEach((scheduleItem, index) => {
-            const suffix = index < 6 ? englishSuffixes[index] : 'other';
+            const suffix = englishSuffixes[index];
             if (suffix !== 'other') {
                 acc[date][`subject_id_${suffix}`] = scheduleItem.schedule || '';
             }
         });
-        // 'other' のデータを配列として追加
-        acc[date]['subject_id_other'] = [daySchedules.other || ''];
+        acc[date]['subject_id_other'] = daySchedules.find(item => item.id === 'other').schedule ? [daySchedules.find(item => item.id === 'other').schedule] : null;
         return acc;
     }, {});
 
-    console.log('Final formatted data:', formattedData);  // 送信直前のデータ確認
+    console.log('Final formatted data:', formattedData);
     router.post('/schedules/bulkStore', { scheduleData: formattedData });
 };
 </script>
@@ -127,8 +144,7 @@ li.drag-item {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <section class="text-gray-600 body-font relative">
-
-                            <form @submit.prevent="submitForm">
+                            <form @submit.prevent="submitWeekSchedules">
                                 <div class="week-navigation text-center">
                                     <button @click="prevWeek" class="mr-6 text-white bg-gray-500 border-0 py-2 px-4 focus:outline-none hover:bg-gray-600 rounded text-lg">前の週</button>
                                     <button @click="nextWeek" class="ml-6 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded text-lg">次の週</button>
@@ -137,23 +153,17 @@ li.drag-item {
                                     <div class="day" v-for="(day, index) in weekDays" :key="index">
                                         <h4>{{ formatDate(day) }}</h4>
                                         <div class="slots">
-                                            <select v-for="item in weekSchedules[formatDate(day)]" v-model="item.schedule">
+                                            <select v-for="(item, itemIndex) in weekSchedules[formatDate(day)]" v-model="item.schedule" :key="itemIndex">
                                                 <option disabled value="">科目を選択</option>
-                                                <option v-for="subject in props.subjects" :value="subject.id">{{ subject.name }}</option>
-                                            </select>
-                                            <select v-model="weekSchedules[formatDate(day)].other">
-                                                <option disabled value="">科目を選択</option>
-                                                <option v-for="subject in props.subjects" :value="subject.id">{{ subject.name }}</option>
+                                                <option v-for="subject in props.subjects" :value="subject.id" :key="subject.id">{{ subject.name }}</option>
                                             </select>
                                         </div>
-                                        <input type="checkbox" id="all_check" name="subject_id_all_check" value="1">
-                                        <label for="all_check" class="mx-3 my-3">全ての時間割
-                                        </label>
+                                        <input type="checkbox" v-model="weekSchedules[formatDate(day)].allChecked" :id="'all_check_' + index" name="subject_id_all_check" value="1">
+                                        <label :for="'all_check_' + index" class="mx-3 my-3">全ての時間割</label>
                                     </div>
                                 </div>
-
                                 <div class="my-5 text-center">
-                                    <button @click="submitWeekSchedules" class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg mr-5">登録</button>
+                                    <button type="submit" class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg mr-5">登録</button>
                                     <Link as="button" class="text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg ml-5" :href="route('schedules.index')">
                                         戻る
                                     </Link>
