@@ -29,37 +29,37 @@ function prevWeek(event) {
 const weekDays = computed(() => {
     const start = startOfWeek(displayedWeek.value, { weekStartsOn: 1 });
     const end = addDays(start, 5);
-    return eachDayOfInterval({ start, end }).filter(day => !isSunday(day));
+    return eachDayOfInterval({ start, end });
 });
 
 const weekSchedules = ref({});
 
 const initWeekSchedules = () => {
+    console.log('Received schedules from Laravel:', props.schedules);
     weekDays.value.forEach(day => {
         const dateKey = formatDate(day);
-        if (!weekSchedules.value[dateKey]) {
-            if (props.schedules[dateKey]) {
-                weekSchedules.value[dateKey] = [
-                    { id: 'first', schedule: props.schedules[dateKey].subject_id_first || '' },
-                    { id: 'second', schedule: props.schedules[dateKey].subject_id_second || '' },
-                    { id: 'third', schedule: props.schedules[dateKey].subject_id_third || '' },
-                    { id: 'fourth', schedule: props.schedules[dateKey].subject_id_fourth || '' },
-                    { id: 'fifth', schedule: props.schedules[dateKey].subject_id_five || '' },
-                    { id: 'sixth', schedule: props.schedules[dateKey].subject_id_six || '' },
-                    { id: 'other', schedule: props.schedules[dateKey].subject_id_other ? [props.schedules[dateKey].subject_id_other] : [] }
-                ];
-                weekSchedules.value[dateKey].allChecked = props.schedules[dateKey].subject_id_all_check === '1';
-            } else {
-                // 初期値を設定
-                weekSchedules.value[dateKey] = props.subjects.map(subject => ({
-                    id: subject.id,
-                    name: subject.name,
-                    grade_class_id: subject.grade_class_id,
-                    schedule: ''
-                }));
-                weekSchedules.value[dateKey].push({ id: 'other', schedule: '' });
-                weekSchedules.value[dateKey].allChecked = false;
-            }
+        const scheduleForDate = props.schedules.find(schedule => formatDate(new Date(schedule.schedule_date)) === dateKey);
+
+        if (scheduleForDate) {
+            weekSchedules.value[dateKey] = [
+                { id: 'first', schedule: scheduleForDate.subject_id_first || '' },
+                { id: 'second', schedule: scheduleForDate.subject_id_second || '' },
+                { id: 'third', schedule: scheduleForDate.subject_id_third || '' },
+                { id: 'fourth', schedule: scheduleForDate.subject_id_fourth || '' },
+                { id: 'fifth', schedule: scheduleForDate.subject_id_five || '' },
+                { id: 'sixth', schedule: scheduleForDate.subject_id_six || '' },
+                { id: 'other', schedule: scheduleForDate.subject_id_other ? [scheduleForDate.subject_id_other] : [] }
+            ];
+            weekSchedules.value[dateKey].allChecked = scheduleForDate.subject_id_all_check === 1;
+        } else {
+            weekSchedules.value[dateKey] = props.subjects.map(subject => ({
+                id: subject.id,
+                name: subject.name,
+                grade_class_id: subject.grade_class_id,
+                schedule: ''
+            }));
+            weekSchedules.value[dateKey].push({ id: 'other', schedule: '' });
+            weekSchedules.value[dateKey].allChecked = false;
         }
     });
 };
