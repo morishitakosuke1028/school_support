@@ -15,6 +15,7 @@ use App\Http\Controllers\Child\DailyController;
 use App\Http\Controllers\Child\EventController;
 use App\Http\Controllers\Child\ContactController;
 use App\Http\Controllers\Child\GrowthController;
+use App\Http\Controllers\Child\ScheduleController;
 use App\Http\Controllers\Child\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -77,4 +78,6 @@ Route::middleware('auth:child')->group(function () {
     });
 
     Route::get('growths/index', [GrowthController::class, 'index'])->name('growths.index');
+
+    Route::get('schedules/index', [ScheduleController::class, 'index'])->name('schedules.index');
 });

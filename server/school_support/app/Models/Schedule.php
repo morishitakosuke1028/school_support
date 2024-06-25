@@ -21,4 +21,9 @@ class Schedule extends Model
         'subject_id_all_check',
         'schedule_date',
     ];
+
+    public function gradeClass()
+    {
+        return $this->belongsTo(GradeClass::class);
+    }
 }
