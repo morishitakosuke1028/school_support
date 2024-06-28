@@ -33,7 +33,6 @@ const weekDays = computed(() => {
 const weekSchedules = ref({});
 
 const initWeekSchedules = () => {
-    console.log('Received schedules from Laravel:', props.schedules);
     weekDays.value.forEach(day => {
         const dateKey = formatDate(day);
         const scheduleForDate = props.schedules.find(schedule => formatDate(new Date(schedule.schedule_date)) === dateKey);
@@ -68,30 +67,30 @@ function formatDate(date) {
     return format(date, 'yyyy-MM-dd');
 }
 
-const englishSuffixes = [
-    'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'other'
-];
+// const englishSuffixes = [
+//     'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'other'
+// ];
 
-const submitWeekSchedules = () => {
-    const formattedData = Object.keys(weekSchedules.value).reduce((acc, date) => {
-        const daySchedules = weekSchedules.value[date];
-        acc[date] = {
-            grade_class_id: props.gradeClassId,
-            subject_id_all_check: daySchedules.allChecked ? '1' : '0'
-        };
-        daySchedules.forEach((scheduleItem, index) => {
-            const suffix = englishSuffixes[index];
-            if (suffix !== 'other') {
-                acc[date][`subject_id_${suffix}`] = scheduleItem.schedule || '';
-            }
-        });
-        acc[date]['subject_id_other'] = daySchedules.find(item => item.id === 'other').schedule ? [daySchedules.find(item => item.id === 'other').schedule] : null;
-        return acc;
-    }, {});
+// const submitWeekSchedules = () => {
+//     const formattedData = Object.keys(weekSchedules.value).reduce((acc, date) => {
+//         const daySchedules = weekSchedules.value[date];
+//         acc[date] = {
+//             grade_class_id: props.gradeClassId,
+//             subject_id_all_check: daySchedules.allChecked ? '1' : '0'
+//         };
+//         daySchedules.forEach((scheduleItem, index) => {
+//             const suffix = englishSuffixes[index];
+//             if (suffix !== 'other') {
+//                 acc[date][`subject_id_${suffix}`] = scheduleItem.schedule || '';
+//             }
+//         });
+//         acc[date]['subject_id_other'] = daySchedules.find(item => item.id === 'other').schedule ? [daySchedules.find(item => item.id === 'other').schedule] : null;
+//         return acc;
+//     }, {});
 
-    console.log('Final formatted data:', formattedData);
-    router.post('/schedules/bulkStore', { scheduleData: formattedData });
-};
+//     console.log('Final formatted data:', formattedData);
+//     router.post('/schedules/bulkStore', { scheduleData: formattedData });
+// };
 </script>
 <style scoped>
 ul {

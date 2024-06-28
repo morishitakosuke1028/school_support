@@ -52,8 +52,6 @@ class ScheduleController extends Controller
 
     public function bulkStore(Request $request)
     {
-        \Log::info($request->all());
-
         $scheduleEntries = $request->input('scheduleData');
 
         foreach ($scheduleEntries as $date => $data) {
