@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedChildLayout from '@/Layouts/AuthenticatedChildLayout.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { ref, watch, computed, onMounted } from 'vue';
 import { addDays, startOfWeek, addWeeks, format, eachDayOfInterval, isSunday } from 'date-fns';
 
@@ -67,30 +67,10 @@ function formatDate(date) {
     return format(date, 'yyyy-MM-dd');
 }
 
-// const englishSuffixes = [
-//     'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'other'
-// ];
-
-// const submitWeekSchedules = () => {
-//     const formattedData = Object.keys(weekSchedules.value).reduce((acc, date) => {
-//         const daySchedules = weekSchedules.value[date];
-//         acc[date] = {
-//             grade_class_id: props.gradeClassId,
-//             subject_id_all_check: daySchedules.allChecked ? '1' : '0'
-//         };
-//         daySchedules.forEach((scheduleItem, index) => {
-//             const suffix = englishSuffixes[index];
-//             if (suffix !== 'other') {
-//                 acc[date][`subject_id_${suffix}`] = scheduleItem.schedule || '';
-//             }
-//         });
-//         acc[date]['subject_id_other'] = daySchedules.find(item => item.id === 'other').schedule ? [daySchedules.find(item => item.id === 'other').schedule] : null;
-//         return acc;
-//     }, {});
-
-//     console.log('Final formatted data:', formattedData);
-//     router.post('/schedules/bulkStore', { scheduleData: formattedData });
-// };
+function getSubjectNameById(subjectId) {
+    const subject = props.subjects.find(subject => subject.id === subjectId);
+    return subject ? subject.name : '';
+}
 </script>
 <style scoped>
 ul {
@@ -119,11 +99,18 @@ li.drag-item {
   border: 1px solid #ddd;
   min-width: 120px;
 }
-.slots input {
+
+.day h4 {
+  border-bottom: solid 1px black;
+}
+
+.slots p {
   display: block;
   width: 100%;
-  margin-top: 5px;
   padding: 8px;
+  border-bottom: solid 1px black;
+  border-right: solid 1px black;
+  border-left: solid 1px black;
 }
 </style>
 <template>
@@ -150,17 +137,18 @@ li.drag-item {
                                     <div class="day" v-for="(day, index) in weekDays" :key="index">
                                         <h4>{{ formatDate(day) }}</h4>
                                         <div class="slots">
-                                            <select v-for="(item, itemIndex) in weekSchedules[formatDate(day)]" v-model="item.schedule" :key="itemIndex">
-                                                <option disabled value="">科目を選択</option>
-                                                <option v-for="subject in props.subjects" :value="subject.id" :key="subject.id">{{ subject.name }}</option>
-                                            </select>
+                                            <p v-for="(item, itemIndex) in weekSchedules[formatDate(day)]" :key="itemIndex">
+                                                {{ getSubjectNameById(item.schedule) || '　' }}
+                                            </p>
                                         </div>
-                                        <input type="checkbox" v-model="weekSchedules[formatDate(day)].allChecked" :id="'all_check_' + index" name="subject_id_all_check" value="1">
+                                        <div>
+
+                                        </div>
+                                        <input type="checkbox" v-model="weekSchedules[formatDate(day)].allChecked" :id="'all_check_' + index" name="subject_id_all_check" disabled value="1">
                                         <label :for="'all_check_' + index" class="mx-3 my-3">全ての時間割</label>
                                     </div>
                                 </div>
                                 <div class="my-5 text-center">
-                                    <button type="submit" class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg mr-5">登録</button>
                                     <Link as="button" class="text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg ml-5" :href="route('schedules.index')">
                                         戻る
                                     </Link>

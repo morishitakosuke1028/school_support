@@ -23,8 +23,6 @@ class ScheduleController extends Controller
         $schedules = Schedule::where('grade_class_id', $gradeClassId)->get();
         $subjects = subject::select('id', 'name')->get();
 
-        // dd($schedules);
-
         return Inertia::render('Child/Schedule/Index', [
             'schedules' => $schedules,
             'subjects' => $subjects,
