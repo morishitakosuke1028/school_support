@@ -13,6 +13,8 @@ use App\Http\Controllers\GrowthController;
 use App\Http\Controllers\Child\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaticController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -78,6 +80,17 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/csvImport/create', [CsvImportController::class, 'create'])->name('csvImport.create');
     Route::post('/csvImport', [CsvImportController::class, 'store'])->name('csvImport.store');
+
+    Route::get('/subjects/index', [SubjectController::class, 'index'])->name('subjects.index');
+    Route::get('/subjects/create', [SubjectController::class, 'create'])->name('subjects.create');
+    Route::post('/subjects', [SubjectController::class, 'store'])->name('subjects.store');
+    Route::get('/subjects/{subject}/edit', [SubjectController::class, 'edit'])->name('subjects.edit');
+    Route::put('/subjects/{subject}', [SubjectController::class, 'update'])->name('subjects.update');
+    Route::delete('/subjects/{subject}', [SubjectController::class, 'destroy'])->name('subjects.destroy');
+
+    Route::get('/schedules/index', [ScheduleController::class, 'index'])->name('schedules.index');
+    Route::get('/schedules/{gradeClass}/edit', [ScheduleController::class, 'edit'])->name('schedules.edit');
+    Route::post('/schedules/{schedule}', [ScheduleController::class, 'bulkStore'])->name('schedules.bulkStore');
 
     Route::get('/admin/child/register', [RegisteredUserController::class, 'create'])
     ->name('admin.child.register');

@@ -117,10 +117,10 @@ defineProps({
         <span class="close" @click="$emit('close')">&times;</span>
         <div class="mx-auto my-auto">
             <h3 class="font-bold">時間割機能</h3>
-            <p class="text-gray-300 text-md my-2">実装途中</p>
+            <p class="text-gray-300 text-md my-2">好きな名前の教科を作成して時間割を作成できます。</p>
             <div class="md:flex">
-                <!-- <p><img src="images/schedule-child.png" alt=""></p>
-                <p><img src="images/schedule-pc.png" alt=""></p> -->
+                <p><img src="images/subject-index.png" alt=""></p>
+                <p><img src="images/schedule-index.png" alt=""></p>
             </div>
         </div>
       </div>
