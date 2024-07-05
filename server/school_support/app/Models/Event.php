@@ -19,6 +19,11 @@ class Event extends Model
         'content',
     ];
 
+    public static function createEvent(array $attributes)
+    {
+        return self::create($attributes);
+    }
+
     public function gradeClass()
     {
         return $this->belongsTo(GradeClass::class);
