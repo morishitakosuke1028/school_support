@@ -59,7 +59,7 @@ class GrowthController extends Controller
      */
     public function store(StoreGrowthRequest $request)
     {
-        Growth::create([
+        Growth::createGrowth([
             'child_id' => $request->child_id,
             'height' => $request->height,
             'weight' => $request->weight,
