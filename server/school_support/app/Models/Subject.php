@@ -13,6 +13,11 @@ class Subject extends Model
         'name'
     ];
 
+    public static function createSubject(array $attributes)
+    {
+        return self::create($attributes);
+    }
+
     public function schedules()
     {
         return $this->hasMany(Schedule::class);

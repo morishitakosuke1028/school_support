@@ -28,7 +28,7 @@ class SubjectController extends Controller
 
     public function store(StoreSubjectRequest $request)
     {
-        $subject = Subject::create([
+        Subject::createSubject([
             'name' => $request->name,
         ]);
 
