@@ -54,38 +54,10 @@ class ScheduleController extends Controller
     {
         $scheduleEntries = $request->input('scheduleData');
 
-        foreach ($scheduleEntries as $date => $data) {
-            $data['schedule_date'] = $date;
+        $result = Schedule::bulkStore($scheduleEntries);
 
-            if (isset($data['subject_id_other']) && is_array($data['subject_id_other'])) {
-                if (empty($data['subject_id_other'][0])) {
-                    $data['subject_id_other'] = null;
-                } else {
-                    $data['subject_id_other'] = $data['subject_id_other'][0];
-                }
-            }
-
-            $validator = Validator::make($data, [
-                'grade_class_id' => 'required|integer',
-                'schedule_date' => 'required',
-                'subject_id_first' => 'nullable|integer',
-                'subject_id_second' => 'nullable|integer',
-                'subject_id_third' => 'nullable|integer',
-                'subject_id_fourth' => 'nullable|integer',
-                'subject_id_five' => 'nullable|integer',
-                'subject_id_six' => 'nullable|integer',
-                'subject_id_other' => 'nullable|string',
-                'subject_id_all_check' => 'nullable|integer',
-            ]);
-
-            if ($validator->fails()) {
-                return back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-
-            // ここでデータを保存
-            Schedule::updateOrCreate(['schedule_date' => $date, 'grade_class_id' => $data['grade_class_id']], $data);
+        if ($result instanceof \Illuminate\Http\RedirectResponse) {
+            return $result;
         }
 
         return to_route('schedules.index')->with([
