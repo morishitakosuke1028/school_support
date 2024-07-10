@@ -10,7 +10,8 @@ use App\Models\GradeClass;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\ScheduleRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ScheduleController extends Controller
@@ -50,19 +51,28 @@ class ScheduleController extends Controller
         ]);
     }
 
-    public function bulkStore(Request $request)
+    public function bulkStore(ScheduleRequest $request)
     {
         $scheduleEntries = $request->input('scheduleData');
 
-        $result = Schedule::bulkStore($scheduleEntries);
+        DB::beginTransaction();
 
-        if ($result instanceof \Illuminate\Http\RedirectResponse) {
-            return $result;
+        try {
+            Schedule::bulkStore($scheduleEntries);
+            DB::commit();
+
+            return to_route('schedules.index')->with([
+                'message' => '一括登録が完了しました。',
+                'status' => 'success',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error during bulk store:', ['exception' => $e]);
+
+            return back()->with([
+                'message' => '登録に失敗しました。',
+                'status' => 'error',
+            ]);
         }
-
-        return to_route('schedules.index')->with([
-            'message' => '一括登録が完了しました。',
-            'status' => 'success',
-        ]);
     }
 }
