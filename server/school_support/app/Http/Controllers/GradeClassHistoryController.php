@@ -33,7 +33,7 @@ class GradeClassHistoryController extends Controller
                     'grade_class_id' => $history->gradeClass->id,
                     'grade_name' => $history->gradeClass->grade_name,
                     'class_name' => $history->gradeClass->class_name,
-                    'user_name' => $history->user?->name ?? '',
+                    'user_name' => $history->user->name ?? '',
                 ];
             })
             ->groupBy('grade_class_id')
@@ -92,39 +92,14 @@ class GradeClassHistoryController extends Controller
      * @param  \App\Models\gradeClassHistory  $gradeClassHistory
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdategradeClassHistoryRequest $request, gradeClassHistory $gradeClassHistory)
+    public function update(UpdateGradeClassHistoryRequest $request, GradeClassHistory $gradeClassHistory)
     {
         Log::info('UpdateGradeClassHistoryRequest', $request->all());
         $userId = $request->input('user_id');
         $gradeClassId = $request->input('grade_class_id._value') ?? $request->input('grade_class_id');
         $childIds = $request->input('child_ids._value') ?? $request->input('child_ids', []);
 
-        $nullRecords = GradeClassHistory::where('grade_class_id', $gradeClassId)
-            ->whereNull('child_id')
-            ->whereNull('user_id')
-            ->first();
-
-        if ($nullRecords) {
-            $childIdToUpdate = array_shift($childIds);
-            $nullRecords->update([
-                'user_id' => $userId,
-                'child_id' => $childIdToUpdate,
-            ]);
-        }
-
-        foreach ($childIds as $childId) {
-            if (Child::where('id', $childId)->exists()) {
-                GradeClassHistory::updateOrCreate(
-                    [
-                        'child_id' => $childId,
-                        'grade_class_id' => $gradeClassId,
-                    ],
-                    [
-                        'user_id' => $userId,
-                    ]
-                );
-            }
-        }
+        GradeClassHistory::updateGradeClassHistory($userId, $gradeClassId, $childIds);
 
         return to_route('gradeClassHistories.index')->with([
             'message' => '更新しました。',
