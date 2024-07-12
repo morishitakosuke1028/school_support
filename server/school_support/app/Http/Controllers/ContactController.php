@@ -62,15 +62,14 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        Contact::create([
+        Contact::createContact([
             'user_id' => $request->user_id,
             'child_id' => $request->child_id,
             'sender' => $request->sender,
             'content' => $request->content,
         ]);
 
-        return to_route('contacts.index')
-        ->with([
+        return to_route('contacts.index')->with([
             'message' => '送信しました。',
             'status' => 'success',
         ]);

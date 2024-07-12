@@ -111,7 +111,7 @@ const deleteContact = id => {
                                 <div class="vertical-text">{{ contact.sender }}</div>
                             </td>
                             <td v-if="currentUserRole">
-                                <button @click="deleteContact(contact.id)" class="text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg">除削</button>
+                                <button @click="deleteContact(contact.id)" class="text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg">削除</button>
                             </td>
                         </tr>
                     </tbody>
