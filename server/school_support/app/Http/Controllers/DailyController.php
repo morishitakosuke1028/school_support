@@ -88,40 +88,12 @@ class DailyController extends Controller
      */
     public function store(StoreDailyRequest $request)
     {
-        foreach ($request->dailies as $dailyData) {
-            if (isset($dailyData['id']) && $daily = Daily::find($dailyData['id'])) {
-                // 既存レコードの更新
-                $daily->update([
-                    'child_id' => $dailyData['child_id'],
-                    'attendance_status' => $dailyData['attendance_status'],
-                    'absence_reason' => $dailyData['absence_reason'],
-                    'start_time' => $dailyData['start_time'],
-                    'end_time' => $dailyData['end_time'],
-                    'admin_memo' => $dailyData['admin_memo'],
-                    'parent_memo' => $dailyData['parent_memo'],
-                    'date_use' => $dailyData['date_use'],
-                    'update_method' => $dailyData['update_method']
-                ]);
-            } else {
-                // 新規レコードの作成
-                Daily::create([
-                    'child_id' => $dailyData['child_id'],
-                    'attendance_status' => $dailyData['attendance_status'],
-                    'absence_reason' => $dailyData['absence_reason'],
-                    'start_time' => $dailyData['start_time'],
-                    'end_time' => $dailyData['end_time'],
-                    'admin_memo' => $dailyData['admin_memo'],
-                    'parent_memo' => $dailyData['parent_memo'],
-                    'date_use' => $dailyData['date_use'],
-                    'entry_method' => $dailyData['entry_method'],
-                ]);
-            }
-        }
+        Daily::processDailies($request->dailies);
 
         return redirect()->back()
-        ->with([
-            'message' => '出欠確認の処理が完了しました。',
-            'status' => 'success',
-        ]);
+            ->with([
+                'message' => '出欠確認の処理が完了しました。',
+                'status' => 'success',
+            ]);
     }
 }
