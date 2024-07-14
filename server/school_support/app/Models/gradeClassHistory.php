@@ -18,6 +18,36 @@ class gradeClassHistory extends Model
         'grade_class_id',
     ];
 
+    public static function updateGradeClassHistory($userId, $gradeClassId, array $childIds)
+    {
+        $nullRecords = self::where('grade_class_id', $gradeClassId)
+            ->whereNull('child_id')
+            ->whereNull('user_id')
+            ->first();
+
+        if ($nullRecords) {
+            $childIdToUpdate = array_shift($childIds);
+            $nullRecords->update([
+                'user_id' => $userId,
+                'child_id' => $childIdToUpdate,
+            ]);
+        }
+
+        foreach ($childIds as $childId) {
+            if (Child::where('id', $childId)->exists()) {
+                self::updateOrCreate(
+                    [
+                        'child_id' => $childId,
+                        'grade_class_id' => $gradeClassId,
+                    ],
+                    [
+                        'user_id' => $userId,
+                    ]
+                );
+            }
+        }
+    }
+
     public function child()
     {
         return $this->belongsTo(Child::class, 'child_id');

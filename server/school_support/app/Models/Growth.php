@@ -19,6 +19,11 @@ class Growth extends Model
         'measurement_month',
     ];
 
+    public static function createGrowth(array $attributes)
+    {
+        return self::create($attributes);
+    }
+
     public function child()
     {
         return $this->belongsTo(Child::class);

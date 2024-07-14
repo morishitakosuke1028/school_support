@@ -30,4 +30,15 @@ class gradeClass extends Model
     {
         return $this->hasMany(GradeClassHistory::class);
     }
+
+    public static function createWithHistory(array $attributes)
+    {
+        $gradeClass = self::create($attributes);
+
+        GradeClassHistory::create([
+            'grade_class_id' => $gradeClass->id,
+        ]);
+
+        return $gradeClass;
+    }
 }

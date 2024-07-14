@@ -48,14 +48,10 @@ class GradeClassController extends Controller
      */
     public function store(StoregradeClassRequest $request)
     {
-        $gradeClass = GradeClass::create([
+        GradeClass::createWithHistory([
             'grade_name' => $request->grade_name,
             'class_name' => $request->class_name,
             'school_id' => $request->school_id,
-        ]);
-
-        GradeClassHistory::create([
-            'grade_class_id' => $gradeClass->id,
         ]);
 
         return to_route('gradeClasses.index')

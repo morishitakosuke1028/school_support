@@ -10,7 +10,8 @@ use App\Models\GradeClass;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\ScheduleRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ScheduleController extends Controller
@@ -50,47 +51,28 @@ class ScheduleController extends Controller
         ]);
     }
 
-    public function bulkStore(Request $request)
+    public function bulkStore(ScheduleRequest $request)
     {
         $scheduleEntries = $request->input('scheduleData');
 
-        foreach ($scheduleEntries as $date => $data) {
-            $data['schedule_date'] = $date;
+        DB::beginTransaction();
 
-            if (isset($data['subject_id_other']) && is_array($data['subject_id_other'])) {
-                if (empty($data['subject_id_other'][0])) {
-                    $data['subject_id_other'] = null;
-                } else {
-                    $data['subject_id_other'] = $data['subject_id_other'][0];
-                }
-            }
+        try {
+            Schedule::bulkStore($scheduleEntries);
+            DB::commit();
 
-            $validator = Validator::make($data, [
-                'grade_class_id' => 'required|integer',
-                'schedule_date' => 'required',
-                'subject_id_first' => 'nullable|integer',
-                'subject_id_second' => 'nullable|integer',
-                'subject_id_third' => 'nullable|integer',
-                'subject_id_fourth' => 'nullable|integer',
-                'subject_id_five' => 'nullable|integer',
-                'subject_id_six' => 'nullable|integer',
-                'subject_id_other' => 'nullable|string',
-                'subject_id_all_check' => 'nullable|integer',
+            return to_route('schedules.index')->with([
+                'message' => '一括登録が完了しました。',
+                'status' => 'success',
             ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error during bulk store:', ['exception' => $e]);
 
-            if ($validator->fails()) {
-                return back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-
-            // ここでデータを保存
-            Schedule::updateOrCreate(['schedule_date' => $date, 'grade_class_id' => $data['grade_class_id']], $data);
+            return back()->with([
+                'message' => '登録に失敗しました。',
+                'status' => 'error',
+            ]);
         }
-
-        return to_route('schedules.index')->with([
-            'message' => '一括登録が完了しました。',
-            'status' => 'success',
-        ]);
     }
 }

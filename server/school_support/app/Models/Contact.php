@@ -18,6 +18,11 @@ class Contact extends Model
         'content',
     ];
 
+    public static function createContact(array $attributes)
+    {
+        return self::create($attributes);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
