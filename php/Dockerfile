@@ -23,8 +23,7 @@ RUN apt-get install -y nodejs
 # Composer install
 RUN cd /usr/bin && curl -s http://getcomposer.org/installer | php && ln -s /usr/bin/composer.phar /usr/bin/composer
 
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV COMPOSER_HOME /composer
-ENV PATH $PATH:/composer/vendor/bin
-WORKDIR /var/www
-RUN composer global require "laravel/installer"
+WORKDIR /var/www/html
+
+#コンテナ内に入った時のディレクトリを指定
+WORKDIR /var/www/html
