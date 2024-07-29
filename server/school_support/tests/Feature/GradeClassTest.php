@@ -46,4 +46,22 @@ class GradeClassTest extends TestCase
                 ->where('currentUserRole', true);
         });
     }
+
+    /**
+     * Create メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_create()
+    {
+        $user = $this->createUser();
+        Auth::login($user);
+
+        $response = $this->actingAs($user)->get(route('gradeClasses.create'));
+
+        $response->assertStatus(200);
+        $response->assertInertia(function ($page) {
+            $page->component('GradeClass/Create');
+        });
+    }
 }
