@@ -66,7 +66,7 @@ return [
         // テスト環境用のMySQL接続設定を追加
         'mysql_testing' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', 'test_db'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'school_support_db_test'),
             'username' => env('DB_USERNAME', 'user'),
