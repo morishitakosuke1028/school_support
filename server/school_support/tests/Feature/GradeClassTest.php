@@ -64,4 +64,29 @@ class GradeClassTest extends TestCase
             $page->component('GradeClass/Create');
         });
     }
+
+    /**
+     * Store メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_store()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $data = [
+            'grade_name' => '一年',
+            'class_name' => 'A',
+            'school_id' => 1,
+        ];
+
+        $response = $this->post(route('gradeClasses.store'), $data);
+
+        $response->assertRedirect(route('gradeClasses.index'));
+        $response->assertSessionHas('message', '登録しました。');
+        $response->assertSessionHas('status', 'success');
+
+        $this->assertDatabaseHas('grade_classes', $data);
+    }
 }
