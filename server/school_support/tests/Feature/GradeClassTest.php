@@ -89,4 +89,32 @@ class GradeClassTest extends TestCase
 
         $this->assertDatabaseHas('grade_classes', $data);
     }
+
+    /**
+     * Edit メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_edit()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $gradeClass = GradeClass::factory()->create([
+            'grade_name' => '一年',
+            'class_name' => 'A',
+            'school_id' => 1,
+        ]);
+
+        $response = $this->get(route('gradeClasses.edit', $gradeClass));
+
+        $response->assertStatus(200);
+        $response->assertInertia(function ($page) use ($gradeClass) {
+            $page->component('GradeClass/Edit')
+                ->where('gradeClass.id', $gradeClass->id)
+                ->where('gradeClass.grade_name', $gradeClass->grade_name)
+                ->where('gradeClass.class_name', $gradeClass->class_name)
+                ->where('gradeClass.school_id', $gradeClass->school_id);
+        });
+    }
 }
