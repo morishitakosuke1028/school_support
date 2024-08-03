@@ -117,4 +117,38 @@ class GradeClassTest extends TestCase
                 ->where('gradeClass.school_id', $gradeClass->school_id);
         });
     }
+
+    /**
+     * Update メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_update()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $gradeClass = GradeClass::factory()->create([
+            'grade_name' => '一年',
+            'class_name' => 'A',
+            'school_id' => 1,
+        ]);
+
+        $data = [
+            'grade_name' => '二年',
+            'class_name' => 'B',
+        ];
+
+        $response = $this->put(route('gradeClasses.update', $gradeClass), $data);
+
+        $response->assertRedirect(route('gradeClasses.index'));
+        $response->assertSessionHas('message', '更新しました。');
+        $response->assertSessionHas('status', 'success');
+
+        $this->assertDatabaseHas('grade_classes', [
+            'id' => $gradeClass->id,
+            'grade_name' => '二年',
+            'class_name' => 'B',
+        ]);
+    }
 }
