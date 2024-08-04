@@ -151,4 +151,31 @@ class GradeClassTest extends TestCase
             'class_name' => 'B',
         ]);
     }
+
+    /**
+     * Destroy メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_destroy()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $gradeClass = GradeClass::factory()->create([
+            'grade_name' => '一年',
+            'class_name' => 'A',
+            'school_id' => 1,
+        ]);
+
+        $response = $this->delete(route('gradeClasses.destroy', $gradeClass));
+
+        $response->assertRedirect(route('gradeClasses.index'));
+        $response->assertSessionHas('message', '削除しました。');
+        $response->assertSessionHas('status', 'danger');
+
+        $this->assertDatabaseMissing('grade_classes', [
+            'id' => $gradeClass->id,
+        ]);
+    }
 }
