@@ -5,16 +5,52 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Contact;
+use App\Models\User;
+use App\Models\Child;
+use App\Models\GradeClass;
+use App\Models\GradeClassHistory;
+use Illuminate\Support\Facades\Auth;
 
 class ContactTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
-     * A basic feature test example.
+     * テストユーザーの作成
+     *
+     * @return \App\Models\User
      */
-    public function test_example(): void
+    protected function createUser()
     {
-        $response = $this->get('/');
+        return User::factory()->create([
+            'role' => 1,
+        ]);
+    }
+
+    /**
+     * Index メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_index()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $child = Child::factory()->create();
+        $gradeClass = GradeClass::factory()->create();
+        GradeClassHistory::factory()->create([
+            'child_id' => $child->id,
+            'grade_class_id' => $gradeClass->id,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('contacts.index'));
 
         $response->assertStatus(200);
+        $response->assertInertia(function ($page) {
+            $page->component('Contact/Index')
+                ->has('children', 1);
+        });
     }
 }
