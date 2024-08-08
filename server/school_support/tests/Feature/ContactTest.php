@@ -53,4 +53,33 @@ class ContactTest extends TestCase
                 ->has('children', 1);
         });
     }
+
+    /**
+     * Create メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_create()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $child = Child::factory()->create();
+        Contact::factory()->create([
+            'child_id' => $child->id,
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('contacts.create', ['contact' => $child->id]));
+
+        $response->assertStatus(200);
+        $response->assertInertia(function ($page) use ($child, $user) {
+            $page->component('Contact/Create')
+                ->has('contacts', 1)
+                ->where('child.id', $child->id)
+                ->where('currentUserRole', true)
+                ->where('currentUser', $user->id)
+                ->where('currentUserName', $user->name);
+        });
+    }
 }
