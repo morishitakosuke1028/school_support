@@ -82,4 +82,32 @@ class ContactTest extends TestCase
                 ->where('currentUserName', $user->name);
         });
     }
+
+    /**
+     * Store メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_store()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $child = Child::factory()->create();
+
+        $data = [
+            'user_id' => $user->id,
+            'child_id' => $child->id,
+            'sender' => 'Teacher',
+            'content' => 'This is a test message.',
+        ];
+
+        $response = $this->post(route('contacts.store'), $data);
+
+        $response->assertRedirect(route('contacts.index'));
+        $response->assertSessionHas('message', '送信しました。');
+        $response->assertSessionHas('status', 'success');
+
+        $this->assertDatabaseHas('contacts', $data);
+    }
 }
