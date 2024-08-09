@@ -110,4 +110,29 @@ class ContactTest extends TestCase
 
         $this->assertDatabaseHas('contacts', $data);
     }
+
+		/**
+     * Destroy メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_destroy()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $contact = Contact::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->delete(route('contacts.destroy', $contact));
+
+        $response->assertRedirect(route('contacts.index'));
+        $response->assertSessionHas('message', '削除しました。');
+        $response->assertSessionHas('status', 'danger');
+
+        $this->assertDatabaseMissing('contacts', [
+            'id' => $contact->id,
+        ]);
+    }
 }
