@@ -45,4 +45,27 @@ class HomeworkTest extends TestCase
                 ->where('currentUserRole', true);
         });
     }
+
+    /**
+     * Edit メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_edit()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $gradeClass = GradeClass::factory()->create();
+        Homework::factory()->count(5)->create(['grade_class_id' => $gradeClass->id]);
+
+        $response = $this->get(route('homeworks.edit', $gradeClass->id));
+
+        $response->assertStatus(200);
+        $response->assertInertia(function ($page) use ($gradeClass) {
+            $page->component('Homework/Edit')
+                ->where('gradeClass.id', $gradeClass->id)
+                ->has('homeworks', 5);
+        });
+    }
 }
