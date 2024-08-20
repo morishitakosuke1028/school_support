@@ -68,4 +68,61 @@ class HomeworkTest extends TestCase
                 ->has('homeworks', 5);
         });
     }
+
+    /**
+     * BulkStore メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_bulk_store()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $gradeClass = GradeClass::factory()->create();
+
+        $homeworkData = [
+            '2024-08-12' => [
+                'grade_class_id' => $gradeClass->id,
+                'homework_day' => '2024-08-12',
+                'reading' => 'Read chapter 1',
+                'language_drill' => 'Complete exercise 1',
+                'arithmetic' => 'Solve problems 1-10',
+                'diary' => 'Write about your day',
+                'ipad' => 'true',
+                'other' => 'Practice piano',
+            ],
+            '2024-08-13' => [
+                'grade_class_id' => $gradeClass->id,
+                'homework_day' => '2024-08-13',
+                'reading' => 'Read chapter 2',
+                'language_drill' => 'Complete exercise 2',
+                'arithmetic' => 'Solve problems 11-20',
+                'diary' => 'Write about your dreams',
+                'ipad' => 'false',
+                'other' => 'Draw a picture',
+            ],
+        ];
+
+        $existingHomework = Homework::factory()->create(['grade_class_id' => $gradeClass->id]);
+
+        $response = $this->post(route('homeworks.bulkStore', ['homework' => $existingHomework->id]), ['homeworkData' => $homeworkData]);
+
+        $response->assertRedirect(route('homeworks.index'));
+        $response->assertSessionHas('message', '一括登録が完了しました。');
+        $response->assertSessionHas('status', 'success');
+
+        foreach ($homeworkData as $date => $data) {
+            $this->assertDatabaseHas('homework', [
+                'grade_class_id' => $data['grade_class_id'],
+                'homework_day' => $data['homework_day'],
+                'reading' => $data['reading'],
+                'language_drill' => $data['language_drill'],
+                'arithmetic' => $data['arithmetic'],
+                'diary' => $data['diary'],
+                'ipad' => $data['ipad'],
+                'other' => $data['other'],
+            ]);
+        }
+    }
 }
