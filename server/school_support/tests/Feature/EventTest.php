@@ -31,30 +31,24 @@ class EventTest extends TestCase
         $user = $this->createUser();
         $this->actingAs($user);
 
-        // 外部キー制約を無効にする
-        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-        // データベースの状態をリセット
-        GradeClass::truncate();
-        Event::truncate();
-
-        // 外部キー制約を有効に戻す
-        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
         // 必要なテストデータを作成
         $gradeClasses = GradeClass::factory()->count(2)->create();
 
+        // 同じgrade_class_idを持つイベントを3つ作成
+        $eventGradeClass = $gradeClasses->first();
         Event::factory()->count(3)->create([
-            'grade_class_id' => $gradeClasses->random()->id,
+            'grade_class_id' => $eventGradeClass->id,
         ]);
 
         $response = $this->get(route('events.index'));
 
         $response->assertStatus(200);
-        $response->assertInertia(function ($page) {
+        $response->assertInertia(function ($page) use ($gradeClasses) {
             $page->component('Event/Index')
                 ->has('events', 3)
-                ->has('gradeClasses', 2)
+                ->where('gradeClasses', function ($gradeClassesCollection) use ($gradeClasses) {
+                    return $gradeClassesCollection->count() === $gradeClasses->count();
+                })
                 ->where('currentUserRole', true);
         });
     }
