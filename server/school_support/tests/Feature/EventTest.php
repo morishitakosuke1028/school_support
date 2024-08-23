@@ -52,4 +52,22 @@ class EventTest extends TestCase
                 ->where('currentUserRole', true);
         });
     }
+
+    /**
+     * Create メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_create()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $response = $this->get(route('events.create', ['date' => '2024-08-12', 'gradeClassId' => 1]));
+
+        $response->assertStatus(200);
+        $response->assertInertia(function ($page) {
+            $page->component('Event/Create');
+        });
+    }
 }
