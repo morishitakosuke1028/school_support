@@ -70,4 +70,35 @@ class EventTest extends TestCase
             $page->component('Event/Create');
         });
     }
+
+    /**
+     * Store メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_store()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $gradeClass = GradeClass::factory()->create();
+
+        $data = [
+            'grade_class_id' => $gradeClass->id,
+            'start_datetime' => '2024-08-12 09:00:00',
+            'end_datetime' => '2024-08-12 11:00:00',
+            'title' => 'Event Title',
+            'place' => 'Event Place',
+            'personal_effect' => 'Event Personal Effect',
+            'content' => 'Event Content',
+        ];
+
+        $response = $this->post(route('events.store'), $data);
+
+        $response->assertRedirect(route('events.index'));
+        $response->assertSessionHas('message', '登録しました。');
+        $response->assertSessionHas('status', 'success');
+
+        $this->assertDatabaseHas('events', $data);
+    }
 }
