@@ -101,4 +101,25 @@ class EventTest extends TestCase
 
         $this->assertDatabaseHas('events', $data);
     }
+
+		/**
+     * Edit メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_edit()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $event = Event::factory()->create();
+
+        $response = $this->get(route('events.edit', $event));
+
+        $response->assertStatus(200);
+        $response->assertInertia(function ($page) use ($event) {
+            $page->component('Event/Edit')
+                ->where('event.id', $event->id);
+        });
+    }
 }
