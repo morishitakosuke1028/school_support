@@ -122,4 +122,35 @@ class EventTest extends TestCase
                 ->where('event.id', $event->id);
         });
     }
+
+		/**
+     * Update メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_update()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $event = Event::factory()->create();
+
+        $data = [
+            'grade_class_id' => $event->grade_class_id,
+            'start_datetime' => '2024-08-12 10:00:00',
+            'end_datetime' => '2024-08-12 12:00:00',
+            'title' => 'Updated Event Title',
+            'place' => 'Updated Event Place',
+            'personal_effect' => 'Updated Personal Effect',
+            'content' => 'Updated Event Content',
+        ];
+
+        $response = $this->put(route('events.update', $event), $data);
+
+        $response->assertRedirect(route('events.index'));
+        $response->assertSessionHas('message', '更新しました。');
+        $response->assertSessionHas('status', 'success');
+
+        $this->assertDatabaseHas('events', $data);
+    }
 }
