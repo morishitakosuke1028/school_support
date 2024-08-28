@@ -153,4 +153,37 @@ class EventTest extends TestCase
 
         $this->assertDatabaseHas('events', $data);
     }
+
+		/**
+     * Check メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_check_with_existing_event()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $gradeClass = GradeClass::factory()->create();
+        $event = Event::factory()->create([
+            'grade_class_id' => $gradeClass->id,
+            'start_datetime' => '2024-08-12 09:00:00',
+        ]);
+
+        $response = $this->get(route('events.check', ['date' => '2024-08-12', 'gradeClassId' => $gradeClass->id]));
+
+        $response->assertRedirect(route('events.edit', $event));
+    }
+
+    public function test_check_with_no_existing_event()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $gradeClass = GradeClass::factory()->create();
+
+        $response = $this->get(route('events.check', ['date' => '2024-08-12', 'gradeClassId' => $gradeClass->id]));
+
+        $response->assertRedirect(route('events.create', ['date' => '2024-08-12', 'gradeClassId' => $gradeClass->id]));
+    }
 }
