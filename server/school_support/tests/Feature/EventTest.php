@@ -186,4 +186,27 @@ class EventTest extends TestCase
 
         $response->assertRedirect(route('events.create', ['date' => '2024-08-12', 'gradeClassId' => $gradeClass->id]));
     }
+
+		/**
+     * Destroy メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_destroy()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $event = Event::factory()->create();
+
+        $response = $this->delete(route('events.destroy', $event));
+
+        $response->assertRedirect(route('events.index'));
+        $response->assertSessionHas('message', '削除しました。');
+        $response->assertSessionHas('status', 'danger');
+
+        $this->assertDatabaseMissing('events', [
+            'id' => $event->id,
+        ]);
+    }
 }
