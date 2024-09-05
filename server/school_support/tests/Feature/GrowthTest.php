@@ -55,4 +55,26 @@ class GrowthTest extends TestCase
                 ->where('children.0.class_name', $gradeClass->class_name);
         });
     }
+
+    /**
+     * Create メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_create()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $child = Child::factory()->create();
+
+        $response = $this->get(route('growths.create', ['growth' => $child->id]));
+
+        $response->assertStatus(200);
+        $response->assertInertia(function ($page) use ($child) {
+            $page->component('Growth/Create')
+                ->where('child.id', $child->id)
+                ->has('growths');
+        });
+    }
 }
