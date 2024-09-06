@@ -108,4 +108,27 @@ class GrowthTest extends TestCase
 
         $this->assertDatabaseHas('growths', $data);
     }
+
+		/**
+     * Edit メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_edit()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $child = Child::factory()->create();
+        $growth = Growth::factory()->create(['child_id' => $child->id]);
+
+        $response = $this->get(route('growths.edit', $growth));
+
+        $response->assertStatus(200);
+        $response->assertInertia(function ($page) use ($growth, $child) {
+            $page->component('Growth/Edit')
+                ->where('growth.id', $growth->id)
+                ->where('child.id', $child->id);
+        });
+    }
 }
