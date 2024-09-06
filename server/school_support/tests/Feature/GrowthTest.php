@@ -77,4 +77,35 @@ class GrowthTest extends TestCase
                 ->has('growths');
         });
     }
+
+		/**
+     * Store メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_store()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $child = Child::factory()->create();
+
+        $data = [
+            'child_id' => $child->id,
+            'height' => 120.5,
+            'weight' => 35.2,
+            'chest' => 60.0,
+            'abdomen' => 55.0,
+            'head' => 50.0,
+            'measurement_month' => '2024-08-01',
+        ];
+
+        $response = $this->post(route('growths.store'), $data);
+
+        $response->assertRedirect(route('growths.index'));
+        $response->assertSessionHas('message', '登録しました。');
+        $response->assertSessionHas('status', 'success');
+
+        $this->assertDatabaseHas('growths', $data);
+    }
 }
