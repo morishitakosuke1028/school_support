@@ -131,4 +131,35 @@ class GrowthTest extends TestCase
                 ->where('child.id', $child->id);
         });
     }
+
+    /**
+     * Update メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_update()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $growth = Growth::factory()->create();
+
+        $data = [
+            'child_id' => $growth->child_id,
+            'height' => 125.0,
+            'weight' => 40.0,
+            'chest' => 62.0,
+            'abdomen' => 58.0,
+            'head' => 52.0,
+            'measurement_month' => '2024-09-01',
+        ];
+
+        $response = $this->put(route('growths.update', $growth), $data);
+
+        $response->assertRedirect(route('growths.index'));
+        $response->assertSessionHas('message', '更新しました。');
+        $response->assertSessionHas('status', 'success');
+
+        $this->assertDatabaseHas('growths', $data);
+    }
 }
