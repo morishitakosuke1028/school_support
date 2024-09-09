@@ -162,4 +162,27 @@ class GrowthTest extends TestCase
 
         $this->assertDatabaseHas('growths', $data);
     }
+
+    /**
+     * Destroy メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_destroy()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $growth = Growth::factory()->create();
+
+        $response = $this->delete(route('growths.destroy', $growth));
+
+        $response->assertRedirect(route('growths.index'));
+        $response->assertSessionHas('message', '削除しました。');
+        $response->assertSessionHas('status', 'danger');
+
+        $this->assertDatabaseMissing('growths', [
+            'id' => $growth->id,
+        ]);
+    }
 }
