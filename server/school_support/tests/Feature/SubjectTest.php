@@ -65,4 +65,27 @@ class SubjectTest extends TestCase
             $page->component('Subject/Create');
         });
     }
+
+    /**
+     * Store メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_store()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $data = [
+            'name' => 'Mathematics',
+        ];
+
+        $response = $this->post(route('subjects.store'), $data);
+
+        $response->assertRedirect(route('subjects.index'));
+        $response->assertSessionHas('message', '登録しました。');
+        $response->assertSessionHas('status', 'success');
+
+        $this->assertDatabaseHas('subjects', $data);
+    }
 }
