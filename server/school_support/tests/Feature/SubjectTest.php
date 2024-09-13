@@ -47,4 +47,22 @@ class SubjectTest extends TestCase
                 ->where('currentUserRole', true);
         });
     }
+
+		/**
+     * Create メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_create()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $response = $this->get(route('subjects.create'));
+
+        $response->assertStatus(200);
+        $response->assertInertia(function ($page) {
+            $page->component('Subject/Create');
+        });
+    }
 }
