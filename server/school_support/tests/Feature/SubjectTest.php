@@ -88,4 +88,25 @@ class SubjectTest extends TestCase
 
         $this->assertDatabaseHas('subjects', $data);
     }
+
+		/**
+     * Edit メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_edit()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $subject = Subject::factory()->create();
+
+        $response = $this->get(route('subjects.edit', $subject));
+
+        $response->assertStatus(200);
+        $response->assertInertia(function ($page) use ($subject) {
+            $page->component('Subject/Edit')
+                ->where('subject.id', $subject->id);
+        });
+    }
 }
