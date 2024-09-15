@@ -109,4 +109,29 @@ class SubjectTest extends TestCase
                 ->where('subject.id', $subject->id);
         });
     }
+
+		/**
+     * Update メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_update()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $subject = Subject::factory()->create();
+
+        $data = [
+            'name' => 'Updated Subject Name',
+        ];
+
+        $response = $this->put(route('subjects.update', $subject), $data);
+
+        $response->assertRedirect(route('subjects.index'));
+        $response->assertSessionHas('message', '更新しました。');
+        $response->assertSessionHas('status', 'success');
+
+        $this->assertDatabaseHas('subjects', $data);
+    }
 }
