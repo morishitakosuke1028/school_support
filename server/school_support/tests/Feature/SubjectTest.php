@@ -134,4 +134,27 @@ class SubjectTest extends TestCase
 
         $this->assertDatabaseHas('subjects', $data);
     }
+
+		/**
+     * Destroy メソッドのテスト
+     *
+     * @return void
+     */
+    public function test_destroy()
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $subject = Subject::factory()->create();
+
+        $response = $this->delete(route('subjects.destroy', $subject));
+
+        $response->assertRedirect(route('subjects.index'));
+        $response->assertSessionHas('message', '削除しました。');
+        $response->assertSessionHas('status', 'danger');
+
+        $this->assertDatabaseMissing('subjects', [
+            'id' => $subject->id,
+        ]);
+    }
 }
