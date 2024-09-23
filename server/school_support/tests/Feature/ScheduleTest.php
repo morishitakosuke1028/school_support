@@ -99,4 +99,46 @@ class ScheduleTest extends TestCase
         $response->assertSessionHas('message', '一括登録が完了しました。');
         $response->assertSessionHas('status', 'success');
     }
+
+    public function test_bulk_store_handles_error_gracefully()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $schedule = Schedule::factory()->create();
+
+        $scheduleData = [
+            '2024-09-20' => [
+                'grade_class_id' => 1,
+                'subject_id_first' => 1,
+                'schedule_date' => now(),
+            ],
+            '2024-09-21' => [
+                'grade_class_id' => 1,
+                'subject_id_first' => 2,
+                'schedule_date' => now(),
+            ],
+        ];
+
+        $this->mock(Schedule::class, function ($mock) {
+            $mock->shouldReceive('bulkStore')->andThrow(new \Exception('Mocked exception'));
+        });
+
+        $response = $this->post(route('schedules.bulkStore', ['schedule' => $schedule->id]), [
+            'scheduleData' => $scheduleData,
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('message', '登録に失敗しました。');
+        $response->assertSessionHas('status', 'error');
+
+        $this->assertDatabaseMissing('schedules', [
+            'subject_id_first' => 1,
+            'schedule_date' => '2024-09-20',
+        ]);
+        $this->assertDatabaseMissing('schedules', [
+            'subject_id_first' => 2,
+            'schedule_date' => '2024-09-21',
+        ]);
+    }
 }
