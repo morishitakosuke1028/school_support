@@ -78,4 +78,51 @@ class DailyTest extends TestCase
                 ->where('children.0.dailies.attendance_status', null)
         );
     }
+
+		public function test_store_saves_daily_attendance_data()
+		{
+				// Create user and log in
+				$user = User::factory()->create();
+				$this->actingAs($user);
+
+				// Create a child and associate it with a grade class
+				$child = Child::factory()->create();
+				$gradeClass = GradeClass::factory()->create();
+				$child->gradeClassHistories()->create(['grade_class_id' => $gradeClass->id]);
+
+				// Mock daily attendance data with integer attendance_status and full date-time format for start_time and end_time
+				$dailyData = [
+						[
+								'child_id' => $child->id,
+								'attendance_status' => 1, // Assuming 1 represents "Present"
+								'absence_reason' => '',
+								'start_time' => now()->format('Y-m-d H:i'), // Full date-time format
+								'end_time' => now()->addHours(8)->format('Y-m-d H:i'), // Full date-time format
+								'admin_memo' => 'All good',
+								'parent_memo' => 'Great day',
+								'date_use' => now()->toDateString(),
+								'entry_method' => 'Manual',
+						]
+				];
+
+				// Send POST request to store method
+				$response = $this->post(route('attendance.store'), [
+						'dailies' => $dailyData
+				]);
+
+				// Assert that daily attendance was saved in the database with the correct format
+				$this->assertDatabaseHas('dailies', [
+						'child_id' => $child->id,
+						'attendance_status' => 1,
+						'start_time' => now()->format('Y-m-d H:i'),
+						'end_time' => now()->addHours(8)->format('Y-m-d H:i'),
+						'admin_memo' => 'All good',
+						'parent_memo' => 'Great day',
+				]);
+
+				// Assert that the response redirects with a success message
+				$response->assertRedirect();
+				$response->assertSessionHas('message', '出欠確認の処理が完了しました。');
+				$response->assertSessionHas('status', 'success');
+		}
 }
