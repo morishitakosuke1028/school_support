@@ -50,4 +50,32 @@ class DailyTest extends TestCase
                 ->where('gradeClasses.0.grade_name', 'Grade 1')
         );
     }
+
+    /**
+     * Test index method when no matching children are found.
+     *
+     * @return void
+     */
+    public function test_index_displays_default_children_if_no_matches_found()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $child = Child::factory()->create(['name' => 'Unfiltered Child']);
+        $gradeClass = GradeClass::factory()->create();
+        $child->gradeClassHistories()->create(['grade_class_id' => $gradeClass->id]);
+
+        $response = $this->get(route('attendance.index', [
+            'gradeNames' => 'Non-Existent Grade',
+        ]));
+
+        $response->assertStatus(200);
+
+        $response->assertInertia(fn ($page) =>
+            $page->component('Attendance/Index')
+                ->has('children', 1)
+                ->where('children.0.name', 'Unfiltered Child')
+                ->where('children.0.dailies.attendance_status', null)
+        );
+    }
 }
