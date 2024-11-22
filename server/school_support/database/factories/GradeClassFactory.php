@@ -17,7 +17,9 @@ class GradeClassFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'grade_name' => $this->faker->randomElement(['一年', '二年', '三年']),
+            'class_name' => $this->faker->randomElement(['A', 'B', 'C']),
+            'school_id' => 1,
         ];
     }
 }

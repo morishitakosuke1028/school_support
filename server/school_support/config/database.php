@@ -63,6 +63,26 @@ return [
             ]) : [],
         ],
 
+        // テスト環境用のMySQL接続設定を追加
+        'mysql_testing' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'test_db'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'school_support_db_test'),
+            'username' => env('DB_USERNAME', 'user'),
+            'password' => env('DB_PASSWORD', 'password'),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
